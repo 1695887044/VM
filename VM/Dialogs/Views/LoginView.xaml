@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="VM.Start.Dialogs.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:VM.Start.Dialogs.Views"
+             mc:Ignorable="d" 
+             Background="Transparent"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="450" d:DesignWidth="700">
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="WindowShadow" BlurRadius="15" Direction="270" Color="Black" Opacity="0.3"/>
+    </UserControl.Resources>
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="WindowStyle"
+                    Value="None"/>
+            <Setter Property="prism:Dialog.WindowStartupLocation"
+                    Value="CenterScreen" />
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Width" Value="700"/>
+            <Setter Property="Height" Value="450"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </prism:Dialog.WindowStyle>
+    <Border CornerRadius="12"
+            Background="White"
+            Effect="{StaticResource WindowShadow}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.6*"/>
+                <ColumnDefinition Width="0.4*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"
+                    CornerRadius="12 0 0 12">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF0078D4" Offset="0"/>
+                        <GradientStop Color="#FF005FB8" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                  
+                    <TextBlock Text="Welcome" FontSize="36" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="Sign in to continue" FontSize="16" Foreground="#DDFFFFFF" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+            <StackPanel Grid.Column="1" Margin="25,50" VerticalAlignment="Center">
+                <TextBlock Text="Sign In" FontSize="28" FontWeight="SemiBold" Foreground="#000000"/>
+
+                <TextBlock Text="Username" Margin="0,25,0,4" FontSize="15" Foreground="#000000"/>
+                <Border CornerRadius="6" BorderBrush="#1F1F1F" BorderThickness="1">
+                    <TextBox Padding="12,8" Text="{Binding User.UserName}" BorderThickness="0" FontSize="14"/>
+                </Border>
+
+                <TextBlock Text="Password"  Margin="0,15,0,4"  FontSize="15" Foreground="#000000"/>
+                <Border CornerRadius="6" BorderBrush="#1F1F1F" BorderThickness="1">
+                    <hc:PasswordBox Padding="12,8" BorderThickness="0" FontSize="14" IsSafeEnabled="False" UnsafePassword="{Binding User.UserPwd}" ShowPassword="True" ShowEyeButton="True"/>
+                </Border>
+                <!-- 按钮区 -->
+                <Grid Margin="5 20 0 0" >
+                    <Button Content="登录" HorizontalAlignment="Left" Command="{Binding LoginByTagCommand}" CommandParameter="1"/>
+                    <Button Content="退出" HorizontalAlignment="Center" Command="{Binding LoginByTagCommand}" CommandParameter="2"/>
+                    <Button Content="游客" HorizontalAlignment="Right" Command="{Binding LoginByTagCommand}" CommandParameter="3"/>
+                </Grid>
+
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</UserControl>
