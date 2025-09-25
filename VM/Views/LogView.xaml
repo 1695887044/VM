@@ -66,5 +66,62 @@
             </hc:Badge>
 
         </hc:UniformSpacingPanel>
+        <DataGrid
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            BorderThickness="0"
+            CanUserAddRows="False"
+            EnableColumnVirtualization="True"
+            EnableRowVirtualization="True"
+            FontSize="12"
+            Foreground="White"
+            GridLinesVisibility="All"
+            HeadersVisibility="Column"
+            IsReadOnly="True"
+            RowHeaderWidth="20"
+            SelectionUnit="FullRow"
+            VirtualizingPanel.IsVirtualizing="True">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn
+                    Width="150"
+                    Header="时间"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                Foreground="{Binding LogColor}"
+                                Text="{Binding CreateTime, StringFormat=\{0:yyyy/MM/dd HH:mm:ss fff\}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Width="50"
+                    Header="类型"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                Foreground="{Binding LogColor}"
+                                Text="{Binding LogType}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Width="*"
+                    Header="内容"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                Foreground="{Binding LogColor}"
+                                Text="{Binding Content}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

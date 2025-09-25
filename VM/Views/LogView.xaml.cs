@@ -24,5 +24,6 @@ namespace VM.Start.Views
         {
             InitializeComponent();
         }
+        public static LogView Ins = new();
     }
 }

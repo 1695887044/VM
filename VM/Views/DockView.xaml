@@ -63,6 +63,7 @@
                                 Title="日志信息"
                                 AutoHideHeight="300"
                                 AutoHideMinHeight="200"
+                                Content="{x:Static local:LogView.Ins}"
                                 FloatingHeight="300" />
                             <LayoutAnchorable
                                 Title="数据栏"
