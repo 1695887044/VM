@@ -12,7 +12,6 @@
     mc:Ignorable="d">
     <Grid>
         <avalonDock:DockingManager
-            x:Name="dockManager"
             AllowMixedOrientation="True"
             AutoWindowSizeWhenOpened="True"
             Background="Transparent"
@@ -45,7 +44,7 @@
                             CanAutoHide="True"
                             CanClose="False"
                             CanHide="True"
-                            ContentId="Tool" />
+                            ContentId="Process" />
                     </LayoutAnchorablePane>
                     <LayoutAnchorablePane DockWidth="0.65*">
                         <LayoutAnchorable
@@ -63,21 +62,25 @@
                                 Title="日志信息"
                                 AutoHideHeight="300"
                                 AutoHideMinHeight="200"
+                                ContentId="Log"
                                 Content="{x:Static local:LogView.Ins}"
                                 FloatingHeight="300" />
                             <LayoutAnchorable
                                 Title="数据栏"
                                 AutoHideHeight="300"
                                 AutoHideMinHeight="200"
+                                 ContentId="Data"
                                 FloatingHeight="300" />
                             <LayoutAnchorable
                                 Title="模块输出"
                                 AutoHideHeight="300"
+                                 ContentId="ModuleOut"
                                 AutoHideMinHeight="200"
                                 FloatingHeight="300" />
                             <LayoutAnchorable
                                 Title="设备状态"
                                 AutoHideHeight="300"
+                                 ContentId="DeviceState"
                                 AutoHideMinHeight="200"
                                 FloatingHeight="300" />
                         </LayoutAnchorGroup>
