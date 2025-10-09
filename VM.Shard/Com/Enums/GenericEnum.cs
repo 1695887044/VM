@@ -32,4 +32,38 @@ namespace VM.Shard.Com.Enums
         /// </summary>
         Alarm,
     }
+    public enum DialogResult
+    {
+        Cancel = 0,     
+        Close = 1,     
+        OK = 10,   
+        Yes = 20,   
+        No = 30,   
+        Save = 40,
+        SaveAll = 41,
+        DontSave = 42,
+        Retry = 50,
+        Ignore = 60,
+        Abort = 70
+    }
+    public enum eProjectAutoRunMode
+    {
+        主动执行 = 0,
+        调用执行 = 1,
+    }
+    public enum eProjectType
+    {
+        /// <summary>
+        /// 流程
+        /// </summary>
+        Process,
+        /// <summary>
+        /// 方法
+        /// </summary>
+        Method,
+        /// <summary>
+        /// 文件夹
+        /// </summary>
+        Folder,
+    }
 }

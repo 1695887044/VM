@@ -1,0 +1,130 @@
+﻿<UserControl
+    x:Class="VM.Start.Dialogs.Views.MessageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvts="clr-namespace:VM.Start.Dialogs.Converts"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:VM.Start.Dialogs.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    Width="500"
+    Height="320"
+    Background="#F0F8FF"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <cvts:MsgTypeConvert x:Key="MsgCvt" />
+    </UserControl.Resources>
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="WindowStyle" Value="None" />
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="AllowsTransparency" Value="True" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </prism:Dialog.WindowStyle>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Background="AliceBlue"
+            Orientation="Horizontal">
+            <GridSplitter
+                Width="2"
+                Margin="0,2"
+                Background="Gray" />
+            <Grid>
+                <Path
+                    Width="45"
+                    Height="45"
+                    Margin="10,2"
+                    HorizontalAlignment="Left"
+                    Data="{StaticResource info}"
+                    Fill="Green"
+                    Stretch="UniformToFill"
+                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=1}" />
+
+                <Path
+                    Width="40"
+                    Height="40"
+                    Margin="10,4"
+                    HorizontalAlignment="Left"
+                    Data="{StaticResource warn}"
+                    Fill="Orange"
+                    Stretch="UniformToFill"
+                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=2}" />
+                <Path
+                    Width="45"
+                    Height="45"
+                    Margin="10,2"
+                    HorizontalAlignment="Left"
+                    Data="{StaticResource alarm}"
+                    Fill="DarkRed"
+                    Stretch="UniformToFill"
+                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=3}" />
+                <Path
+                    Width="45"
+                    Height="45"
+                    Margin="10,2"
+                    HorizontalAlignment="Left"
+                    Data="{StaticResource error}"
+                    Fill="Red"
+                    Stretch="UniformToFill"
+                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=4}" />
+            </Grid>
+            <GridSplitter
+                Width="2"
+                Margin="2"
+                Background="Gray" />
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="26"
+                FontWeight="Light"
+                Text="{Binding Title}" />
+        </StackPanel>
+
+        <ScrollViewer
+            Grid.Row="1"
+            Background="#F0F8FF"
+            HorizontalScrollBarVisibility="Auto"
+            Opacity="0.9"
+            VerticalScrollBarVisibility="Auto">
+            <TextBox
+                MaxWidth="500"
+                Margin="5,15,5,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                FontSize="24"
+                Foreground="Black"
+                IsReadOnly="True"
+                Text="{Binding Message}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </ScrollViewer>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                hc:IconElement.Geometry="{StaticResource cancel}"
+                Command="{Binding ButtomByTagCommand}"
+                CommandParameter="cancel"
+                Content="取消"
+                Style="{StaticResource ButtonDashed}" />
+            <Button
+                Margin="20,0"
+                hc:IconElement.Geometry="{StaticResource submit}"
+                Command="{Binding ButtomByTagCommand}"
+                CommandParameter="ok"
+                Content="确定"
+                Style="{StaticResource ButtonDashed}" />
+
+        </StackPanel>
+    </Grid>
+</UserControl>

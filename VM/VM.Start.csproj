@@ -6,10 +6,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <PackageIcon>机器视觉.png</PackageIcon>
+    <ApplicationIcon>机器视觉.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="机器视觉.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Common\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>

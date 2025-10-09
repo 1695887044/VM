@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows;
+
+namespace VM.Shard.Extensions
+{
+   public  class VisualTreeExt
+    {
+      public static  List<T> FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            try
+            {
+                List<T> list = new List<T>();
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                    
+                    if (child is T)
+                    {
+                        list.Add((T)child);
+                        List<T> childOfChildren = FindVisualChild<T>(child);
+                        if (childOfChildren != null)
+                        {
+                            list.AddRange(childOfChildren);
+                        }
+                    }
+                    else
+                    {
+                        List<T> childOfChildren = FindVisualChild<T>(child);
+                        if (childOfChildren != null)
+                        {
+                            list.AddRange(childOfChildren);
+                        }
+                    }
+                }
+
+                return list;
+            }
+            catch (Exception)
+            {
+                //MessageBox.Show(ee.Message);
+                return null;
+            }
+        }
+        public static DependencyObject FindChild(DependencyObject parent, string name)
+        {
+            // confirm parent and name are valid.
+            if (parent == null || string.IsNullOrEmpty(name)) return null;
+
+            if (parent is FrameworkElement && (parent as FrameworkElement).Name == name) return parent;
+
+            DependencyObject result = null;
+
+            if (parent is FrameworkElement) (parent as FrameworkElement).ApplyTemplate();
+
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                result = FindChild(child, name);
+                if (result != null) break;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Looks for a child control within a parent by type
+        /// </summary>
+        public static T FindChild<T>(DependencyObject parent)
+            where T : DependencyObject
+        {
+            // confirm parent is valid.
+            if (parent == null) return null;
+            if (parent is T) return parent as T;
+
+            DependencyObject foundChild = null;
+
+            if (parent is FrameworkElement) (parent as FrameworkElement).ApplyTemplate();
+
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                foundChild = FindChild<T>(child);
+                if (foundChild != null) break;
+            }
+
+            return foundChild as T;
+        }
+    }
+}

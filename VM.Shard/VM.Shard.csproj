@@ -633,4 +633,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\Cvts\" />
+  </ItemGroup>
+
 </Project>

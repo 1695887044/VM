@@ -4,6 +4,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/VM.Shard;component/Assets/language/CN.xaml"/>
         <ResourceDictionary Source="/VM.Shard;component/Assets/Styles/ButtonStyle.xaml"/>
+        <ResourceDictionary Source="/VM.Shard;component/Assets/Styles/TreeViewStyle.xaml"/>
         <ResourceDictionary Source="/VM.Shard;component/Assets/Geometrys/Geometrys.xaml"/>
         <ResourceDictionary>
             <FontFamily x:Key="FontAwesome">pack://application:,,,/VM.Shard;component/Assets/fonts/#FontAwesome</FontFamily>

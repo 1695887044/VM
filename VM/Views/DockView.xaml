@@ -30,62 +30,77 @@
             </DockingManager.DocumentHeaderTemplate>
             <LayoutRoot>
                 <LayoutPanel Orientation="Horizontal">
-                    <LayoutAnchorablePane DockWidth="0.15*">
+                    <LayoutAnchorablePane DockWidth="190">
                         <LayoutAnchorable
-                            Title="工具栏"
+                            Title="[工具栏]"
                             CanAutoHide="True"
                             CanClose="False"
                             CanHide="True"
+                            Content="{x:Static local:ToolView.Ins}"
                             ContentId="Tool" />
                     </LayoutAnchorablePane>
-                    <LayoutAnchorablePane DockWidth="0.2*">
+                    <LayoutAnchorablePane DockWidth="240">
                         <LayoutAnchorable
-                            Title="流程栏"
+                            Title="[流程栏]"
                             CanAutoHide="True"
                             CanClose="False"
                             CanHide="True"
                             ContentId="Process" />
                     </LayoutAnchorablePane>
-                    <LayoutAnchorablePane DockWidth="0.65*">
-                        <LayoutAnchorable
-                            Title="图像栏"
-                            CanAutoHide="True"
-                            CanClose="False"
-                            CanHide="True"
-                            ContentId="Tool" />
-                    </LayoutAnchorablePane>
+                    <LayoutPanel DockWidth="1.06422018348624*" Orientation="Vertical">
+                        <LayoutDocumentPaneGroup Orientation="Horizontal">
+                            <LayoutDocumentPane DockWidth="0.65*">
+                                <LayoutDocument
+                                    Title="[图像栏]"
+                                    CanClose="False"
+                                    ContentId="Tool"
+                                    IsSelected="True" />
+                            </LayoutDocumentPane>
+                        </LayoutDocumentPaneGroup>
+                        <LayoutAnchorablePaneGroup
+                                DockHeight="277.6"
+                                FloatingHeight="300"
+                                FloatingLeft="1034.4"
+                                FloatingTop="544.8"
+                                FloatingWidth="136"
+                                Orientation="Vertical">
+                            <LayoutAnchorablePane
+                                    DockHeight="277.6"
+                                    DockWidth="1.65746549560853*"
+                                    FloatingHeight="300"
+                                    FloatingLeft="1034.4"
+                                    FloatingTop="544.8"
+                                    FloatingWidth="136">
+                                <LayoutAnchorable
+                                        Title="[日志]"
+                                        AutoHideHeight="300"
+                                        AutoHideMinHeight="200"
+                                        Content="{x:Static local:LogView.Ins}"
+                                        ContentId="Log"
+                                        FloatingHeight="300" />
+                                <LayoutAnchorable
+                                        Title="[数据]"
+                                        AutoHideHeight="300"
+                                        AutoHideMinHeight="200"
+                                        ContentId="Data"
+                                        FloatingHeight="300" />
+                                <LayoutAnchorable
+                                        Title="[输出]"
+                                        AutoHideHeight="300"
+                                        AutoHideMinHeight="200"
+                                        ContentId="ModuleOut"
+                                        FloatingHeight="300" />
+                                <LayoutAnchorable
+                                        Title="[设备状态]"
+                                        AutoHideHeight="300"
+                                        AutoHideMinHeight="200"
+                                        ContentId="DeviceState"
+                                        FloatingHeight="300" />
+                            </LayoutAnchorablePane>
+                        </LayoutAnchorablePaneGroup>
+
+                    </LayoutPanel>
                 </LayoutPanel>
-                <LayoutRoot.BottomSide>
-                    <LayoutAnchorSide>
-                        <LayoutAnchorGroup>
-                            <LayoutAnchorable
-                                Title="日志信息"
-                                AutoHideHeight="300"
-                                AutoHideMinHeight="200"
-                                ContentId="Log"
-                                Content="{x:Static local:LogView.Ins}"
-                                FloatingHeight="300" />
-                            <LayoutAnchorable
-                                Title="数据栏"
-                                AutoHideHeight="300"
-                                AutoHideMinHeight="200"
-                                 ContentId="Data"
-                                FloatingHeight="300" />
-                            <LayoutAnchorable
-                                Title="模块输出"
-                                AutoHideHeight="300"
-                                 ContentId="ModuleOut"
-                                AutoHideMinHeight="200"
-                                FloatingHeight="300" />
-                            <LayoutAnchorable
-                                Title="设备状态"
-                                AutoHideHeight="300"
-                                 ContentId="DeviceState"
-                                AutoHideMinHeight="200"
-                                FloatingHeight="300" />
-                        </LayoutAnchorGroup>
-                    </LayoutAnchorSide>
-                </LayoutRoot.BottomSide>
             </LayoutRoot>
         </avalonDock:DockingManager>
     </Grid>
