@@ -109,24 +109,36 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1.5*" />
                                 <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="3.5*" />
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <Path
                                 Grid.Column="0"
-                                Width="12"
-                                Height="12"
-                                Margin="20,2,2,2"
-                                Data="{Binding IconText}" />
+                                Width="15"
+                                Height="15"
+                                Margin="5,1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                Data="{Binding IconText}"
+                                Fill="White"
+                                Stretch="Fill" />
                             <TextBlock Grid.Column="1">
-                                <Run Text="序号" />
+                                <Run Text="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(ItemsControl.AlternationIndex),Mode=OneWay}" />
                                 <Run Text="." />
-                                <Run Text="名称" />
+                                <Run Text="{Binding Name}" />
                             </TextBlock>
-                            <TextBlock Grid.Column="2" Text="注释" />
-                            <TextBlock Grid.Column="3" Text="运行时间" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Padding="5,0"
+                                FontStyle="Italic"
+                                Foreground="Green"
+                                Text="{Binding Remark}" />
+                            <TextBlock Grid.Column="3" >
+                                <Run Text="{Binding CostTime}"/>
+                                <Run Text="ms"/>
+                            </TextBlock>
                         </Grid>
                     </DataTemplate>
                 </Setter.Value>
@@ -164,18 +176,16 @@
         </ToolBar>
         <ListBox
             Grid.Row="1"
+            dd:DragDrop.DragHandler="{Binding}"
+            dd:DragDrop.DropHandler="{Binding}"
             dd:DragDrop.IsDragSource="True"
-            dd:DragDrop.IsDropTarget="True" 
+            dd:DragDrop.IsDropTarget="True"
             dd:DragDrop.UseDefaultDragAdorner="True"
             dd:DragDrop.UseDefaultEffectDataTemplate="True"
-            AllowDrop="True"
-            ItemsSource="{Binding Datas}"
+            
+            AlternationCount="10000"
+            ItemsSource="{Binding ProcessDatas}"
             Style="{StaticResource processListBox}">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Drop">
-                    <b:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
             <ListBox.ContextMenu>
                 <ContextMenu FontFamily="{StaticResource iconfont}">
                     <MenuItem Header="重命名" Icon="&#xe6e3;" />

@@ -4,13 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:local="clr-namespace:VM.Start.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     d:DesignHeight="450"
     d:DesignWidth="400"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="#1A1A1A"
+    Background="Transparent"
     mc:Ignorable="d">
     <Grid Background="#252525">
         <Grid.RowDefinitions>
@@ -54,6 +55,7 @@
         </ToolBar>
         <TreeView
             Grid.Row="1"
+            AllowDrop="True"
             Background="Transparent"
             BorderThickness="0"
             ItemsSource="{Binding CurrentProject.ProcessList.Children}"
@@ -188,40 +190,36 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button
-                                        Width="55"
-                                        Height="55"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Cursor="Hand">
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger EventName="PreviewMouseDown">
-                                                <b:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ToolBarMouseDownCommand}" PassEventArgsToCommand="True" />
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-
-                                        <StackPanel
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Background="Transparent">
-                                            <Path
-                                                Width="15"
-                                                Height="15"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Top"
-                                                Data="{Binding IconText}"
-                                                Fill="White"
-                                                Stretch="Fill" />
-                                            <TextBlock
-                                                Margin="0,3,0,0"
-                                                HorizontalAlignment="Center"
-                                                FontSize="7"
-                                                Foreground="White"
-                                                Text="{Binding Name}"
-                                                TextTrimming="CharacterEllipsis"
-                                                TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </Button>
+                                    <StackPanel
+                                        dd:DragDrop.IsDragSource="True"
+                                        dd:DragDrop.UseDefaultDragAdorner="True"
+                                        dd:DragDrop.UseDefaultEffectDataTemplate="True">
+                                        <Button
+                                            Width="55"
+                                            Height="55"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Cursor="Hand">
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Path
+                                                    Width="12"
+                                                    Height="12"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    Data="{Binding IconText}"
+                                                    Fill="White"
+                                                    Stretch="Fill" />
+                                                <TextBlock
+                                                    Margin="0,3,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="7"
+                                                    Foreground="White"
+                                                    Text="{Binding Name}"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
