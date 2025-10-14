@@ -16,7 +16,7 @@ namespace VM.Start.Models.Projects.Nodes
         public ObservableCollection<INode> Children { get; set; } = new ObservableCollection<INode>();
 
 
-        public string IconText => "\uf1c3";
+        public string IconText { get; set; } ="\uf1c3";
 
         public string Remark { get; set; } = "文件储存";
     }

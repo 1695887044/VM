@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
+     Background="Transparent"
     mc:Ignorable="d">
     <Grid>
         <avalonDock:DockingManager
@@ -44,6 +45,7 @@
                             Title="[流程栏]"
                             CanAutoHide="True"
                             CanClose="False"
+                              Content="{x:Static local:ProcessView.Ins}"
                             CanHide="True"
                             ContentId="Process" />
                     </LayoutAnchorablePane>

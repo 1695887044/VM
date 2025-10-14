@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace VM.Start.Core
+
+namespace Plugin.Delay.ViewModels
 {
-     sealed class MillisecondTimer : IComponent, IDisposable
+    public sealed class MillisecondTimer : IComponent, IDisposable
     {
         //*****************************************************  字 段  *******************************************************************
         private static TimerCaps caps;

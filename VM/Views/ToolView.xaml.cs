@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using VM.Start.Common;
-
+using VM.Shard.Helper;
 namespace VM.Start.Views
 {
     /// <summary>
@@ -34,7 +23,7 @@ namespace VM.Start.Views
             Point pt = e.GetPosition(ctl);
             HitTestResult result = VisualTreeHelper.HitTest(ctl, pt);
             if(result == null) return;
-            TreeViewItem treeViewItem = WPFElementTool.FindVisualParent<TreeViewItem>(result.VisualHit);
+            TreeViewItem treeViewItem = WPFElementHelper.FindVisualParent<TreeViewItem>(result.VisualHit);
             if(treeViewItem == null) return;
             treeViewItem.Focus();
         }

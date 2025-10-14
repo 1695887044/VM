@@ -9,27 +9,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace VM
+namespace Demo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainShell : Window
+    public partial class MainWindow : Window
     {
-        public MainShell()
+        public string DD { get; set; } = "                ";
+        public MainWindow()
         {
             InitializeComponent();
-        }
-
-
-
-        private void DockPanel_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.DragMove();
-                e.Handled = false;
-            }
+            this.DataContext = new MainViewModel() ;
         }
     }
 }

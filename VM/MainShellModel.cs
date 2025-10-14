@@ -1,11 +1,8 @@
 ﻿using AvalonDock;
-using AvalonDock.Layout;
 using System.Windows;
-using System.Windows.Media;
 using VM.Shard.Extensions;
 using VM.Start.Models;
 using VM.Start.Services;
-using VM.Start.Views;
 
 namespace VM.Start
 {
@@ -27,7 +24,6 @@ namespace VM.Start
         public DelegateCommand<string> ViewCommand { get; init; }
         public DelegateCommand<Object> LoadedCommand { get; init; }
         public DelegateCommand<string> AppComs { get; init; }
-
 
         public MainShellModel(PrismProvider prism, SystemInfo systemInfo)
         {

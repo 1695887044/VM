@@ -13,6 +13,7 @@
     Width="1800"
     Height="900"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    AllowsTransparency="True"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
@@ -30,12 +31,12 @@
             <RowDefinition />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0">
-            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+        <DockPanel Grid.Row="0" Background="Transparent" MouseMove="DockPanel_PreviewMouseMove">
+            <StackPanel DockPanel.Dock="Left" Background="#574EB9" Orientation="Horizontal">
                 <Button
-                    Background="Transparent"
                     BorderThickness="0"
                     Content="&#xe601;"
+                    Background="Transparent"
                     FontFamily="{StaticResource iconfont}"
                     FontSize="18"
                     ToolTip="浏览官网" />
@@ -93,6 +94,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel
+                 Background="#574EB9"
                 HorizontalAlignment="Right"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
@@ -104,7 +106,6 @@
                     Content="&#xe632;"
                     FontFamily="{StaticResource iconfont}"
                     FontSize="16"
-              
                     ToolTip="用户登陆" />
                 <Button
                     VerticalAlignment="Center"
@@ -135,7 +136,7 @@
             BorderBrush="Gray"
             BorderThickness="0,0.5,0.5,0">
             <Button
-                Command="{Binding ViewCommand}" 
+                Command="{Binding ViewCommand}"
                 CommandParameter="NewSolution"
                 Content="&#xe63c;"
                 Style="{StaticResource NavOperateButtonStyle}"
@@ -212,8 +213,7 @@
                 hc:InfoElement.TitlePlacement="Left"
                 FontSize="12"
                 FontWeight="Normal"
-                Style="{StaticResource TextBoxExtend}"
-               />
+                Style="{StaticResource TextBoxExtend}" />
         </ToolBar>
         <ContentControl
             Grid.Row="2"
@@ -232,7 +232,7 @@
             <StatusBarItem>开发者</StatusBarItem>
             <GridSplitter Width="1" />
             <StatusBarItem>解决方案路径:</StatusBarItem>
-            <StatusBarItem Content="{Binding ProjectInfo.ProjectPath}"></StatusBarItem>
+            <StatusBarItem Content="{Binding ProjectInfo.ProjectPath}" />
             <GridSplitter Width="1" />
             <StatusBarItem HorizontalAlignment="Right" Content="{Binding ProjectInfo.ActTime}" />
         </StatusBar>
