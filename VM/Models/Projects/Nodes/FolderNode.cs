@@ -22,5 +22,7 @@ namespace VM.Start.Models.Projects.Nodes
         public string IconText => "\uf07c";
 
         public string Remark { get; set; } = "文件储存";
+
+        public string Tag { get; set; }
     }
 }

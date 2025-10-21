@@ -22,5 +22,7 @@ namespace VM.Start.Models.Projects.Nodes
         public string IconText => "\uf0ae";
 
         public string Remark { get; set; } = "模块";
+
+        public string Tag { get; set; }
     }
 }

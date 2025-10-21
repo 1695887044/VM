@@ -1,28 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using VM.IPlugin;
 
 namespace Plugin.Delay.Views
 {
     /// <summary>
     /// DelayView.xaml 的交互逻辑
     /// </summary>
-    public partial class DelayView : UserControl
+    public partial class DelayView : UserControl, IModuleViewBase
     {
         public DelayView()
         {
             InitializeComponent();
+        }
+
+        public void CancelView()
+        {
+            //this.Close();
+        }
+
+
+        public void InitView(ModuleViewModelBase model = null)
+        {
+            if (model == null) return;
+            this.DataContext = model;
+        }
+
+        public void ShowView()
+        {
+           // this.ShowDialog();
         }
     }
 }

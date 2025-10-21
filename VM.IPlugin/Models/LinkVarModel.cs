@@ -1,0 +1,59 @@
+﻿
+namespace VM.IPlugin.Models
+{
+
+    public class LinkVarModel : BindableBase
+    {
+        public Action TextChanged;
+        private string _Text = "";
+        /// <summary>
+        /// 显示文本
+        /// </summary>
+        public string Text
+        {
+            get { return _Text; }
+            set
+            {
+                _Text = value;
+                RaisePropertyChanged();
+                if (_Text.StartsWith("&"))
+                {
+                    IsReadOnly = true;
+                }
+                else
+                {
+                    Value = _Text;
+                    IsReadOnly = false;
+                }
+                TextChanged?.Invoke();
+            }
+        }
+        private bool _IsReadOnly = false;
+        /// <summary>
+        /// 只读
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return _IsReadOnly; }
+            set
+            {
+                _IsReadOnly = value;
+                RaisePropertyChanged();
+            }
+        }
+        private object _Value;
+        /// <summary>
+        /// 值
+        /// </summary>
+        public object Value
+        {
+            get { return _Value; }
+            set
+            {
+                if (value == null || value.ToString().StartsWith("&")) return;
+                _Value = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+}

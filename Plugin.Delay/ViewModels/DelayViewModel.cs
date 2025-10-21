@@ -1,66 +1,60 @@
-﻿using System.ComponentModel;
+﻿using System.Diagnostics;
+using VM.IPlugin;
+using VM.IPlugin.Enums;
+using VM.IPlugin.Models;
 
 namespace Plugin.Delay.ViewModels
 {
-    [Category("常用工具")]
-    [DisplayName("延时工具")]
-    [Description("Delay")]
     [Serializable]
-    public class DelayViewModel:BindableBase
+    public class DelayViewModel : ModuleViewModelBase
     {
-        private int _delayTime=1000;
-        public int DelayTime
+        Stopwatch stopwatch { get; set; } =new Stopwatch();
+        private LinkVarModel _delayTime = new LinkVarModel { Text = "100" };
+
+        public LinkVarModel DelayTime
         {
             get { return _delayTime; }
-            set { _delayTime = value; RaisePropertyChanged(); }
+            set { _delayTime = value; }
         }
-        private string _status="就绪";
-        public string Status
+
+        public override bool Execute()
         {
-            get { return _status; }
-            set { _status = value; RaisePropertyChanged(); }
-        }
-        public DelegateCommand StartCommand { get; init; }
-        public DelegateCommand StopCommand { get; init; }
-        private bool _isRuning=false;
-        public DelayViewModel()
-        {
-            StartCommand = new DelegateCommand(StartExecute, CanStart).ObservesProperty(() => IsRuning);
-            StopCommand = new DelegateCommand(StopExecute, CanStop).ObservesProperty(() => IsRuning);
-        }
-        private void StopExecute()
-        {
-            _isRuning = false;
-            Status = "已停止";
-            RaisePropertyChanged(nameof(IsRuning));
-        }
-        private bool CanStop()
-        {
-            return IsRuning;
-        }
-        private void StartExecute()
-        {
-            _isRuning = true;
-            Status = "运行中...";
-            RaisePropertyChanged(nameof(IsRuning));
-            System.Threading.Tasks.Task.Run(async () =>
+            int _time = Convert.ToInt32(DelayTime.Value);
+            stopwatch.Restart();
+            try
             {
-                await System.Threading.Tasks.Task.Delay(DelayTime);
-                if (IsRuning)
+                OnModuleStateChanged(StateEvent.Running);
+                stopwatch.Start();
+                while (stopwatch.ElapsedMilliseconds <= _time ||  !stopwatch.IsRunning)
                 {
-                    Status = "延时完成";
-                    _isRuning = false;
-                    RaisePropertyChanged(nameof(IsRuning));
+                    DisplayTime = stopwatch.ElapsedMilliseconds.ToString();
+                    Thread.Sleep(2);
                 }
-            });
+                stopwatch.Stop();
+                OnModuleStateChanged(StateEvent.Complete);
+                return stopwatch.ElapsedMilliseconds >= _time;
+            }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+                OnModuleStateChanged(StateEvent.Error);
+                return false;
+            }
         }
-        private bool CanStart()
+
+        public override bool Confirm()
+        {         
+            return true;
+        }
+
+        public override bool Cancel()
         {
-            return !IsRuning;
+            stopwatch.Stop();
+            OnModuleStateChanged(StateEvent.Paused);
+            return true;
         }
-        public bool IsRuning
-        {
-            get { return _isRuning; }
-        }
+        
+       
+    
     }
 }

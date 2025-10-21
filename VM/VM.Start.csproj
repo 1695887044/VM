@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\03ThirdPartyDll\AvalonDock.Themes.VS2013\AvalonDock.Themes.VS2013.csproj" />
     <ProjectReference Include="..\..\03ThirdPartyDll\AvalonDock\AvalonDock.csproj" />
+    <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
     <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />
   </ItemGroup>
 

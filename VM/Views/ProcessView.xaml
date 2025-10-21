@@ -98,8 +98,8 @@
                                 <Setter Property="FontWeight" Value="Bold" />
                                 <Setter Property="Opacity" Value="1" />
                             </Trigger>
-
                         </Style.Triggers>
+
 
                     </Style>
                 </Setter.Value>
@@ -125,7 +125,7 @@
                                 Fill="White"
                                 Stretch="Fill" />
                             <TextBlock Grid.Column="1">
-                                <Run Text="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(ItemsControl.AlternationIndex),Mode=OneWay}" />
+                                <Run Text="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(ItemsControl.AlternationIndex), Mode=OneWay}" />
                                 <Run Text="." />
                                 <Run Text="{Binding Name}" />
                             </TextBlock>
@@ -135,12 +135,19 @@
                                 FontStyle="Italic"
                                 Foreground="Green"
                                 Text="{Binding Remark}" />
-                            <TextBlock Grid.Column="3" >
-                                <Run Text="{Binding CostTime}"/>
-                                <Run Text="ms"/>
+                            <TextBlock Grid.Column="3">
+                                <Run Text="{Binding CostTime}" />
+                                <Run Text="ms" />
                             </TextBlock>
+                            <Grid.InputBindings>
+                                <MouseBinding
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DoubleClickCommand}"
+                                    CommandParameter="{Binding}"
+                                    MouseAction="LeftDoubleClick" />
+                            </Grid.InputBindings>
                         </Grid>
                     </DataTemplate>
+
                 </Setter.Value>
             </Setter>
         </Style>
@@ -151,14 +158,16 @@
             <RowDefinition />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <ToolBar
+        <StackPanel
             Grid.Row="0"
-            Margin="2,10"
-            Background="Transparent">
+            Margin="10,10"
+            Background="Transparent"
+            Orientation="Horizontal">
             <Button
                 hc:IconElement.Geometry="{StaticResource start1}"
                 Background="Transparent"
                 BorderThickness="0"
+                Command="{Binding ExecuteFlowOnceCommand}"
                 Foreground="Green"
                 ToolTip="执行一次" />
             <Button
@@ -166,14 +175,16 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Foreground="Green"
+                 Command="{Binding RunContinuousCommand}"
                 ToolTip="连续执行" />
             <Button
                 hc:IconElement.Geometry="{StaticResource stop1}"
                 Background="Transparent"
                 BorderThickness="0"
                 Foreground="Red"
+                 Command="{Binding StopFlowCommand}"
                 ToolTip="终止流程" />
-        </ToolBar>
+        </StackPanel>
         <ListBox
             Grid.Row="1"
             dd:DragDrop.DragHandler="{Binding}"
@@ -182,10 +193,10 @@
             dd:DragDrop.IsDropTarget="True"
             dd:DragDrop.UseDefaultDragAdorner="True"
             dd:DragDrop.UseDefaultEffectDataTemplate="True"
-            
             AlternationCount="10000"
             ItemsSource="{Binding ProcessDatas}"
             Style="{StaticResource processListBox}">
+
             <ListBox.ContextMenu>
                 <ContextMenu FontFamily="{StaticResource iconfont}">
                     <MenuItem Header="重命名" Icon="&#xe6e3;" />

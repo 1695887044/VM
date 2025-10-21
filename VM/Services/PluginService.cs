@@ -1,4 +1,4 @@
-﻿using VM.Shard.Events;
+﻿using VM.IPlugin;
 
 namespace VM.Start.Services
 {
@@ -8,21 +8,21 @@ namespace VM.Start.Services
         /// <summary>
         /// 模块插件字典
         /// </summary>
-        public static  Dictionary<string, PolutionInfo> PluginDic_Module = new();
+        public static  Dictionary<string, IPlutionInfo> PluginDic_Module = new();
 
         /// <summary>
         /// 相机插件字典
         /// </summary>
-        public static Dictionary<string, PolutionInfo> PluginDic_Camera = new();
+        public static Dictionary<string, IPlutionInfo> PluginDic_Camera = new();
         /// <summary>
         /// 激光插件字典
         /// </summary>
-        public static Dictionary<string, PolutionInfo> PluginDic_Laser = new();
+        public static Dictionary<string, IPlutionInfo> PluginDic_Laser = new();
 
         /// <summary>
         /// 轴卡插件字典
         /// </summary>
-        public static Dictionary<string, PolutionInfo> PluginDic_Motion = new();
+        public static Dictionary<string, IPlutionInfo> PluginDic_Motion = new();
 
 
         public PluginService(PrismProvider prism)

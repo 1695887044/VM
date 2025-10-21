@@ -16,5 +16,7 @@ namespace VM.Start.Models.Projects.Nodes
         String IconText { get; }
 
         string Remark { get; }
+
+        string Tag { get; set; }
     }
 }

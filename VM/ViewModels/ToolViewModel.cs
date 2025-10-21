@@ -86,7 +86,7 @@ namespace VM.Start.ViewModels
                 FolderNode folder = new FolderNode() { Name = g.Key };
                 g.ToList().ForEach(p =>
                 {
-                    MethodNode method = new MethodNode() { Name = p.Value.DisplayName, Remark = p.Value.Description , IconText =p.Value.PluginIcon};
+                    MethodNode method = new MethodNode() { Name = p.Value.DisplayName, Remark = p.Value.Description , IconText =p.Value.PluginIcon,Tag = p.Value.PluginName};
                     folder.Children.Add(method);
                 });
                 ToolBarSource.Add(folder);

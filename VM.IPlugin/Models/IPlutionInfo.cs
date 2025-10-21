@@ -1,47 +1,45 @@
-﻿using Prism.Events;
+﻿
 
-namespace VM.Shard.Events
+namespace VM.IPlugin
 {
-    public class PluginEvent : PubSubEvent<PolutionInfo>
+    public class PluginEvent : PubSubEvent<IPlutionInfo>
     {
-     
     }
-    public class PolutionInfo
+    public interface IPlutionInfo
     {
         /// <summary>
         /// 插件名称
         /// </summary>
-        public string PluginName { get; set; }
+        public string PluginName { get;}
 
         /// <summary>
         /// 插件图标
         /// </summary>
-        public string PluginIcon { get; set; }
+        public string PluginIcon { get;}
 
         /// <summary>
         /// 分组
         /// </summary>
-        public string Category { get; set; }
+        public string Category { get;}
         /// <summary>
         /// 展示名称
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get;  }
         /// <summary>
         /// 备注
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; }
         /// <summary>
         /// 视图类型
         /// </summary>
-
-        public Type ViewType { get; set; }
+        public IModuleViewBase ViewType { get; }
         /// <summary>
         /// 视图后台类型
         /// </summary>
 
-        public Type ViewModelType { get; set; }
+        public ModuleViewModelBase ViewModelType { get; }
 
 
-        public int Code { get; set; }
+        public int Code { get;  }
     }
 }

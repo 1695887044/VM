@@ -1,5 +1,7 @@
 ﻿
 
+using VM.IPlugin;
+
 namespace VM.Start.Models.Projects.Nodes
 {
     /// <summary>
@@ -14,7 +16,10 @@ namespace VM.Start.Models.Projects.Nodes
         /// <summary>
         /// 执行模块
         /// </summary>
-        public Object ModuleBase { get; set; }
+        public ModuleViewModelBase ViewModel { get; set; }
+        
+
+        public IModuleViewBase View { get; init; }
         /// <summary>
         /// 运行时间
         /// </summary>

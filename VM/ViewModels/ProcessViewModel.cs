@@ -2,13 +2,21 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using VM.IPlugin.Views;
 using VM.Start.Models.Projects.Nodes;
+using VM.Start.Services;
 
 namespace VM.Start.ViewModels
 {
     public class ProcessViewModel:BindableBase, IDropTarget
     {
+        #region 流程栏按钮命令声明
+         public DelegateCommand ExecuteFlowOnceCommand { get; init; }
+         public DelegateCommand RunContinuousCommand { get; init; }
+         public DelegateCommand StopFlowCommand { get; init; }
+        #endregion
         private ObservableCollection<IProcessNode> processDatas = new();
+        public DelegateCommand<IProcessNode> DoubleClickCommand { get; init; }
 
         public ObservableCollection<IProcessNode> ProcessDatas
         {
@@ -19,8 +27,27 @@ namespace VM.Start.ViewModels
 
         public ProcessViewModel()
         {
+            DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
+            ExecuteFlowOnceCommand = new DelegateCommand(ExecuteFlowOnce);
         }
 
+        private void ExecuteFlowOnce()
+        {
+            
+        }
+
+        private void NodeShow(IProcessNode node)
+        {
+            if(node.View is FrameworkElement fe)
+            {
+                var a =  new PluginView();
+                a.Init(fe);
+                a.ShowDialog();
+            }
+            //node.View.ShowView();
+
+        }
+        #region 控件拖拽
         /// <summary>
         /// 控件拖动
         /// </summary>
@@ -55,17 +82,22 @@ namespace VM.Start.ViewModels
         /// </summary>
         /// <param name="node"></param>
         /// <exception cref="NotImplementedException"></exception>
+       #endregion
         private ProcessNode createProcessNode(INode args)
         {
-            ProcessNode node = new();
-            node.Name = args.Name;
-            node.CreateTime = DateTime.Now;
-            node.Updatetime = DateTime.Now;
-            node.SortId = ProcessDatas.Count > 0 ? ProcessDatas.Last().SortId+1:1;
-            node.Token = Guid.NewGuid();
-            node.IconText = args.IconText;
-            node.ModuleBase = "执行模块";
-            node.Remark = args.Remark;
+            ProcessNode node = new()
+            {
+                Name = args.Name,
+                CreateTime = DateTime.Now,
+                Updatetime = DateTime.Now,
+                SortId = ProcessDatas.Count > 0 ? ProcessDatas.Last().SortId + 1 : 1,
+                Token = Guid.NewGuid(),
+                Tag = args.Tag,
+                IconText = args.IconText,
+                View= PluginService.PluginDic_Module[args.Tag].ViewType,
+                ViewModel = PluginService.PluginDic_Module[args.Tag].ViewModelType,
+                Remark = args.Remark
+            };
             return node;
         }
     }
