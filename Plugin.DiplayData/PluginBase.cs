@@ -1,4 +1,4 @@
-﻿using VM.IPlugin;
+﻿using VM.IPlugin.ModuleEvent;
 
 namespace Plugin.DiplayData
 {

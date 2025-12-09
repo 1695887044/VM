@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HWindow_Tool\HWindow_Tool.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="halcondotnet">
+      <HintPath>..\HalconDll\halcondotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing.Common">
+      <HintPath>bin\8.0.15\lib\net6.0\System.Drawing.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

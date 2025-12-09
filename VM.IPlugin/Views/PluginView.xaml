@@ -5,28 +5,34 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:VM.IPlugin.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="Transparent"
     ResizeMode="NoResize"
-     Background="#0F5C0F"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="Button">
+            <Setter Property="Background" Value="#07C160"/>
             <Setter Property="Width" Value="50" />
             <Setter Property="Height" Value="35" />
-            <Setter Property="Margin" Value="5" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Geometry x:Key="info">
             M512 224m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z M544 392h-64c-4.4 0-8 3.6-8 8v464c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V400c0-4.4-3.6-8-8-8z
         </Geometry>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="PART_grid" >
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
-            <RowDefinition  />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="38" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown" Background="#6459DF" Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="0"
+            Background="#6459DF"
+            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+            Orientation="Horizontal">
             <Path
                 Width="40"
                 Height="40"
@@ -37,17 +43,21 @@
             <TextBlock
                 VerticalAlignment="Center"
                 FontSize="26"
-                Text="延时设置" />
+                Text="公用底板" />
         </StackPanel>
-        <ContentControl  x:Name="PART_View" Grid.Row="1" />
+        <ContentControl VerticalContentAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"  x:Name="PART_View" Grid.Row="1" />
         <DockPanel
-           
             Grid.Row="2"
-            Margin="0,2,0,0"
+            Background="#6459DF"
             LastChildFill="True">
-            <TextBlock x:Name="textBlock" VerticalAlignment="Center" DockPanel.Dock="Left">
+            <TextBlock
+                x:Name="textBlock"
+                Margin="10,2"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left">
                 <Run Text="耗时:" />
-                <Run x:Name="t1"  />
+                <Run x:Name="t1" />
                 <Run Text="ms" />
                 <LineBreak />
                 <Run Text="状态:" />
@@ -55,18 +65,16 @@
             </TextBlock>
             <StackPanel
                 HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
                 <Button
-                    Background="#6459DF"
                     Click="Button_Click"
                     Content="执行" />
                 <Button
-                    Background="#6459DF"
                     Click="Button_Click_1"
                     Content="取消" />
                 <Button
-                    Background="#6459DF"
                     Click="Button_Click_2"
                     Content="确认" />
             </StackPanel>

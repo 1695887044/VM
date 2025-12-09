@@ -1,5 +1,4 @@
-﻿
-using VM.IPlugin.Enums;
+﻿using VM.IPlugin.Enums;
 using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin
@@ -7,11 +6,9 @@ namespace VM.IPlugin
 
     public abstract class ModuleViewModelBase:BindableBase
     {
+
         public ModuleEventArgs Args { get; set; } = new();
-
-
-        public Guid ModuleGuid = Guid.NewGuid();
-
+       
         private string displayTime ="0";
 
         public string DisplayTime
@@ -53,7 +50,7 @@ namespace VM.IPlugin
         /// <returns></returns>
         public abstract bool Cancel();
         /// <summary>
-        /// 模块状态发生改变
+        /// 模块状态发生改变  
         /// </summary>
         /// <param name="args"></param>
         protected virtual void OnModuleStateChanged(StateEvent state)
@@ -62,15 +59,24 @@ namespace VM.IPlugin
             ModuleStateChanged?.Invoke(this, Args);
         }
         /// <summary>
-        /// 
+        /// 🔗链接变量发生改变
         /// </summary>
-        protected virtual void OnVarChanged()
+        public abstract void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent);
+       
+        /// <summary>
+        /// 打开变量链接视图
+        /// </summary>
+        protected void OpenVarLinkView(OpenLinkargs args =null)
         {
-            OnVarChangedEvent?.Invoke(this, EventArgs.Empty);
-        }
-        protected virtual void OpenVarLinkView()
-        {
-            OpenVarLinkViewEvent?.Invoke(this, EventArgs.Empty);
+            if(args == null)
+            {
+                args = new OpenLinkargs();
+            }
+            if(args.Fiter == null)
+            {
+                args.Fiter = (s => true);
+            }
+            OpenVarLinkViewEvent?.Invoke(this, args);
         }
         #endregion
 
@@ -78,9 +84,8 @@ namespace VM.IPlugin
         /// <summary>
         /// 事件
         /// </summary>
-        public event EventHandler<ModuleEventArgs>? ModuleStateChanged;
-        public event EventHandler<EventArgs>? OpenVarLinkViewEvent;
-        public event EventHandler<EventArgs>? OnVarChangedEvent;
+        public event EventHandler<ModuleEventArgs>? ModuleStateChanged ;
+        public event EventHandler<OpenLinkargs>? OpenVarLinkViewEvent;
         #endregion
     }
 }

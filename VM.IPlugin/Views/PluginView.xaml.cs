@@ -11,22 +11,24 @@ namespace VM.IPlugin.Views
     /// </summary>
     public partial class PluginView : Window
     {
-         ModuleViewModelBase ActVm;
+          ModuleViewModelBase ActVm;
         public PluginView()
         {
             InitializeComponent();
         }
-        public void Init(FrameworkElement element)
+        public  bool? ShowView(FrameworkElement View, ModuleViewModelBase ViewModel)
         {
-            this.PART_View.Content = element;
-            this.Width = element.Width;
-            this.Height = element.Height + 80;
-            if (element.DataContext is ModuleViewModelBase vm)
-            {
-                ActVm = vm;
-                BindingOperations.SetBinding(t1, Run.TextProperty, new Binding("DisplayTime") { Source = vm });
-                BindingOperations.SetBinding(t2, Run.TextProperty, new Binding("State") { Source = vm });
-            }
+            this.PART_View.Content = View;
+            this.Width = View.Width;
+            this.Height = View.Height + 70;
+           
+            View.DataContext = ViewModel;
+           // this.Width = PART_grid.ActualWidth;
+           // this.Height = PART_grid.ActualHeight;
+            ActVm = ViewModel;
+            BindingOperations.SetBinding(t1, Run.TextProperty, new Binding("DisplayTime") { Source = ActVm });
+            BindingOperations.SetBinding(t2, Run.TextProperty, new Binding("State") { Source = ActVm });
+            return this.ShowDialog();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

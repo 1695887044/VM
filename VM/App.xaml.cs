@@ -29,9 +29,10 @@ namespace VM
             containerRegistry.RegisterForNavigation<MainShell, MainShellModel>();
             containerRegistry.RegisterForNavigation<MessageView, MessageViewModel>();
             containerRegistry.RegisterDialog<LoginView>();
+            containerRegistry.RegisterDialog<VarLinkView, VarLinkViewModel>();
             containerRegistry.RegisterSingleton<PrismProvider>();
             containerRegistry.RegisterSingleton<SystemInfo>();
-            containerRegistry.RegisterSingleton<PluginService>();
+            containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalVarService>();
         }
         protected override IModuleCatalog CreateModuleCatalog()
         {

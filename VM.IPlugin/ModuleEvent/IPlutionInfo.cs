@@ -1,10 +1,6 @@
-﻿
-
-namespace VM.IPlugin
+﻿namespace VM.IPlugin.ModuleEvent
 {
-    public class PluginEvent : PubSubEvent<IPlutionInfo>
-    {
-    }
+    public class PluginEvent : PubSubEvent<IPlutionInfo> { }
     public interface IPlutionInfo
     {
         /// <summary>

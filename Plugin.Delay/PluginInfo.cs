@@ -2,6 +2,7 @@
 using Plugin.Delay.ViewModels;
 using Plugin.Delay.Views;
 using VM.IPlugin;
+using VM.IPlugin.ModuleEvent;
 
 namespace Plugin.Delay
 {

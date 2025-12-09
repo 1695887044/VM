@@ -1,0 +1,31 @@
+﻿using System.Windows.Controls;
+using VM.IPlugin;
+
+namespace Plugin.GrabImage.Views
+{
+    /// <summary>
+    /// GrabImageView.xaml 的交互逻辑
+    /// </summary>
+    public partial class GrabImageView : UserControl,IModuleViewBase
+    {
+        public GrabImageView()
+        {
+            InitializeComponent();
+        }
+
+        public void CancelView()
+        {
+           
+        }
+
+        public void InitView(ModuleViewModelBase model = null)
+        {
+            this.DataContext = model;
+        }
+
+        public void ShowView()
+        {
+           
+        }
+    }
+}

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>net6.0-windows</TargetFramework>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <UseWPF>true</UseWPF>
+  </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="halcondotnet">
+            <HintPath>..\HalconDll\halcondotnet.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Drawing.Common">
+            <HintPath>bin\8.0.15\lib\net6.0\System.Drawing.Common.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Themes\" />
+    </ItemGroup>
+</Project>
