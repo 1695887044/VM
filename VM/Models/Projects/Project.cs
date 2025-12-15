@@ -1,4 +1,6 @@
-﻿using VM.Start.Models.Projects.Nodes;
+﻿using System.Collections.ObjectModel;
+using VM.IPlugin.Models.VarModels;
+using VM.Start.Models.Projects.Nodes;
 
 namespace VM.Start.Models.Projects
 {
@@ -11,16 +13,10 @@ namespace VM.Start.Models.Projects
             get { return _info != null ? _info : _info = new ProjectInfo(); }
             set { _info = value; }
         }
+        public INode Nodes { get; set; }=new FolderNode();
+      
 
-        private INode  processList;
-
-        public INode ProcessList
-        {
-            get { return processList != null ? processList : processList = new ActionNode(); }
-            set { processList = value;  RaisePropertyChanged(); }
-        }
-
-
-
+        public ObservableCollection<IProcessNode> DisplayProcessNodes {  get; set; } =new ObservableCollection<IProcessNode>();
+       
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using VM.Start.Models.Projects;
 using VM.Start.Models.Projects.Nodes;
@@ -111,16 +110,10 @@ namespace VM.Start.ViewModels
             switch (obj)
             {
                 case "Create_A":
-                    Project project = new Project();
-                    CurrentProject = project;
-                    project.ProcessList.Children.Add(new ActionNode());
-                    project.ProcessList.Children[0].Children.Add(new MethodNode() {  Name="子流程A"});
-                    project.ProcessList.Children[0].Children[0].Children.Add(new FolderNode() { Name = "子流程Aaa" });
-                    project.ProcessList.Children.Add(new ActionNode());
-                    project.ProcessList.Children.Add(new ActionNode());
-                    project.ProcessList.Children.Add(new ActionNode());
-                    project.ProcessList.Children.Add(new ActionNode());
-                    project.ProcessList.Children.Add(new ActionNode());
+                     var p = new MethodNode() { Name = "流程0" };
+                    SysConfigProvider.Ins.CurrentProject.Nodes.Children.Add(p);
+                    SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes = p.Nodes;
+                    CurrentProject = SysConfigProvider.Ins.CurrentProject;
                     break;
                 case "Delete_A":
                    

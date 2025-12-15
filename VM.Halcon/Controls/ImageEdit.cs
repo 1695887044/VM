@@ -1,18 +1,18 @@
-﻿using HalconDemo.Enums;
-using HalconDemo.Extensions;
-using HalconDemo.Models;
+﻿
+
 using HalconDotNet;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using VM.Halcon.Enums;
+using VM.Halcon.Extensions;
+using VM.Halcon.Models;
 
-
-namespace HalconDemo.ThemeCodes
+namespace VM.Halcon.Controls
 {
     [TemplatePart(Name = "PART_Halcon", Type = typeof(HSmartWindowControlWPF))]
-    public class ImageEdit:Control
+    public class ImageEdit : Control
     {
         #region //Ctl
         private HSmartWindowControlWPF hSmart;
@@ -104,7 +104,7 @@ namespace HalconDemo.ThemeCodes
         #region //Methods
         private static void HImageChangedCallBack(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if(d is ImageEdit view && e.NewValue != null)
+            if (d is ImageEdit view && e.NewValue != null)
             {
                 view.Display((HObject)e.NewValue);
                 view.HImageWidth = view.HImage.GetImageSize()[0];
@@ -116,7 +116,7 @@ namespace HalconDemo.ThemeCodes
         private void Display(HObject hObject)
         {
             HWindow.DispObj(hObject);
-          
+
             HWindow.SetPart(0, 0, -2, -2);
         }
 
@@ -124,13 +124,13 @@ namespace HalconDemo.ThemeCodes
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if(this.GetTemplateChild("PART_Halcon") is HSmartWindowControlWPF obj1)
+            if (this.GetTemplateChild("PART_Halcon") is HSmartWindowControlWPF obj1)
             {
                 hSmart = (HSmartWindowControlWPF)obj1;
                 this.hSmart.Loaded += HalconWpfView_Loaded;
             }
             RegisterMouseMethods();
-           
+
         }
         /// <summary>
         /// 鼠标右键方法注册
@@ -141,7 +141,7 @@ namespace HalconDemo.ThemeCodes
             MenuItem RoiMenu = new MenuItem();
             RoiMenu.Header = "区域";
             //添加ROI
-            RoiMenu.Items.Add(CreateMenu("绘制矩形", 
+            RoiMenu.Items.Add(CreateMenu("绘制矩形",
                 (s, e) => { DrawShape(DrawShapeType.Rectangle, new HTuple(), new HTuple(), new HTuple(), new HTuple()); }));
             RoiMenu.Items.Add(CreateMenu("绘制椭圆",
                 (s, e) => { DrawShape(DrawShapeType.Ellipse, new HTuple(), new HTuple(), new HTuple(), new HTuple(), new HTuple()); }));
@@ -155,7 +155,7 @@ namespace HalconDemo.ThemeCodes
             MenuItem DisplayMenu = new MenuItem();
             DisplayMenu.Header = "显示";
             DisplayMenu.Items.Add(CreateMenu("适应窗口", (s, e) => {
-            
+
             }));
             _ = DisplayMenu.Items.Add(CreateMenu("显示/隐藏十字", (s, e) =>
             {
@@ -179,7 +179,7 @@ namespace HalconDemo.ThemeCodes
                 else
                 {
                     hSmart.HMouseMove -= HSmart_HMouseMove;
-                }               
+                }
             }));
             //添加
             this.ContextMenu.Items.Add(RoiMenu);
@@ -297,7 +297,7 @@ namespace HalconDemo.ThemeCodes
                 (double)_COL
             );
         }
-        private MenuItem CreateMenu(string name , RoutedEventHandler click)
+        private MenuItem CreateMenu(string name, RoutedEventHandler click)
         {
             MenuItem menu = new MenuItem();
             menu.Header = name;
@@ -306,7 +306,7 @@ namespace HalconDemo.ThemeCodes
         }
         private void HalconWpfView_Loaded(object sender, RoutedEventArgs e)
         {
-        
+
             hWindow = hSmart.HalconWindow;
             HWindow = hWindow;
         }
@@ -321,9 +321,9 @@ namespace HalconDemo.ThemeCodes
             if (HImage == null) return;
             try
             {
-         
+
                 HOperatorSet.CountChannels(HImage, out HTuple channel_count);
-                hWindow.GetMpositionSubPix(out var positionY,out var positionX  , out var button_state);
+                hWindow.GetMpositionSubPix(out var positionY, out var positionX, out var button_state);
                 sb.Append($"X : {positionX:F2} , Y :{positionY:F2}");
                 if (positionX < 0 || positionX >= HImageWidth) return;
                 if (positionY < 0 || positionY >= HImageHeight) return;
@@ -333,7 +333,7 @@ namespace HalconDemo.ThemeCodes
                     var grayVal = hImage.GetGrayval(positionY, positionX);
                     sb.Append($"Gray: {grayVal}");
                 }
-                else if (channel_count == 3) 
+                else if (channel_count == 3)
                 {
                     HImage _RedChannel = hImage.AccessChannel(1);
                     HImage _GreenChannel = hImage.AccessChannel(2);
@@ -348,7 +348,6 @@ namespace HalconDemo.ThemeCodes
             {
                 BottomText = ex.Message;
             }
-            TopText = BottomText;
             BottomText = sb.ToString();
         }
 

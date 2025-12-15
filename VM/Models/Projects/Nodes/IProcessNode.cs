@@ -28,7 +28,9 @@ namespace VM.Start.Models.Projects.Nodes
         /// 运行中
         /// </summary>
         public bool IsRuning { get; set; }
-
+        /// <summary>
+        /// 节点状态
+        /// </summary>
         public int State { get; set; }
     }
 }

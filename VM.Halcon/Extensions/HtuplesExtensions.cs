@@ -1,6 +1,6 @@
 ﻿using HalconDotNet;
 
-namespace HalconDemo
+namespace VM.Halcon.Extensions
 {
     public static class HtuplesExtensions
     {

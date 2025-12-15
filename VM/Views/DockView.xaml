@@ -54,8 +54,8 @@
                             <LayoutDocumentPane DockWidth="0.65*">
                                 <LayoutDocument
                                     Title="[图像栏]"
-                                    CanClose="False"
-                                    ContentId="Tool"
+                                    CanClose="False"                              
+                                       Content="{x:Static local:VisionView.Ins}"
                                     IsSelected="True" />
                             </LayoutDocumentPane>
                         </LayoutDocumentPaneGroup>

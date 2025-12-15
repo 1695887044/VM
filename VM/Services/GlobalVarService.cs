@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Shell;
 using VM.IPlugin.Models.VarModels;
 using VM.Start.Models;
+using VM.Start.Models.Projects.Nodes;
 
 namespace VM.Start.Services
 {
@@ -33,25 +35,31 @@ namespace VM.Start.Services
             vars.Add(new VarValue<bool> { DataType = "bool", LinkPath = "全局变量表1", Name = "测试数据5", Value = false, Note = "布尔类型" });
             moduleVarList.VarModels = vars;
             GlobalVarList.Add(moduleVarList);
-             moduleVarList = new ModuleVarList();
-            moduleVarList.DisplayName = "全局变量表2";
-            moduleVarList.Remarks = "全局变量";
-            moduleVarList.ModuleNo = 2;
-             vars = new ObservableCollection<IVarValue>();
-            vars.Add(new VarValue<int> { DataType = "int", Name = "测试数据111", LinkPath = "全局变量表2", Value = 2220, Note = "整数类型" });
-            vars.Add(new VarValue<int> { DataType = "int", Name = "测试数据112", LinkPath = "全局变量表2", Value = 3330, Note = "整数类型" });
-            vars.Add(new VarValue<string> { DataType = "string", Name = "测试数据11", LinkPath = "全局变量表2", Value = "测试字符串", Note = "字符串类型" });
-            vars.Add(new VarValue<bool> { DataType = "bool", Name = "测试数据15", LinkPath = "全局变量表2", Value = false, Note = "布尔类型" });
-            moduleVarList.VarModels = vars;
-            GlobalVarList.Add(moduleVarList);
         }
         /// <summary>
         /// 根据传入的筛选条件 刷新显示的变量列表
         /// </summary>
         /// <param name="Fiter"></param>
-        public void RefreshDisplayVarList(Func<IVarValue, bool> Fiter)
+        public void RefreshDisplayVarList(Func<IVarValue, bool> Fiter,IProcessNode node =null)
         {
             DisplayVarList.Clear();
+       
+            //遍历当前工程模块的变量输出
+            foreach (var item in SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes)
+            {
+                if (item.SortId >=  node.SortId ||
+                    item.ViewModel.ModuleData.VarOut == null ||
+                    item.ViewModel.ModuleData.VarOut.Count == 0) continue;
+                ModuleVarList tempModuleList = new ModuleVarList();
+                tempModuleList.DisplayName = $"{item.Name}-{item.SortId+1}";
+                foreach (var data in item.ViewModel.ModuleData.VarOut.Where(Fiter))
+                {
+                    
+                    tempModuleList.VarModels.Add(data);
+                }
+                DisplayVarList.Add(tempModuleList);
+            }
+            //查找全局变量列表
             foreach (ModuleVarList list in GlobalVarList)
             {
                 ModuleVarList tempList = list.Clone() as ModuleVarList;

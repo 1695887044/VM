@@ -1,6 +1,8 @@
 ﻿using HalconDotNet;
 using Microsoft.Win32;
+using System.Diagnostics;
 using VM.IPlugin;
+using VM.IPlugin.Enums;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
@@ -20,20 +22,22 @@ namespace Plugin.GrabImage.ViewModels
                 get { return imageSourcePath; }
                 set { imageSourcePath = value; RaisePropertyChanged(); }
             }
-        private HWindowControlWPF imageControl;
 
-        public HWindowControlWPF ImageControl
+
+        private HImage displayImage;
+
+        public HImage DisplayImage
         {
-            get { return imageControl; }
-            set { imageControl = value; RaisePropertyChanged(); }
+            get { return displayImage; }
+            set { displayImage = value; RaisePropertyChanged(); }
         }
-
         #endregion
+
 
         public GrabImageViewModel()
         {
-            ImageControl= new HWindowControlWPF();
             initCommands();
+           
         }
 
         private void initCommands()
@@ -45,12 +49,12 @@ namespace Plugin.GrabImage.ViewModels
         private void OpenLink()
         {
             OpenLinkargs openLinkargs = new OpenLinkargs();
-            openLinkargs.guid = Paramer.ModuleGuid;
+            openLinkargs.guid = ModuleData.ModuleGuid;
             openLinkargs.name = "GrabImage";
-            openLinkargs.Fiter = (s => s.DataType == "image");
+            openLinkargs.Fiter = (s => s.DataType == "HImage");
             OpenVarLinkView(openLinkargs);
         }
-
+         
         /// <summary>
         /// 触发选择图片
         /// </summary>
@@ -59,8 +63,16 @@ namespace Plugin.GrabImage.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
             if (openFileDialog.ShowDialog() != true) return;
-            ImageSourcePath.Value= openFileDialog.FileName;
-            ImageControl.HalconWindow.DispImage(new HImage(ImageSourcePath.Value));
+            var img = new HImage();
+            ImageSourcePath.Value = openFileDialog.FileName;
+            img.ReadImage(openFileDialog.FileName);
+            ModuleData.SetVarValue<HImage>("图像", (s =>
+            {
+                s.Value = img;
+              DisplayImage = s.Value;
+            }
+            ));
+           
         }
 
         public override bool Cancel()
@@ -80,7 +92,22 @@ namespace Plugin.GrabImage.ViewModels
 
         public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
         {
-            
+            if(changedEvent.varValue is VarValue<HImage> linkvar)
+            {
+                linkvar.OnValueChanged += Linkvar_OnValueChanged;
+                DisplayImage = linkvar.Value;
+            }
+        }
+
+        private void Linkvar_OnValueChanged(object? sender, HImage e)
+        {
+            DisplayImage = e;
+        }
+
+        public override void RegisterOut()
+        {
+            base.RegisterOut();
+            ModuleData.AppendOutVar("图像", "HImage" ,  DisplayImage);
         }
     }
 }

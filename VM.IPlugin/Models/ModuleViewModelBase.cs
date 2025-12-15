@@ -1,4 +1,5 @@
 ﻿using VM.IPlugin.Enums;
+using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin
@@ -25,12 +26,12 @@ namespace VM.IPlugin
             set { state = value; RaisePropertyChanged(); }
         }
 
-        private ModuleParamer _Paramer = new();
+        private ModuleParamer _moduleData = new();
 
-        public ModuleParamer Paramer
+        public ModuleParamer ModuleData
         {
-            get { return _Paramer; }
-            set { _Paramer = value; }
+            get { return _moduleData; }
+            set { _moduleData = value; }
         }
 
         #region Methods
@@ -62,7 +63,7 @@ namespace VM.IPlugin
         /// 🔗链接变量发生改变
         /// </summary>
         public abstract void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent);
-       
+        
         /// <summary>
         /// 打开变量链接视图
         /// </summary>
@@ -86,6 +87,25 @@ namespace VM.IPlugin
         /// </summary>
         public event EventHandler<ModuleEventArgs>? ModuleStateChanged ;
         public event EventHandler<OpenLinkargs>? OpenVarLinkViewEvent;
+
+
+
+
+        #region 创建模块时,初始化一些属性
+        public virtual void ModuleInit()
+        {
+
+        }
+        public virtual void RegisterOut()
+        {
+            ModuleData.AppendOutVar("状态", "StateEvent", StateEvent.Initializing);
+            ModuleData.AppendOutVar("时间", "int",0 );
+        }
+        public virtual void RegisterIn()
+        {
+            
+        }
+        #endregion
         #endregion
     }
 }

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+      <TargetFramework>net6.0-windows</TargetFramework>
+      <Nullable>enable</Nullable>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="8.0.15" />
+  </ItemGroup>
+    <ItemGroup>
+        <Reference Include="halcondotnet">
+            <HintPath>..\HalconDll\halcondotnet.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+</Project>

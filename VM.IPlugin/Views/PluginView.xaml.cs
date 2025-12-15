@@ -54,7 +54,7 @@ namespace VM.IPlugin.Views
             this.Close();
         }
 
-        private void StackPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed) this.DragMove();
         }

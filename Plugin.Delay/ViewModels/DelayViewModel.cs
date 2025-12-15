@@ -33,7 +33,7 @@ namespace Plugin.Delay.ViewModels
         private void OpenLink()
         {
             OpenLinkargs openLinkargs = new OpenLinkargs();
-            openLinkargs.guid = Paramer.ModuleGuid;
+            openLinkargs.guid = ModuleData.ModuleGuid;
             openLinkargs.name = "DelayTime";
             openLinkargs.Fiter = (s => s.DataType == "int");
             OpenVarLinkView(openLinkargs);

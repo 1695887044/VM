@@ -1,6 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using VM.IPlugin.Consts;
 using VM.IPlugin.Models.VarModels;
@@ -18,17 +17,14 @@ namespace VM.Start.ViewModels
          public DelegateCommand RunContinuousCommand { get; init; }
          public DelegateCommand StopFlowCommand { get; init; }
         #endregion
-        private ObservableCollection<IProcessNode> processDatas = new();
+     
         private readonly IDialogService dialogService;
         private readonly GlobalVarService globalVarService;
         private IProcessNode _currentNode;
         public DelegateCommand<IProcessNode> DoubleClickCommand { get; init; }
 
-        public ObservableCollection<IProcessNode> ProcessDatas
-        {
-            get { return processDatas; }
-            set { processDatas = value;RaisePropertyChanged(); }
-        }
+        public ObservableCollection<IProcessNode> ProcessDatas { get; }
+  
 
 
         public ProcessViewModel(IDialogService dialogService,GlobalVarService globalVarService)
@@ -37,7 +33,9 @@ namespace VM.Start.ViewModels
             ExecuteFlowOnceCommand = new DelegateCommand(ExecuteFlowOnce);
             this.dialogService = dialogService;
             this.globalVarService = globalVarService;
+            ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
         }
+
 
         private void ExecuteFlowOnce()
         {
@@ -63,7 +61,7 @@ namespace VM.Start.ViewModels
         private void OpenVarLinkView(object? sender, OpenLinkargs e)
         {
             //根据传入的参数筛选数据
-            globalVarService.RefreshDisplayVarList(e.Fiter);
+            globalVarService.RefreshDisplayVarList(e.Fiter,_currentNode);
             //打开弹窗 确认后 通知对应后台  作出VieModel的变量改变处理
             dialogService.ShowDialog("VarLinkView", (s) => {
                 if (s.Result != ButtonResult.OK) return;
@@ -104,7 +102,7 @@ namespace VM.Start.ViewModels
             }
         }
         /// <summary>
-        /// 根据节点创建流程节点
+        /// 根据节点创建流程节点 创建后 模块初始化  注册输入类型 注册输出类型
         /// </summary>
         /// <param name="node"></param>
         /// <exception cref="NotImplementedException"></exception>
@@ -124,6 +122,9 @@ namespace VM.Start.ViewModels
                 ViewModel = PluginService.PluginDic_Module[args.Tag].ViewModelType,
                 Remark = args.Remark
             };
+            node.ViewModel.ModuleInit();
+            node.ViewModel.RegisterIn();
+            node.ViewModel.RegisterOut();
             return node;
         }
     }

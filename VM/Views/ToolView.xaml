@@ -21,7 +21,7 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <ToolBar Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}">
+        <ToolBar Background="#252525" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}">
             <StackPanel Orientation="Horizontal">
                 <Button
                     Command="{Binding ProjectCommand}"
@@ -58,7 +58,7 @@
             AllowDrop="True"
             Background="Transparent"
             BorderThickness="0"
-            ItemsSource="{Binding CurrentProject.ProcessList.Children}"
+            ItemsSource="{Binding CurrentProject.Nodes.Children}"
             PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectedItemChanged">

@@ -1,8 +1,6 @@
-﻿
+﻿using HalconDotNet;
 
-using HalconDotNet;
-
-namespace HalconDemo.Extensions
+namespace VM.Halcon.Extensions
 {
     public static class HObjectExtension
     {
@@ -24,7 +22,7 @@ namespace HalconDemo.Extensions
                 }
             }
         }
-        public static HImage ToHimage( this HObject hobject)
+        public static HImage ToHimage(this HObject hobject)
         {
             HImage img = new HImage();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())

@@ -4,6 +4,9 @@ using VM.Shard.Com.Enums;
 
 namespace VM.Start.Models.Projects.Nodes
 {
+    /// <summary>
+    /// 单个执行模块
+    /// </summary>
     public class ProcessNode : ModelBase, IProcessNode
     {
         public int SortId { get; set; }
@@ -26,5 +29,7 @@ namespace VM.Start.Models.Projects.Nodes
         public string Remark { get; set; }
 
         public string Tag { get; set; }
+
+
     }
 }
