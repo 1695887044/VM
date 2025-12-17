@@ -18,12 +18,21 @@ namespace VM.Start.ViewModels
          public DelegateCommand RunContinuousCommand { get; init; }
          public DelegateCommand StopFlowCommand { get; init; }
 
+        public DelegateCommand<string> MenuOperateCommand { get; init; }
         private readonly PrismProvider prism;
         #endregion
 
         private readonly IDialogService dialogService;
         private readonly GlobalVarService globalVarService;
         private IProcessNode _currentNode;
+        private IProcessNode selectNodeItem;
+
+        public IProcessNode SelectNodeItem
+        {
+            get { return selectNodeItem; }
+            set { selectNodeItem = value; RaisePropertyChanged(); }
+        }
+
         public DelegateCommand<IProcessNode> DoubleClickCommand { get; init; }
 
         public ObservableCollection<IProcessNode> ProcessDatas { get; }
@@ -35,12 +44,27 @@ namespace VM.Start.ViewModels
 
             DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
             ExecuteFlowOnceCommand = new DelegateCommand(ExecuteFlowOnce);
+            MenuOperateCommand = new DelegateCommand<string>(MenuOperate);
             this.prism = prism;
             this.dialogService = dialogService;
             this.globalVarService = globalVarService;
             ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
         }
-
+        /// <summary>
+        /// 菜单栏命令
+        /// </summary>
+        /// <param name="obj"></param>
+        private void MenuOperate(string obj)
+        {
+            if (SelectNodeItem == null) return;
+            ProcessDatas.Remove(SelectNodeItem);
+            int tempi = 1;
+            foreach (var processData in ProcessDatas) 
+            {
+                processData.SortId = tempi;
+                tempi = tempi + 1;
+            }
+        }
 
         private void ExecuteFlowOnce()
         {

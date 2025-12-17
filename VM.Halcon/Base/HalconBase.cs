@@ -59,13 +59,13 @@ namespace VM.Halcon.Base
 
 
 
-        public HObject HImage
+        public HImage HImage
         {
-            get { return (HObject)GetValue(HImageProperty); }
+            get { return (HImage)GetValue(HImageProperty); }
             set { SetValue(HImageProperty, value); }
         }
         public static readonly DependencyProperty HImageProperty =
-            DependencyProperty.Register("HImage", typeof(HObject), typeof(HalconBase), new PropertyMetadata(HImageChangedCallBack));
+            DependencyProperty.Register("HImage", typeof(HImage), typeof(HalconBase), new PropertyMetadata(HImageChangedCallBack));
 
 
 
@@ -87,9 +87,10 @@ namespace VM.Halcon.Base
             if (d is HalconBase view && e.NewValue != null)
             {
                 view.Display((HObject)e.NewValue);
+                view.HImage = (HImage)e.NewValue;
                 view.DisplayImageInfo.Width = view.HImage.GetImageSize()[0];
                 view.DisplayImageInfo.Height = view.HImage.GetImageSize()[1];
-                view.DisplayImageInfo.Image = view.HImage.ToHimage();
+                view.DisplayImageInfo.Image = view.HImage;
                 HOperatorSet.CountChannels(view.HImage, out HTuple channel_count);
                 view.DisplayImageInfo.ChannelCount = channel_count;
                 view.HImageChanged(view, view.DisplayImageInfo.Image);

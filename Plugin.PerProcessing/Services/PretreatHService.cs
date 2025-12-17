@@ -1,11 +1,91 @@
 ﻿using HalconDotNet;
 using Plugin.PerProcessing.Common;
+using Plugin.PerProcessing.Model;
 using System.Diagnostics;
 
 namespace Plugin.PerProcessing.Services
 {
     public class PretreatHService
     {
+        public HImage ImageOperator( HImage inImg , IToolData tool)
+        {
+            HImage outImg = new HImage();
+            switch (tool.SubType)
+            {
+                case eOperatorType.彩色转灰:
+                    var s1 = tool.As<ToolDataBase<TransImageParam>>()?.ToolParamer;
+                    TransImage(inImg,out outImg,s1.TransImageType,s1.TransImageChannel);
+                    break;
+                case eOperatorType.图像镜像:
+                    var s2 = tool.As<ToolDataBase<MirrorImageParam>>()?.ToolParamer;
+                    MirrorImage(inImg, out outImg, s2.MirrorImageType);
+                    break;
+                case eOperatorType.图像旋转:
+                    var s3 = tool.As<ToolDataBase<RotateImageParam>>()?.ToolParamer;
+                    RotateImage(inImg, out outImg, s3.RotateImageAngle);
+                    break;
+                case eOperatorType.修改图像尺寸:
+                    break;
+                case eOperatorType.均值滤波:
+                    var s4 = tool.As<ToolDataBase<FilterParam>>()?.ToolParamer;
+                    MeanImage(inImg, out outImg,s4.Width,s4.Height);
+                    break;
+                case eOperatorType.中值滤波:
+                    var s5 = tool.As<ToolDataBase<FilterParam>>()?.ToolParamer;
+                    MedianImage(inImg, out outImg, s5.Width, s5.Height);
+                    break;
+                case eOperatorType.高斯滤波:
+                    var s6 = tool.As<ToolDataBase<FilterParam>>()?.ToolParamer;
+                    GaussImage(inImg, out outImg,s6.Size);
+                    break;
+                case eOperatorType.灰度膨胀:
+                    var s14 = tool.As<ToolDataBase<MorphologyParam>>()?.ToolParamer;
+                    GrayErosion(inImg, out outImg, s14.Width, s14.Height);
+                    break;
+                case eOperatorType.灰度腐蚀:
+                    var s15 = tool.As<ToolDataBase<MorphologyParam>>()?.ToolParamer;
+                    GrayDilation(inImg, out outImg, s15.Width, s15.Height);
+                    break;
+                case eOperatorType.锐化:
+                    var s16 = tool.As<ToolDataBase<EnhanceParam>>()?.ToolParamer;
+                    EmphaSize(inImg, out outImg,s16.Width,s16.Height,s16.EmphaFactor);
+                    break;
+                case eOperatorType.对比度:
+                    var s17 = tool.As<ToolDataBase<EnhanceParam>>()?.ToolParamer;
+                    Illuminate(inImg, out outImg, s17.Width, s17.Height, s17.IlluminateFactor);
+                    break;
+                case eOperatorType.亮度调节:
+                    var s18 = tool.As<ToolDataBase<EnhanceParam>>()?.ToolParamer;
+                    ScaleImage(inImg, out outImg, s18.ScaleMult,s18.ScaleAdd);
+                    break;
+                case eOperatorType.灰度开运算:
+                    var s19 = tool.As<ToolDataBase<MorphologyParam>>()?.ToolParamer;
+                    Closing(inImg, out outImg, s19.Width, s19.Height);
+                    break;
+                case eOperatorType.灰度闭运算:
+                    var s20 = tool.As<ToolDataBase<MorphologyParam>>()?.ToolParamer;
+                    Closing(inImg, out outImg, s20.Width,s20.Height);
+                    break;
+                case eOperatorType.反色:
+                    var s21 = tool.As<ToolDataBase<InvertImageParam>>()?.ToolParamer;
+                    InvertImage(inImg, out outImg,s21.InvertImageLogic);
+                    break;
+                case eOperatorType.二值化:
+                    var s22 = tool.As<ToolDataBase<ThresholdParam>>()?.ToolParamer;
+                    Threshold(inImg, out outImg, s22.ThresholdLow, s22.ThresholdHight, s22.ThresholdReverse);
+                    break;
+                case eOperatorType.均值二值化:
+                    var s23 = tool.As<ToolDataBase<VarThresholdParam>>()?.ToolParamer;
+                    VarThreshold(inImg, out outImg, s23.VarThresholdWidth, s23.VarThresholdHeight, s23.VarThresholdSkew,s23.VarThresholdType);
+                    break;
+                default:
+                    break;
+            }
+       
+            return outImg;
+        }
+
+
         #region 图像调整
         /// <summary>
         /// 彩色图转灰度图

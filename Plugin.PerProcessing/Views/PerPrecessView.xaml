@@ -2,13 +2,17 @@
     x:Class="Plugin.PerProcessing.Views.PerPrecessView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:com="clr-namespace:Plugin.PerProcessing.Common"
+    xmlns:ctl="clr-namespace:Plugin.PerProcessing.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="urn:gong-wpf-dragdrop"
-       xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
     xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:linkCt="clr-namespace:VM.IPlugin.Controls;assembly=VM.IPlugin"
     xmlns:local="clr-namespace:Plugin.PerProcessing.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:Plugin.PerProcessing.Model"
     Width="980"
     Height="680"
     d:DesignHeight="450"
@@ -58,21 +62,16 @@
         <TabControl>
             <TabItem Header="基本参数">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="39*" />
-                        <ColumnDefinition Width="98*" />
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80" />
                         <RowDefinition Height="80" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <GroupBox Grid.ColumnSpan="2" Header="图像链接">
+                    <GroupBox  Header="图像链接">
                         <linkCt:LinkPathBlock Header="输入图像" LinkPathCommand="{Binding LinkPathCommand}" />
                     </GroupBox>
                     <GroupBox
                         Grid.Row="1"
-                        Grid.ColumnSpan="2"
                         Header="ROI类型">
                         <StackPanel
                             HorizontalAlignment="Center"
@@ -83,11 +82,8 @@
                         </StackPanel>
                     </GroupBox>
                     <ListBox
+                        x:Name="src"
                         Grid.Row="2"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.UseDefaultDragAdorner="True"
-                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
                         ItemsSource="{Binding RoiData}" />
                 </Grid>
             </TabItem>
@@ -128,13 +124,6 @@
                                         Command="{Binding DataOperateCommand}"
                                         CommandParameter="修改图像尺寸"
                                         Header="修改图像尺寸" />
-                                    <MenuItem Header="缩放图像尺寸" />
-                                    <MenuItem Header="深度转灰度" />
-                                    <MenuItem Header="剪裁图像" />
-                                    <MenuItem Header="点云孔洞填充" />
-                                    <MenuItem Header="斜切补正" />
-                                    <MenuItem Header="斜切变换" />
-                                    <MenuItem Header="阴影补正" />
                                 </MenuItem>
                                 <MenuItem
                                     HorizontalAlignment="Center"
@@ -214,8 +203,13 @@
                     <ListBox
                         Grid.Row="1"
                         HorizontalContentAlignment="Stretch"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.UseDefaultDragAdorner="True"
+                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
                         ItemsSource="{Binding M_ToolData}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SelectedItem="{Binding CurrentItem}"
                         Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
@@ -253,6 +247,10 @@
                                                 Command="{Binding ToolDataOperateCommand}"
                                                 CommandParameter="C"
                                                 Header="修改注释" />
+                                            <MenuItem
+                                                Command="{Binding ToolDataOperateCommand}"
+                                                CommandParameter="D"
+                                                Header="删除" />
                                         </ContextMenu>
                                     </Border.ContextMenu>
                                     <Grid>
@@ -276,19 +274,20 @@
                                             Grid.Column="2"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Center"
-                                            Text="{Binding DisplayString}" />
+                                            Text="{Binding ToolParamer.DisplayValue}" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <ctl:DisplayParam Grid.Row="2" />
                 </Grid>
             </TabItem>
         </TabControl>
-        <hc:DialogContainer/>
+        <hc:DialogContainer />
         <halconCt:ImageEdit
             Grid.Column="1"
             DrawObjectList="{Binding RoiData}"
-            HImage="{Binding CurrentHImage}" DisplayImageInfo="{Binding ImageInfo}"/>
+            HImage="{Binding CurrentHImage, Mode=TwoWay}" />
     </Grid>
 </UserControl>

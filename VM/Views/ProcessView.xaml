@@ -71,6 +71,7 @@
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Border
                                         MinHeight="30"
+                                        Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                         Padding="{TemplateBinding Padding}"
                                         Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
@@ -174,15 +175,15 @@
                 hc:IconElement.Geometry="{StaticResource start2}"
                 Background="Transparent"
                 BorderThickness="0"
+                Command="{Binding RunContinuousCommand}"
                 Foreground="Green"
-                 Command="{Binding RunContinuousCommand}"
                 ToolTip="连续执行" />
             <Button
                 hc:IconElement.Geometry="{StaticResource stop1}"
                 Background="Transparent"
                 BorderThickness="0"
+                Command="{Binding StopFlowCommand}"
                 Foreground="Red"
-                 Command="{Binding StopFlowCommand}"
                 ToolTip="终止流程" />
         </StackPanel>
         <ListBox
@@ -194,11 +195,13 @@
             dd:DragDrop.UseDefaultDragAdorner="True"
             dd:DragDrop.UseDefaultEffectDataTemplate="True"
             AlternationCount="10000"
+            SelectedItem="{Binding SelectNodeItem}"
             ItemsSource="{Binding ProcessDatas}"
-            Style="{StaticResource processListBox}">
+            Style="{StaticResource processListBox}"
+            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
 
             <ListBox.ContextMenu>
-                <ContextMenu FontFamily="{StaticResource iconfont}">
+                <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Mode=Self}}" FontFamily="{StaticResource iconfont}">
                     <MenuItem Header="重命名" Icon="&#xe6e3;" />
                     <MenuItem Header="编辑注释" Icon="&#xe61e;" />
                     <Separator />
@@ -214,7 +217,7 @@
                     <MenuItem Header="复制" Icon="&#xe623;" />
                     <MenuItem Header="粘贴" Icon="&#xe624;" />
                     <MenuItem Header="禁用" Icon="&#xe627;" />
-                    <MenuItem Header="删除模块" Icon="&#xe8b6;" />
+                    <MenuItem Header="删除模块" Icon="&#xe8b6;" Command="{Binding MenuOperateCommand}" CommandParameter="Dele" />
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

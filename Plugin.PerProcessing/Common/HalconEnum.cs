@@ -2,6 +2,14 @@
 
 namespace Plugin.PerProcessing.Common
 {
+    public enum eToolGroup
+    {
+        图像调整,
+        滤波,
+        形态学,
+        增强,
+        二值化
+    }
     public enum eTransImageType
     {
         通用比例转换,

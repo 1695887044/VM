@@ -1,29 +1,32 @@
-﻿namespace Plugin.PerProcessing.Model
+﻿using Plugin.PerProcessing.Common;
+
+namespace Plugin.PerProcessing.Model
 {
-    public class ToolModel:BindableBase
+    public interface IToolData
     {
-        private bool isEnabled=true;
+        public bool IsEnabled { get; set; }
+        public string Name { get; set; }
 
-        public bool IsEnabled
-        {
-            get { return isEnabled; }
-            set { isEnabled = value; RaisePropertyChanged(); }
-        }
+        public string Note { get; set; }
+        public eOperatorType SubType { get; set; }
 
-
-        private string displayString;
-
-        public string DisplayString
-        {
-            get { return displayString; }
-            set { displayString = value; RaisePropertyChanged(); }
-        }
+    }
+    public abstract class ToolDataBase<T>:BindableBase, IToolData where T:class, new()
+    {
+        public eOperatorType SubType { get; set; }
         private string note;
 
         public string Note
         {
             get { return note; }
             set { note = value; RaisePropertyChanged(); }
+        }
+        private bool isEnabled = true;
+
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set { isEnabled = value; RaisePropertyChanged(); }
         }
         private string name;
 
@@ -32,6 +35,15 @@
             get { return name; }
             set { name = value; RaisePropertyChanged(); }
         }
-        public string ToolName { get; set; }
+
+
+        private T toolParamer;
+
+        public T ToolParamer
+        {
+            get { return toolParamer; }
+            set { toolParamer = value; RaisePropertyChanged();}
+        }
     }
+
 }

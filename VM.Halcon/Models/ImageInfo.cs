@@ -1,5 +1,6 @@
 ﻿using HalconDotNet;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace VM.Halcon.Models
 {
@@ -71,9 +72,11 @@ namespace VM.Halcon.Models
             {
                 if (ReferenceEquals(image, value)) return;   // 可选：避免重复通知
                 image = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Image)));
+                OnPropertyChanged();
             }
         }
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     }
 }

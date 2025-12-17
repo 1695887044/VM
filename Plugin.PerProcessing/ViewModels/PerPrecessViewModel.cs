@@ -1,11 +1,8 @@
 ﻿using HalconDotNet;
-using HandyControl.Controls;
+using Plugin.PerProcessing.Common;
 using Plugin.PerProcessing.Model;
 using Plugin.PerProcessing.Services;
-using Prism.Events;
 using System.Collections.ObjectModel;
-using System.Windows;
-using VM.Halcon.Extensions;
 using VM.Halcon.Models;
 using VM.IPlugin;
 using VM.IPlugin.Models.VarModels;
@@ -24,14 +21,13 @@ namespace Plugin.PerProcessing.ViewModels
             set { roiData = value; RaisePropertyChanged(); }
         }
 
-        private ImageInfo imageInfo = new();
+        private IToolData currentData;
 
-        public ImageInfo ImageInfo
+        public IToolData CurrentItem
         {
-            get { return imageInfo; }
-            set { imageInfo = value; RaisePropertyChanged(); }
+            get { return currentData; }
+            set { currentData = value; RaisePropertyChanged(); }
         }
-
 
         private HImage currentHImage;
 
@@ -40,10 +36,10 @@ namespace Plugin.PerProcessing.ViewModels
             get { return currentHImage; }
             set { currentHImage = value;RaisePropertyChanged(); }
         }
-        private ObservableCollection<ToolModel> m_ToolData =new();
+        private ObservableCollection<IToolData> m_ToolData =new();
         private readonly IEventAggregator aggregator;
 
-        public ObservableCollection<ToolModel> M_ToolData
+        public ObservableCollection<IToolData> M_ToolData
         {
             get { return m_ToolData; }
             set { m_ToolData = value; RaisePropertyChanged(); }
@@ -65,17 +61,17 @@ namespace Plugin.PerProcessing.ViewModels
 
 
         }
-
+        /// <summary>
+        /// 增加模块
+        /// </summary>
+        /// <param name="obj"></param>
         private void ChangedToolMethod(string obj)
         {
-            M_ToolData.Add(new ToolModel()
-            {
-                DisplayString = "二值化",
-                Name = "二值化",
-                Note = "二值化",
-                ToolName= "二值化"
-            });
-
+            IToolData? data = ToolFactory.CreateTool(obj);
+            if (data == null) return;
+            data.Name = obj;
+            M_ToolData.Add(data);
+            CurrentItem= data;
         }
 
         private void LinkMethod(string obj)
@@ -99,26 +95,14 @@ namespace Plugin.PerProcessing.ViewModels
 
         public override bool Execute()
         {
-            if(ImageInfo.Image == null) return false;
-            HImage TempOutImage = new HImage();
-            HImage TempInImage = ImageInfo.Image.Clone();
-            bool mem = false;
+            if(CurrentHImage == null) return false;
+            HImage TempOutImage = CurrentHImage.Clone();
+            HImage TempInImage = new HImage();
             foreach (var tool in M_ToolData)
             {
-                if (mem)
-                {
-                    TempInImage = new HImage(TempOutImage);
-                }
-                mem = true;
+                TempInImage = new HImage(TempOutImage);
                 if (!tool.IsEnabled) continue;
-                switch (tool.ToolName)
-                {
-                    case "二值化":
-                        ComMethods.MethodService.Threshold(TempInImage, out TempOutImage,20,40,false);
-                        break;
-                    default:
-                        break;
-                }
+                TempOutImage = ComMethods.MethodService.ImageOperator(TempInImage,tool);
             }
           
             ModuleData.SetVarValue<HImage>("图像", (s =>
