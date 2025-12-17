@@ -1,4 +1,6 @@
-﻿using VM.IPlugin.ModuleEvent;
+﻿using Plugin.DiplayData.ViewModels;
+using Plugin.DiplayData.Views;
+using VM.IPlugin.ModuleEvent;
 
 namespace Plugin.DiplayData
 {
@@ -16,7 +18,7 @@ namespace Plugin.DiplayData
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
 
-
+            containerRegistry.RegisterForNavigation<DisplayDataView, DisplayDataViewModel>();
         }
     }
 }

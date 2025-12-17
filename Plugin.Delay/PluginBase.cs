@@ -19,6 +19,7 @@ namespace Plugin.Delay
         {
             
             containerRegistry.RegisterForNavigation<DelayView, DelayViewModel>();
+           
         }
     }
 }

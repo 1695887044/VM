@@ -28,12 +28,12 @@
         /// <summary>
         /// 视图类型
         /// </summary>
-        public IModuleViewBase ViewType { get; }
+        public Type ViewType { get; }
         /// <summary>
         /// 视图后台类型
         /// </summary>
 
-        public ModuleViewModelBase ViewModelType { get; }
+        public Type ViewModelType { get; }
 
 
         public int Code { get;  }

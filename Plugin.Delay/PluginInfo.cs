@@ -13,8 +13,8 @@ namespace Plugin.Delay
         public string Category => "常用工具";
         public string DisplayName => "延时工具";
         public string Description => "Delay";
-        public IModuleViewBase ViewType => new DelayView();
-        public ModuleViewModelBase ViewModelType => new DelayViewModel();
+        public Type ViewType => typeof(DelayView);
+        public Type ViewModelType => typeof(DelayViewModel);
         public int Code => 200;
 
     }

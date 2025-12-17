@@ -1,0 +1,294 @@
+﻿<UserControl
+    x:Class="Plugin.PerProcessing.Views.PerPrecessView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+       xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
+    xmlns:linkCt="clr-namespace:VM.IPlugin.Controls;assembly=VM.IPlugin"
+    xmlns:local="clr-namespace:Plugin.PerProcessing.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="980"
+    Height="680"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ItemBorderStyle" TargetType="Border">
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="Margin" Value="0,1" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                    <Setter Property="BorderBrush" Value="#FFD0D0D0" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="TextElement.Foreground" Value="Gray" />
+                </DataTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="IsEnabled" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="#FF8CB5FF" />
+                    <Setter Property="BorderThickness" Value="1" />
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="IsEnabled" Value="False" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="BorderBrush" Value="#FF909090" />
+                    <Setter Property="BorderThickness" Value="1" />
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="基本参数">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="39*" />
+                        <ColumnDefinition Width="98*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.ColumnSpan="2" Header="图像链接">
+                        <linkCt:LinkPathBlock Header="输入图像" LinkPathCommand="{Binding LinkPathCommand}" />
+                    </GroupBox>
+                    <GroupBox
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Header="ROI类型">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <RadioButton Margin="10,0" Content="全图" />
+                            <RadioButton Margin="10,0" Content="ROI链接" />
+                        </StackPanel>
+                    </GroupBox>
+                    <ListBox
+                        Grid.Row="2"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.UseDefaultDragAdorner="True"
+                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                        ItemsSource="{Binding RoiData}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="参数设置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <Menu
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            ToolTip="添加">
+                            <MenuItem
+                                HorizontalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Header="➕">
+                                <MenuItem
+                                    HorizontalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Header="图像调整">
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="彩色转灰"
+                                        Header="彩色转灰" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="图像镜像"
+                                        Header="图像镜像" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="图像旋转"
+                                        Header="图像旋转" />
+                                    <MenuItem Header="深度转彩色" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="修改图像尺寸"
+                                        Header="修改图像尺寸" />
+                                    <MenuItem Header="缩放图像尺寸" />
+                                    <MenuItem Header="深度转灰度" />
+                                    <MenuItem Header="剪裁图像" />
+                                    <MenuItem Header="点云孔洞填充" />
+                                    <MenuItem Header="斜切补正" />
+                                    <MenuItem Header="斜切变换" />
+                                    <MenuItem Header="阴影补正" />
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Header="滤波">
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="均值滤波"
+                                        Header="均值滤波" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="中值滤波"
+                                        Header="中值滤波" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="高斯滤波"
+                                        Header="高斯滤波" />
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Header="形态学运算">
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="灰度膨胀"
+                                        Header="灰度膨胀" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="灰度腐蚀"
+                                        Header="灰度腐蚀" />
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Header="图像增强">
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="锐化"
+                                        Header="锐化" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="对比度"
+                                        Header="对比度" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="亮度调节"
+                                        Header="亮度调节" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="灰度开运算"
+                                        Header="灰度开运算" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="灰度闭运算"
+                                        Header="灰度闭运算" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="反色"
+                                        Header="反色" />
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Header="二值化">
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="二值化"
+                                        Header="二值化" />
+                                    <MenuItem
+                                        Command="{Binding DataOperateCommand}"
+                                        CommandParameter="均值二值化"
+                                        Header="均值二值化" />
+                                </MenuItem>
+                            </MenuItem>
+                        </Menu>
+                    </StackPanel>
+                    <ListBox
+                        Grid.Row="1"
+                        HorizontalContentAlignment="Stretch"
+                        ItemsSource="{Binding M_ToolData}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ItemBorderStyle}" Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                    <Border.ToolTip>
+                                        <TextBlock
+                                            MaxWidth="300"
+                                            Padding="6,3"
+                                            Background="Transparent"
+                                            Foreground="Green"
+                                            Text="{Binding Note}"
+                                            TextWrapping="Wrap" />
+                                    </Border.ToolTip>
+                                    <Border.ContextMenu>
+                                        <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Mode=Self}}">
+                                            <MenuItem
+                                                Header="启用/屏蔽"
+                                                IsCheckable="True"
+                                                IsChecked="{Binding PlacementTarget.DataContext.IsEnabled, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=TwoWay}" />
+                                            <MenuItem
+                                                Command="{Binding ToolDataOperateCommand}"
+                                                CommandParameter="B"
+                                                Header="修改模块名" />
+                                            <MenuItem
+                                                Command="{Binding ToolDataOperateCommand}"
+                                                CommandParameter="C"
+                                                Header="修改注释" />
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Text="{Binding Name}" />
+                                        <Rectangle
+                                            Grid.Column="1"
+                                            Height="1"
+                                            Margin="4,0"
+                                            VerticalAlignment="Center"
+                                            Fill="LightGray" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding DisplayString}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <hc:DialogContainer/>
+        <halconCt:ImageEdit
+            Grid.Column="1"
+            DrawObjectList="{Binding RoiData}"
+            HImage="{Binding CurrentHImage}" DisplayImageInfo="{Binding ImageInfo}"/>
+    </Grid>
+</UserControl>

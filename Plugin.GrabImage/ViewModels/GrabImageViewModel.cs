@@ -1,8 +1,6 @@
 ﻿using HalconDotNet;
 using Microsoft.Win32;
-using System.Diagnostics;
 using VM.IPlugin;
-using VM.IPlugin.Enums;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
@@ -25,6 +23,7 @@ namespace Plugin.GrabImage.ViewModels
 
 
         private HImage displayImage;
+        private readonly IEventAggregator eventAggregator;
 
         public HImage DisplayImage
         {
@@ -34,10 +33,10 @@ namespace Plugin.GrabImage.ViewModels
         #endregion
 
 
-        public GrabImageViewModel()
+        public GrabImageViewModel( IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
             initCommands();
-           
         }
 
         private void initCommands()
@@ -69,7 +68,8 @@ namespace Plugin.GrabImage.ViewModels
             ModuleData.SetVarValue<HImage>("图像", (s =>
             {
                 s.Value = img;
-              DisplayImage = s.Value;
+                DisplayImage = s.Value;
+                eventAggregator.GetEvent<RefreshUIEvent<HImage>>().Publish(s);
             }
             ));
            

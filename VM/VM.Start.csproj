@@ -42,6 +42,9 @@
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>..\..\03ThirdPartyDll\GongSolutions.WPF.DragDrop\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
+    <Reference Include="halcondotnet">
+      <HintPath>..\Plugin.GrabImage\bin\Debug\net6.0-windows\halcondotnet.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

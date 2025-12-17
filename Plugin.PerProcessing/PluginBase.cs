@@ -1,10 +1,11 @@
-﻿using Plugin.GrabImage.ViewModels;
-using Plugin.GrabImage.Views;
+﻿
+using Plugin.PerProcessing.ViewModels;
+using Plugin.PerProcessing.Views;
 using VM.IPlugin.ModuleEvent;
 
-namespace Plugin.GrabImage
+namespace Plugin.PerProcessing
 {
-    [Module(ModuleName = "GrabImage")]
+    [Module(ModuleName = "PerProcessing")]
     public class PluginBase : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
@@ -16,7 +17,7 @@ namespace Plugin.GrabImage
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<GrabImageView, GrabImageViewModel>();
+            containerRegistry.RegisterForNavigation<PerPrecessView, PerPrecessViewModel>();
         }
     }
 }

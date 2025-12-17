@@ -1,11 +1,15 @@
-﻿
-
-using VM.IPlugin.Models.VarModels;
+﻿using VM.IPlugin.Models.VarModels;
 
 namespace VM.IPlugin.ModuleEvent
 {
     public class VarChangedEvent : PubSubEvent<IVarChangedEventParamModel> { }
 
+    public class VarChangedEvent<T> : PubSubEvent<VarChangedEventParamModel<T>> { }
+
+    public class RefreshUIEvent<T> : PubSubEvent<VarValue<T>>
+    {
+
+    }
     public class VarChangedEventParamModel : IVarChangedEventParamModel
     {
         /// <summary>

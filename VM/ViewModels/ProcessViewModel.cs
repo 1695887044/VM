@@ -1,6 +1,7 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
 using System.Windows;
+using VM.IPlugin;
 using VM.IPlugin.Consts;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
@@ -16,8 +17,10 @@ namespace VM.Start.ViewModels
          public DelegateCommand ExecuteFlowOnceCommand { get; init; }
          public DelegateCommand RunContinuousCommand { get; init; }
          public DelegateCommand StopFlowCommand { get; init; }
+
+        private readonly PrismProvider prism;
         #endregion
-     
+
         private readonly IDialogService dialogService;
         private readonly GlobalVarService globalVarService;
         private IProcessNode _currentNode;
@@ -27,10 +30,12 @@ namespace VM.Start.ViewModels
   
 
 
-        public ProcessViewModel(IDialogService dialogService,GlobalVarService globalVarService)
+        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalVarService globalVarService)
         {
+
             DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
             ExecuteFlowOnceCommand = new DelegateCommand(ExecuteFlowOnce);
+            this.prism = prism;
             this.dialogService = dialogService;
             this.globalVarService = globalVarService;
             ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
@@ -118,8 +123,8 @@ namespace VM.Start.ViewModels
                 Token = Guid.NewGuid(),
                 Tag = args.Tag,
                 IconText = args.IconText,
-                View= PluginService.PluginDic_Module[args.Tag].ViewType,
-                ViewModel = PluginService.PluginDic_Module[args.Tag].ViewModelType,
+                ViewModel = (ModuleViewModelBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewModelType),
+                View = (IModuleViewBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewType),
                 Remark = args.Remark
             };
             node.ViewModel.ModuleInit();

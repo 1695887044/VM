@@ -1,4 +1,5 @@
-﻿using VM.IPlugin.ModuleEvent;
+﻿using VM.IPlugin;
+using VM.IPlugin.ModuleEvent;
 
 namespace VM.Start.Services
 {
@@ -32,6 +33,7 @@ namespace VM.Start.Services
         public  void InitPlugin()
         {
             prism.EventAggregator.GetEvent<PluginEvent>().Subscribe((s) => {
+               // s.ViewModelType = prism.Container.Resolve<ModuleViewModelBase>("ViewName");
                 if (s.Code != 200) return;
                 if (s.Category == "相机")
                 {

@@ -13,8 +13,8 @@ namespace Plugin.Blob
         public string Category => "图像处理";
         public string DisplayName => "斑点分析";
         public string Description => "Blob";
-        public IModuleViewBase ViewType => new BlobView();
-        public ModuleViewModelBase ViewModelType => new BlobViewModel();
+        public Type ViewType => typeof(BlobView);
+        public Type ViewModelType => typeof(BlobViewModel);
         public int Code => 200;
 
     }

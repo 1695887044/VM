@@ -51,13 +51,15 @@ namespace VM.Start.Services
                     item.ViewModel.ModuleData.VarOut == null ||
                     item.ViewModel.ModuleData.VarOut.Count == 0) continue;
                 ModuleVarList tempModuleList = new ModuleVarList();
-                tempModuleList.DisplayName = $"{item.Name}-{item.SortId+1}";
                 foreach (var data in item.ViewModel.ModuleData.VarOut.Where(Fiter))
                 {
-                    
                     tempModuleList.VarModels.Add(data);
                 }
-                DisplayVarList.Add(tempModuleList);
+                if (tempModuleList.VarModels.Count !=0){
+                    tempModuleList.DisplayName = $"{item.Name}-{item.SortId - 1}";
+                    DisplayVarList.Add(tempModuleList);
+                }
+               
             }
             //查找全局变量列表
             foreach (ModuleVarList list in GlobalVarList)
@@ -69,7 +71,10 @@ namespace VM.Start.Services
                 {
                     tempList.VarModels.Add(item);
                 }
-                DisplayVarList.Add(tempList);
+                if(tempList.VarModels.Count != 0)
+                {
+                    DisplayVarList.Add(tempList);
+                }
             }
         }
     }

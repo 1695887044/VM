@@ -1,6 +1,10 @@
 ﻿
+using HalconDotNet;
+using System.Windows;
 using System.Windows.Controls;
 using VM.Halcon.Controls;
+using VM.IPlugin.Models.VarModels;
+using VM.IPlugin.ModuleEvent;
 
 namespace VM.Start.ViewModels
 {
@@ -20,10 +24,21 @@ namespace VM.Start.ViewModels
             get { return rowCount; }
             set { rowCount = value; RaisePropertyChanged(); }
         }
-        public List<string> ImageEdits { get; set; } = new ();
-        public VisionViewModel()
+        private HImage displayImage;
+
+        public HImage DisplayImage
         {
-            ImageEdits.Add("sa");
+            get { return displayImage; }
+            set { displayImage = value;  RaisePropertyChanged(); }
+        }
+
+        public List<string> ImageEdits { get; set; } = new ();
+        public VisionViewModel(IEventAggregator eventAggregator)
+        {
+            eventAggregator.GetEvent<RefreshUIEvent<HImage>>().Subscribe(s => { 
+                DisplayImage = s.Value;
+            
+            });
         }
     }
 }

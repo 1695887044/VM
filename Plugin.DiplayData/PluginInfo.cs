@@ -13,8 +13,8 @@ namespace Plugin.DiplayData
         public string Category => "图像处理";
         public string DisplayName => "数据展示";
         public string Description => "DiplayData";
-        public IModuleViewBase ViewType => new DisplayDataView();
-        public ModuleViewModelBase ViewModelType => new DisplayDataViewModel();
+        public Type ViewType => typeof(DisplayDataView);
+        public Type ViewModelType => typeof(DisplayDataViewModel);
         public int Code => 200;
 
     }

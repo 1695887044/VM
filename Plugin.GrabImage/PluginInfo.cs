@@ -13,9 +13,10 @@ namespace Plugin.GrabImage
         public string Category => "图像处理";
         public string DisplayName => "图像采集";
         public string Description => "GrabImage";
-        public IModuleViewBase ViewType => new GrabImageView();
-        public ModuleViewModelBase ViewModelType => new GrabImageViewModel();
+        public Type ViewType => typeof(GrabImageView);
+        public Type ViewModelType => typeof(GrabImageViewModel);
         public int Code => 200;
 
+       
     }
 }

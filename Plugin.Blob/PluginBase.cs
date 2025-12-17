@@ -1,4 +1,6 @@
-﻿using VM.IPlugin.ModuleEvent;
+﻿using Plugin.Blob.ViewModels;
+using Plugin.Blob.Views;
+using VM.IPlugin.ModuleEvent;
 
 namespace Plugin.Blob
 {
@@ -16,7 +18,7 @@ namespace Plugin.Blob
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
 
-          
+            containerRegistry.RegisterForNavigation<BlobView, BlobViewModel>();
         }
     }
 }
