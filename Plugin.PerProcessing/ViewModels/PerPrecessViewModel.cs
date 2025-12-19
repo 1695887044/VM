@@ -20,6 +20,14 @@ namespace Plugin.PerProcessing.ViewModels
             get { return roiData; }
             set { roiData = value; RaisePropertyChanged(); }
         }
+        private string linkPath;
+
+        public string LinkPath
+        {
+            get { return linkPath; }
+            set { linkPath = value; RaisePropertyChanged(); }
+        }
+
 
         private IToolData currentData;
 
@@ -28,6 +36,8 @@ namespace Plugin.PerProcessing.ViewModels
             get { return currentData; }
             set { currentData = value; RaisePropertyChanged(); }
         }
+
+        private HImage hImageMemory;
 
         private HImage currentHImage;
 
@@ -58,8 +68,11 @@ namespace Plugin.PerProcessing.ViewModels
 
         private void ToolDataOperate(string obj)
         {
-
-
+            if(obj == "D")
+            {
+                M_ToolData.Remove(CurrentItem);
+                CurrentItem = null;
+            }
         }
         /// <summary>
         /// 增加模块
@@ -76,11 +89,21 @@ namespace Plugin.PerProcessing.ViewModels
 
         private void LinkMethod(string obj)
         {
-            OpenLinkargs openLinkargs = new OpenLinkargs();
-            openLinkargs.guid = ModuleData.ModuleGuid;
-            openLinkargs.name = "GrabImage";
-            openLinkargs.Fiter = (s => s.DataType == "HImage");
-            OpenVarLinkView(openLinkargs);
+            if (obj == "Link")
+            {
+                OpenLinkargs openLinkargs = new OpenLinkargs();
+                openLinkargs.guid = ModuleData.ModuleGuid;
+                openLinkargs.name = "GrabImage";
+                openLinkargs.Fiter = (s => s.DataType == "HImage");
+                OpenVarLinkView(openLinkargs);
+                return;
+            }
+            if(_linkvar != null)
+            {
+                _linkvar.OnValueChanged -= Linkvar_OnValueChanged;
+                _linkvar = null;
+                LinkPath =string.Empty;
+            }
         }
 
         public override bool Cancel()
@@ -95,32 +118,37 @@ namespace Plugin.PerProcessing.ViewModels
 
         public override bool Execute()
         {
-            if(CurrentHImage == null) return false;
-            HImage TempOutImage = CurrentHImage.Clone();
+            if(_linkvar != null && _linkvar.Value != null)
+            {
+                CurrentHImage = _linkvar.Value;
+            }
+            if (CurrentHImage == null) return false;
+            HImage TempOutImage = hImageMemory == null ? CurrentHImage.Clone() : hImageMemory.Clone();
             HImage TempInImage = new HImage();
             foreach (var tool in M_ToolData)
             {
-                TempInImage = new HImage(TempOutImage);
                 if (!tool.IsEnabled) continue;
+                TempInImage = new HImage(TempOutImage);
                 TempOutImage = ComMethods.MethodService.ImageOperator(TempInImage,tool);
-            }
-          
-            ModuleData.SetVarValue<HImage>("图像", (s =>
+            }        
+            ModuleData.SetVarValue<HImage>("预处理图像", (s =>
             {
                 s.Value = TempOutImage;
                 CurrentHImage = TempOutImage;
             }
-));
+            ));
             return true;
 
         }
-
+        VarValue<HImage> _linkvar;
         public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
         {
             if (changedEvent.varValue is VarValue<HImage> linkvar)
             {
-                linkvar.OnValueChanged += Linkvar_OnValueChanged;
-                CurrentHImage = linkvar.Value;
+                _linkvar = linkvar;
+                _linkvar.OnValueChanged += Linkvar_OnValueChanged;
+                LinkPath = $"{_linkvar.LinkPath}&&{_linkvar.Name}";
+               CurrentHImage = _linkvar.Value;
             }
         }
         private void Linkvar_OnValueChanged(object? sender, HImage e)
@@ -130,7 +158,7 @@ namespace Plugin.PerProcessing.ViewModels
         public override void RegisterOut()
         {
             base.RegisterOut();
-            ModuleData.AppendOutVar("图像", "HImage", CurrentHImage);
+            ModuleData.AppendOutVar("预处理图像", "HImage", CurrentHImage);
         }
     }
 }

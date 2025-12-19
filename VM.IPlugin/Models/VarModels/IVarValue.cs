@@ -6,7 +6,7 @@ namespace VM.IPlugin.Models.VarModels
     public interface IVarValue
     {
 
-        string LinkPath { get;  }
+        string LinkPath { get; set; }
         long Index { get; set; }
 
         string DataType { set; get; }

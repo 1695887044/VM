@@ -9,33 +9,42 @@
                 <ControlTemplate TargetType="ct:LinkPathBlock">
                     <Grid VerticalAlignment="Center" Background="Transparent">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="10" MaxWidth="100" />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" MinWidth="150" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                            Margin="0,2,2,2"
-                            HorizontalAlignment="Stretch"
+                            Margin="2"
                             VerticalAlignment="Center"
                             Background="Transparent"
                             FontSize="16"
                             FontWeight="Bold"
                             Text="{TemplateBinding Header}" />
-                        <TextBox
+                        <Rectangle
                             Grid.Column="1"
+                            Height="1"
+                            Margin="2,0"
+                            VerticalAlignment="Center"
+                            Fill="LightGray" />
+                        <TextBox
+                            Grid.Column="2"
                             VerticalAlignment="Stretch"
+                            IsReadOnly="{TemplateBinding IsReadOnlay}"
                             Background="Transparent"
                             BorderBrush="White"
+                            TextWrapping="Wrap"
                             BorderThickness="0,0,0,1"
                             Text="{TemplateBinding LinkPathName}" />
                         <StackPanel
-                            Grid.Column="1"
+                            Grid.Column="3"
                             HorizontalAlignment="Right"
                             Orientation="Horizontal">
                             <Button
+                                MaxWidth="40"
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
-                                MaxWidth="40"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 Command="{TemplateBinding LinkPathCommand}"
@@ -47,15 +56,15 @@
                                     <Style TargetType="Button">
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#234A64"/>
+                                                <Setter Property="Background" Value="#234A64" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
                             </Button>
                             <Button
+                                MaxWidth="40"
                                 Margin="2"
-                                 MaxWidth="40"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 Background="Transparent"
@@ -64,12 +73,12 @@
                                 CommandParameter="Close"
                                 Content="✖"
                                 FontWeight="Bold"
-                                ToolTip="清空" >
+                                ToolTip="清空">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#234A64"/>
+                                                <Setter Property="Background" Value="#234A64" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>

@@ -22,6 +22,18 @@ namespace VM.IPlugin.Controls
 
 
 
+        public bool IsReadOnlay
+        {
+            get { return (bool)GetValue(IsReadOnlayProperty); }
+            set { SetValue(IsReadOnlayProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsReadOnlay.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsReadOnlayProperty =
+            DependencyProperty.Register("IsReadOnlay", typeof(bool), typeof(LinkPathBlock), new PropertyMetadata(false));
+
+
+
         public string LinkPathName
         {
             get { return (string)GetValue(LinkPathNameProperty); }

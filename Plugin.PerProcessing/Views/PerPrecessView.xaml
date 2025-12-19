@@ -68,7 +68,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <GroupBox  Header="图像链接">
-                        <linkCt:LinkPathBlock Header="输入图像" LinkPathCommand="{Binding LinkPathCommand}" />
+                        <linkCt:LinkPathBlock Header="路径" IsReadOnlay="True"  LinkPathName="{Binding LinkPath}" LinkPathCommand="{Binding LinkPathCommand}" />
                     </GroupBox>
                     <GroupBox
                         Grid.Row="1"

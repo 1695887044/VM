@@ -37,7 +37,7 @@ namespace VM.Start.Services
             GlobalVarList.Add(moduleVarList);
         }
         /// <summary>
-        /// 根据传入的筛选条件 刷新显示的变量列表
+        /// 根据传入的筛选条件 刷新显示的变量列表 刷新🔗地址
         /// </summary>
         /// <param name="Fiter"></param>
         public void RefreshDisplayVarList(Func<IVarValue, bool> Fiter,IProcessNode node =null)
@@ -53,6 +53,7 @@ namespace VM.Start.Services
                 ModuleVarList tempModuleList = new ModuleVarList();
                 foreach (var data in item.ViewModel.ModuleData.VarOut.Where(Fiter))
                 {
+                    data.LinkPath = $"{item.Name}{item.SortId - 1}";
                     tempModuleList.VarModels.Add(data);
                 }
                 if (tempModuleList.VarModels.Count !=0){
