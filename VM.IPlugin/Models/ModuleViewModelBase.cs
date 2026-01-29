@@ -158,7 +158,7 @@ namespace VM.IPlugin
         }
         public virtual void RegisterOut()
         {
-           // ModuleData.AppendOutVar("状态", "StateEvent", StateEvent.Initializing);
+            ModuleData.AppendOutVar("状态", "StateEvent", StateEvent.Initializing);
             //ModuleData.AppendOutVar("时间", "int",0 );
         }
         public virtual void RegisterIn()

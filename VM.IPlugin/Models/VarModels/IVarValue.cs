@@ -67,15 +67,6 @@ namespace VM.IPlugin.Models.VarModels
             module.VarOut.Add(_Data);
             return _Data;
         }
-        public static void AppendOutValueVar<T>(this ModuleParamer module, string name, string Datatype,ref T value) 
-        {
-            VarValue<T> _Data = new VarValue<T>();
-            _Data.Name = name;
-            _Data.DataType = Datatype;
-            _Data.Value = value;
-            _Data.LinkPath = module.ModuleGuid.ToString();
-            module.VarOut.Add(_Data);
-        }
         public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name) 
         {
             try
