@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using VM.IPlugin;
+﻿using VM.IPlugin;
 
 namespace Plugin.PerProcessing.Views
 {

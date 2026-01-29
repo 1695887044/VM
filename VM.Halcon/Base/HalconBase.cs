@@ -16,9 +16,28 @@ namespace VM.Halcon.Base
     public class HalconBase:Control
     {
 
-        private HSmartWindowControlWPF hSmart;
+        protected HSmartWindowControlWPF hSmart;
         private HWindow hWindow;
         private StringBuilder sb=new StringBuilder();
+
+        public bool IsDrawing
+        {
+            get { return (bool)GetValue(IsDrawingProperty); }
+            set { SetValue(IsDrawingProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty IsDrawingProperty =
+            DependencyProperty.Register("IsDrawing", typeof(bool), typeof(HalconBase), new PropertyMetadata(false, DrawingModeChanged));
+
+        private static void DrawingModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is HalconBase view && e.NewValue != null)
+            {
+                view.hSmart.HZoomContent = view.IsDrawing ? HSmartWindowControlWPF.ZoomContent.Off : HSmartWindowControlWPF.ZoomContent.WheelForwardZoomsIn;
+            }
+        }
+
 
 
         public string TopText
@@ -58,14 +77,14 @@ namespace VM.Halcon.Base
             DependencyProperty.Register("HWindow", typeof(HWindow), typeof(HalconBase), new PropertyMetadata(null));
 
 
-
+        // new PropertyMetadata(HImageChangedCallBack)
         public HImage HImage
         {
             get { return (HImage)GetValue(HImageProperty); }
             set { SetValue(HImageProperty, value); }
         }
         public static readonly DependencyProperty HImageProperty =
-            DependencyProperty.Register("HImage", typeof(HImage), typeof(HalconBase), new PropertyMetadata(HImageChangedCallBack));
+            DependencyProperty.Register("HImage", typeof(HImage), typeof(HalconBase), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HImageChangedCallBack));
 
 
 
@@ -123,6 +142,7 @@ namespace VM.Halcon.Base
         /// <param name="hObject"></param>
         protected void Display(HObject hObject)
         {
+            HWindow.ClearWindow();
             HWindow.DispObj(hObject);
 
             HWindow.SetPart(0, 0, -2, -2);
@@ -300,6 +320,7 @@ namespace VM.Halcon.Base
                 }
                 if (drawObj == null) return;
             });
+            
             DrawObjectList.Add(new DrawingObjectInfo(shapeType, drawObj, hTuples));
             HOperatorSet.GenContourRegionXld(drawObj, out HObject contours, "border"); //获取绘制对象的轮廓
             HOperatorSet.DispObj(contours, hWindow);

@@ -284,7 +284,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <hc:DialogContainer />
         <halconCt:ImageEdit
             Grid.Column="1"
             DrawObjectList="{Binding RoiData}"

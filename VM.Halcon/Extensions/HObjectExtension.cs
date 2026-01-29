@@ -4,6 +4,29 @@ namespace VM.Halcon.Extensions
 {
     public static class HObjectExtension
     {
+        public static HObject ReduceDomain(this HObject image, HObject region)
+        {
+            HOperatorSet.ReduceDomain(image, region, out HObject template);
+            return template;
+        }
+
+        public static HObject CropDomain(this HObject image)
+        {
+            HOperatorSet.CropDomain(image, out HObject template);
+            return template;
+        }
+
+        public static HObject ReduceDomain(this HObject image, double x1, double y1, double x2, double y2)
+        {
+            HOperatorSet.GenRectangle1(out HObject rectangle, y1, x1, y2, x2);
+            HOperatorSet.ReduceDomain(image, rectangle, out HObject template);
+            return template;
+        }
+        public static HObject Rgb1ToGray(this HObject image)
+        {
+            HOperatorSet.Rgb1ToGray(image, out HObject ho_GrayImage);
+            return ho_GrayImage;
+        }
         public static int[] GetImageSize(this HObject image)
         {
             int width, height;

@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using VM.IPlugin.Services;
 using VM.Shard.Helper;
+using VM.Shard.Services;
 using VM.Start;
 using VM.Start.Core.IOC;
 using VM.Start.Dialogs.ViewModels;
@@ -24,7 +26,7 @@ namespace VM
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<LogView>();
+            containerRegistry.RegisterForNavigation<LogView,logViewModel>();
             containerRegistry.RegisterForNavigation<DockView, DockViewModel>();
             containerRegistry.RegisterForNavigation<MainShell, MainShellModel>();
             containerRegistry.RegisterForNavigation<MessageView, MessageViewModel>();
@@ -32,7 +34,10 @@ namespace VM
             containerRegistry.RegisterDialog<VarLinkView, VarLinkViewModel>();
             containerRegistry.RegisterSingleton<PrismProvider>();
             containerRegistry.RegisterSingleton<SystemInfo>();
+            containerRegistry.RegisterSingleton<IMessageService,MessageService>();
+            containerRegistry.RegisterDialog<InputMessageView, InputMessageViewModel>("InputView");
             containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalVarService>();
+            containerRegistry.RegisterSingleton<ILoggerService, LogService>();
         }
         protected override IModuleCatalog CreateModuleCatalog()
         {

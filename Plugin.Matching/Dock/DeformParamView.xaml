@@ -1,0 +1,198 @@
+﻿<UserControl
+    x:Class="Plugin.Matching.Dock.DeformParamView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:Plugin.Matching.Dock"
+    Background="AliceBlue"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+    mc:Ignorable="d">
+    <StackPanel>
+        <Expander Header="创建模板参数" Style="{StaticResource BaseStyle}">
+            <StackPanel
+                hc:TitleElement.TitlePlacement="Left"
+                hc:TitleElement.TitleWidth="140"
+                TextElement.FontSize="12">
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="图像金字塔"
+                    Text="{Binding MathchingService.templateParameter.NumLevels}"
+                    ToolTip="形状模型的优化策略（控制模型的内存占用、匹配速度）">
+                    <ComboBoxItem>auto</ComboBoxItem>
+                    <ComboBoxItem>0</ComboBoxItem>
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>2</ComboBoxItem>
+                    <ComboBoxItem>3</ComboBoxItem>
+                    <ComboBoxItem>4</ComboBoxItem>
+                    <ComboBoxItem>5</ComboBoxItem>
+                    <ComboBoxItem>6</ComboBoxItem>
+                    <ComboBoxItem>7</ComboBoxItem>
+                    <ComboBoxItem>8</ComboBoxItem>
+                    <ComboBoxItem>9</ComboBoxItem>
+                    <ComboBoxItem>10</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:NumericUpDown
+                    Margin="2"
+                    hc:InfoElement.ContentHeight="27"
+                    hc:TitleElement.Title="开始角度"
+                    Increment="5"
+                    Maximum="360"
+                    Minimum="0"
+                    Style="{StaticResource NumericUpDownPlus.Small}"
+                    ToolTip="目标物体的起始旋转角度（匹配时允许的角度范围起点）"
+                    Value="{Binding MathchingService.templateParameter.AngleStart}" />
+                <hc:NumericUpDown
+                    Margin="2"
+                    hc:InfoElement.ContentHeight="27"
+                    hc:TitleElement.Title="结束角度"
+                    Increment="5"
+                    Maximum="360"
+                    Minimum="0"
+                    Style="{StaticResource NumericUpDownPlus.Small}"
+                    ToolTip="目标物体的起始旋转角度（匹配时允许的角度范围终点）"
+                    Value="{Binding MathchingService.templateParameter.AngleExtent}" />
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="步长"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}"
+                    ToolTip="步长越小，角度匹配精度越高，但匹配速度越慢；步长越大则反之">
+                    <ComboBoxItem>auto</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="行最小缩放"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="行最大缩放"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="行缩放步长"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="列最小缩放"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="列最大缩放"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="列缩放步长"
+                    Text="{Binding MathchingService.templateParameter.AngleStep}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>0.01</ComboBoxItem>
+                    <ComboBoxItem>0.03</ComboBoxItem>
+                    <ComboBoxItem>0.05</ComboBoxItem>
+                    <ComboBoxItem>0.06</ComboBoxItem>
+                    <ComboBoxItem>0.08</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="优化策略"
+                    Text="{Binding MathchingService.templateParameter.Optimization}"
+                    ToolTip="形状模型的优化策略（控制模型的内存占用、匹配速度）">
+                    <ComboBoxItem>auto</ComboBoxItem>
+                    <ComboBoxItem>none</ComboBoxItem>
+                    <ComboBoxItem>point_reduction_low</ComboBoxItem>
+                    <ComboBoxItem>point_reduction_medium</ComboBoxItem>
+                    <ComboBoxItem>point_reduction_high</ComboBoxItem>
+                    <ComboBoxItem>pregeneration</ComboBoxItem>
+                    <ComboBoxItem>no_pregeneration</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="极性规则"
+                    Text="{Binding MathchingService.templateParameter.Metric}"
+                    ToolTip="模板是 “亮背景 + 暗物体”，目标也必须是同样的明暗关系">
+                    <ComboBoxItem>use_polarity</ComboBoxItem>
+                    <ComboBoxItem>ignore_global_polarity</ComboBoxItem>
+                    <ComboBoxItem>ignore_local_polarity</ComboBoxItem>
+                    <ComboBoxItem>ignore_color_polarity</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="对比度阈值"
+                    Text="{Binding MathchingService.templateParameter.Contrast}"
+                    ToolTip="值过低会包含噪声边缘，值过高会丢失有效边缘，影响模板的质量">
+                    <ComboBoxItem>auto</ComboBoxItem>
+                    <ComboBoxItem>auto_contrast</ComboBoxItem>
+                    <ComboBoxItem>auto_contrast_hyst</ComboBoxItem>
+                    <ComboBoxItem>auto_min_size</ComboBoxItem>
+                    <ComboBoxItem>10</ComboBoxItem>
+                    <ComboBoxItem>20</ComboBoxItem>
+                    <ComboBoxItem>30</ComboBoxItem>
+                    <ComboBoxItem>40</ComboBoxItem>
+                    <ComboBoxItem>60</ComboBoxItem>
+                    <ComboBoxItem>80</ComboBoxItem>
+                </hc:ComboBox>
+                <hc:ComboBox
+                    Margin="2"
+                    hc:TitleElement.Title="最小对比度"
+                    Text="{Binding MathchingService.templateParameter.MinContrast}"
+                    ToolTip="过滤低于该值的边缘，进一步提纯模板特征">
+                    <ComboBoxItem>auto</ComboBoxItem>
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>2</ComboBoxItem>
+                    <ComboBoxItem>3</ComboBoxItem>
+                    <ComboBoxItem>4</ComboBoxItem>
+                    <ComboBoxItem>5</ComboBoxItem>
+                    <ComboBoxItem>7</ComboBoxItem>
+                    <ComboBoxItem>10</ComboBoxItem>
+                    <ComboBoxItem>20</ComboBoxItem>
+                    <ComboBoxItem>30</ComboBoxItem>
+                    <ComboBoxItem>40</ComboBoxItem>
+                </hc:ComboBox>
+            </StackPanel>
+        </Expander>
+        <Expander Header="模板查找参数" Style="{StaticResource BaseStyle}">
+            <StackPanel />
+        </Expander>
+    </StackPanel>
+</UserControl>

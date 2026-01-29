@@ -1,16 +1,17 @@
-﻿<prism:PrismApplication x:Class="VM.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/"
-             xmlns:local="clr-namespace:VM">
+﻿<prism:PrismApplication
+    x:Class="VM.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:VM"
+    xmlns:prism="http://prismlibrary.com/">
     <prism:PrismApplication.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/VM.Shard;component/Generic.xaml"/>
-                <ResourceDictionary Source="/VM.IPlugin;component/Generic.xaml"/>
-                <ResourceDictionary Source="/VM.Halcon;component/Generic.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/VM.Shard;component/Generic.xaml" />
+                <ResourceDictionary Source="/VM.IPlugin;component/Generic.xaml" />
+                <ResourceDictionary Source="/VM.Halcon;component/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </prism:PrismApplication.Resources>

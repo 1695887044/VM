@@ -1,8 +1,8 @@
 ﻿using HalconDotNet;
-using Plugin.PerProcessing.Common;
 using Plugin.PerProcessing.Model;
 using Plugin.PerProcessing.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using VM.Halcon.Models;
 using VM.IPlugin;
 using VM.IPlugin.Models.VarModels;
@@ -40,7 +40,7 @@ namespace Plugin.PerProcessing.ViewModels
         private HImage hImageMemory;
 
         private HImage currentHImage;
-
+        [Display(Name = "输出图像")]
         public HImage CurrentHImage
         {
             get { return currentHImage; }
@@ -148,6 +148,7 @@ namespace Plugin.PerProcessing.ViewModels
                 _linkvar = linkvar;
                 _linkvar.OnValueChanged += Linkvar_OnValueChanged;
                 LinkPath = $"{_linkvar.LinkPath}&&{_linkvar.Name}";
+                CurrentHImage = null;
                CurrentHImage = _linkvar.Value;
             }
         }

@@ -1,11 +1,4 @@
-﻿using Prism.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using VM.Start.Models;
+﻿using VM.Start.Models;
 
 namespace VM.Start.Dialogs.ViewModels
 {

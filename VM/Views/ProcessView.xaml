@@ -125,7 +125,7 @@
                                 Data="{Binding IconText}"
                                 Fill="White"
                                 Stretch="Fill" />
-                            <TextBlock Grid.Column="1">
+                            <TextBlock Grid.Column="1" >
                                 <Run Text="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(ItemsControl.AlternationIndex), Mode=OneWay}" />
                                 <Run Text="." />
                                 <Run Text="{Binding Name}" />
@@ -199,7 +199,6 @@
             ItemsSource="{Binding ProcessDatas}"
             Style="{StaticResource processListBox}"
             Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
-
             <ListBox.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Mode=Self}}" FontFamily="{StaticResource iconfont}">
                     <MenuItem Header="重命名" Icon="&#xe6e3;" />

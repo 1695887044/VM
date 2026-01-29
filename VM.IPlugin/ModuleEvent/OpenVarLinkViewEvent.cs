@@ -27,5 +27,6 @@ namespace VM.IPlugin.ModuleEvent
             guid = g;
             name = n;
         }
+        public Action<IVarChangedEventParamModel> CallBack { get; set; }
     }
 }

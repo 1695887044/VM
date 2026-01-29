@@ -30,7 +30,14 @@ namespace VM.IPlugin.Models.VarModels
             _Data.Value = value;
             return _Data;
         }
-        public string LinkPath { get;  set; }
+        private string _linkPath;
+
+        public string LinkPath
+        {
+            get { return _linkPath; }
+            set { _linkPath = value; RaisePropertyChanged(); }
+        }
+
         private T _value;
 
 
@@ -50,7 +57,17 @@ namespace VM.IPlugin.Models.VarModels
     }
     public static class VarValueExtension
     {
-        public static void AppendOutVar<T>(this ModuleParamer module , string name, string Datatype,  T value)
+        public static VarValue<T> AppendOutVar<T>(this ModuleParamer module, string name, string Datatype, T value)
+        {
+            VarValue<T> _Data = new VarValue<T>();
+            _Data.Name = name;
+            _Data.DataType = Datatype;
+            _Data.Value = value;
+            _Data.LinkPath = module.ModuleGuid.ToString();
+            module.VarOut.Add(_Data);
+            return _Data;
+        }
+        public static void AppendOutValueVar<T>(this ModuleParamer module, string name, string Datatype,ref T value) 
         {
             VarValue<T> _Data = new VarValue<T>();
             _Data.Name = name;
@@ -59,16 +76,7 @@ namespace VM.IPlugin.Models.VarModels
             _Data.LinkPath = module.ModuleGuid.ToString();
             module.VarOut.Add(_Data);
         }
-        public static void AppendOutValueVar<T>(this ModuleParamer module, string name, string Datatype,ref T value)
-        {
-            VarValue<T> _Data = new VarValue<T>();
-            _Data.Name = name;
-            _Data.DataType = Datatype;
-            _Data.Value = value;
-            _Data.LinkPath = module.ModuleGuid.ToString();
-            module.VarOut.Add(_Data);
-        }
-        public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name)
+        public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name) 
         {
             try
             {
@@ -93,6 +101,31 @@ namespace VM.IPlugin.Models.VarModels
             catch (Exception ex)
             {
                 
+            }
+        }
+        public static void RemoveVarValue(this ModuleParamer module, IVarValue data) 
+        {
+            try
+            {
+                module.VarOut?.Remove(data);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+        public static void RemoveVarValue(this ModuleParamer module, string name)
+        {
+            try
+            {
+               IVarValue  v =   module.VarOut?.Find(s => s.Name == name);
+                if (v != null) { 
+                 module.VarOut?.Remove(v);               
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

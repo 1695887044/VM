@@ -21,7 +21,7 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <ToolBar Background="#252525" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}">
+        <ToolBar Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}" Background="#252525">
             <StackPanel Orientation="Horizontal">
                 <Button
                     Command="{Binding ProjectCommand}"
@@ -181,7 +181,11 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander Header="{Binding Name}">
+                    <Expander
+                        Background="DarkGray"
+                        FocusVisualStyle="{x:Null}"
+                        Header="{Binding Name}"
+                        Style="{StaticResource BaseStyle}">
                         <ItemsControl ItemsSource="{Binding Children}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>

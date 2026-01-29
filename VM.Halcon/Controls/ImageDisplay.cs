@@ -5,10 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using VM.Halcon.Base;
-using VM.Halcon.Enums;
-using VM.Halcon.Extensions;
-using VM.Halcon.Models;
-
 namespace VM.Halcon.Controls
 {
     

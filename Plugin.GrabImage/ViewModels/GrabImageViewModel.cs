@@ -1,5 +1,6 @@
 ﻿using HalconDotNet;
 using Microsoft.Win32;
+using System.ComponentModel.DataAnnotations;
 using VM.IPlugin;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
@@ -24,7 +25,7 @@ namespace Plugin.GrabImage.ViewModels
 
         private HImage displayImage;
         private readonly IEventAggregator eventAggregator;
-
+        [Display(Name = "输出图像",Description ="测试")]
         public HImage DisplayImage
         {
             get { return displayImage; }
@@ -65,7 +66,7 @@ namespace Plugin.GrabImage.ViewModels
             var img = new HImage();
             ImageSourcePath.Value = openFileDialog.FileName;
             img.ReadImage(openFileDialog.FileName);
-            ModuleData.SetVarValue<HImage>("图像", (s =>
+            ModuleData.SetVarValue<HImage>("DisplayImage", (s =>
             {
                 s.Value = img;
                 DisplayImage = s.Value;
@@ -107,7 +108,7 @@ namespace Plugin.GrabImage.ViewModels
         public override void RegisterOut()
         {
             base.RegisterOut();
-            ModuleData.AppendOutVar("图像", "HImage" ,  DisplayImage);
+           // ModuleData.AppendOutVar("图像", "HImage" ,  DisplayImage);
         }
     }
 }

@@ -636,6 +636,7 @@
   <ItemGroup>
     <Folder Include="Assets\Cvts\" />
     <Folder Include="Events\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

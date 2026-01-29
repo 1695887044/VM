@@ -101,7 +101,6 @@
                             <Border>
                                 <Path
                                     Width="18"
-                                   
                                     Margin="5"
                                     Data="{Binding Content, RelativeSource={RelativeSource AncestorType=Button}}"
                                     Fill="{TemplateBinding Foreground}"
@@ -141,9 +140,9 @@
                     <Border Background="{TemplateBinding Background}" CornerRadius="5">
                         <StackPanel>
                             <ContentPresenter
-                              Margin="3"
-                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                Margin="3"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </StackPanel>
                     </Border>
                 </ControlTemplate>

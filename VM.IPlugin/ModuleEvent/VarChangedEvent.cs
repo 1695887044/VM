@@ -33,15 +33,15 @@ namespace VM.IPlugin.ModuleEvent
 
     public interface IVarChangedEventParamModel
     {
-        public string SendName { get; set; }
-        public string LinkName { get; set; }
+         string SendName { get; set; }
+         string LinkName { get; set; }
 
+        IVarValue varValue { get; set; }
+         string Name { get; set; }
+         string DataType { get; set; }
+         bool IsAdd { get; set; }
 
-        public string Name { get; set; }
-        public string DataType { get; set; }
-        public bool IsAdd { get; set; }
-
-        public string Note { get; set; }
+         string Note { get; set; }
     }
     public interface IVarChangedEventParam<T> : IVarChangedEventParamModel
     {

@@ -6,6 +6,7 @@ using VM.IPlugin.Consts;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 using VM.IPlugin.Views;
+using VM.Shard.Services;
 using VM.Start.Models.Projects.Nodes;
 using VM.Start.Services;
 
@@ -24,6 +25,7 @@ namespace VM.Start.ViewModels
 
         private readonly IDialogService dialogService;
         private readonly GlobalVarService globalVarService;
+        private readonly ILoggerService loggerService;
         private IProcessNode _currentNode;
         private IProcessNode selectNodeItem;
 
@@ -39,7 +41,7 @@ namespace VM.Start.ViewModels
   
 
 
-        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalVarService globalVarService)
+        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalVarService globalVarService,ILoggerService loggerService)
         {
 
             DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
@@ -48,6 +50,7 @@ namespace VM.Start.ViewModels
             this.prism = prism;
             this.dialogService = dialogService;
             this.globalVarService = globalVarService;
+            this.loggerService = loggerService;
             ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
         }
         /// <summary>
@@ -79,7 +82,8 @@ namespace VM.Start.ViewModels
             if (!(node.View is FrameworkElement content)) return;
             _currentNode = node;
             node.ViewModel.OpenVarLinkViewEvent += OpenVarLinkView;
-             _ = new PluginView().ShowView(content, node.ViewModel);
+           
+             _ = new PluginView().ShowView(content, node.ViewModel,node.Name,node.IconText);
             node.ViewModel.OpenVarLinkViewEvent -= OpenVarLinkView;
         }
         /// <summary>
@@ -97,6 +101,7 @@ namespace VM.Start.ViewModels
                 s.Parameters.ContainsKey(GlobalConst.LinkVarEventParamterKey);
                 VarChangedEventParamModel varEvent = new VarChangedEventParamModel();
                 varEvent.varValue= s.Parameters.GetValue<IVarValue>(GlobalConst.LinkVarEventParamterKey);
+                e.CallBack?.Invoke(varEvent);
                 _currentNode.ViewModel.OnLinkVarPathChanged(varEvent);
             });
         }
@@ -119,6 +124,7 @@ namespace VM.Start.ViewModels
             if (args.Effects == DragDropEffects.Copy && args.Data is INode node)
             {
                 ProcessDatas.Add(createProcessNode(node));
+                loggerService.LogInfo($"添加模块{node.Name}");
                 return;
             }
             if (args.Effects == DragDropEffects.Move  && args.Data is IProcessNode d && args.TargetItem is IProcessNode t)
@@ -152,8 +158,6 @@ namespace VM.Start.ViewModels
                 Remark = args.Remark
             };
             node.ViewModel.ModuleInit();
-            node.ViewModel.RegisterIn();
-            node.ViewModel.RegisterOut();
             return node;
         }
     }

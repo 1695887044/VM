@@ -7,7 +7,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource  ProcessTreeViewItem}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ProcessTreeViewItem}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeView">
@@ -48,19 +48,17 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="ProcessTreeViewItem" TargetType="TreeViewItem">
-        <Setter Property="Background" Value="#252525"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="#252525" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, Mode=OneWay, FallbackValue=Stretch, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="MinHeight" Value="25" />
         <Setter Property="RenderOptions.ClearTypeHint" Value="{Binding Path=(RenderOptions.ClearTypeHint), Mode=OneWay, FallbackValue=Auto, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay}"/>
-        <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}"/>
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TreeViewItem}">
-
-                </ControlTemplate>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}" />
             </Setter.Value>
         </Setter>
     </Style>

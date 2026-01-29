@@ -1,0 +1,95 @@
+﻿<UserControl
+    x:Class="Plugin.CreateROI.Views.CreateROIView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:linkCt="clr-namespace:VM.IPlugin.Controls;assembly=VM.IPlugin"
+    xmlns:local="clr-namespace:Plugin.CreateROI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="980"
+    Height="680"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="基本参数">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="图像链接">
+                        <linkCt:LinkPathBlock
+                            Header="路径"
+                            IsReadOnlay="True"
+                            LinkPathCommand="{Binding LinkPathCommand}"
+                            LinkPathName="{Binding LinkPath}" />
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Header="ROI列表">
+                        <ListBox
+                            ItemsSource="{Binding RoiData}"
+                            SelectedItem="{Binding SelectRoi}"
+                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0,1" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="Height" Value="20" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                        <Viewbox HorizontalAlignment="Left" Stretch="Uniform">
+                                            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                                                <Run FontWeight="Bold" Text="{Binding ShapeType}" />
+                                                <Run FontWeight="Bold" Text=":" />
+                                                <Run Text="{Binding RoiName, Mode=TwoWay}" />
+                                            </TextBlock>
+                                        </Viewbox>
+                                        <Border.ContextMenu>
+                                            <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Mode=Self}}">
+                                                <MenuItem
+                                                    Command="{Binding RoiItemOperatorCommand}"
+                                                    CommandParameter="A"
+                                                    Header="重命名" />
+                                                <MenuItem
+                                                    Command="{Binding RoiItemOperatorCommand}"
+                                                    CommandParameter="B"
+                                                    Header="编辑模板" />
+                                                <MenuItem
+                                                    Command="{Binding RoiItemOperatorCommand}"
+                                                    CommandParameter="C"
+                                                    Header="删除" />
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="参数设置" />
+        </TabControl>
+        <halconCt:ImageEdit
+            Grid.Column="1"
+            DrawObjectList="{Binding RoiData, Mode=TwoWay}"
+            HImage="{Binding CurrentHImage, Mode=TwoWay}"
+            HWindow="{Binding HWindow, Mode=OneWayToSource}"
+            IsDrawing="{Binding IsDrawing, Mode=TwoWay}"
+            TopText="{Binding ViewTopText, Mode=TwoWay}" />
+    </Grid>
+</UserControl>

@@ -7,25 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="Transparent"
     ResizeMode="NoResize"
+    AllowsTransparency="True"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#07C160"/>
+            <Setter Property="Background" Value="#07C160" />
             <Setter Property="Width" Value="50" />
             <Setter Property="Height" Value="35" />
             <Setter Property="Margin" Value="2" />
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Geometry x:Key="info">
             M512 224m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z M544 392h-64c-4.4 0-8 3.6-8 8v464c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V400c0-4.4-3.6-8-8-8z
         </Geometry>
     </Window.Resources>
-    <Grid x:Name="PART_grid" >
+    <Grid x:Name="PART_grid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="38" />
         </Grid.RowDefinitions>
         <StackPanel
@@ -34,19 +35,25 @@
             MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
             Orientation="Horizontal">
             <Path
-                Width="40"
-                Height="40"
-                Margin="10,4"
-                Data="{StaticResource info}"
+                x:Name="IconCtl"
+                Width="30"
+                Height="30"
+                Margin="5,4"
+                Data="{Binding IconCtl}"
                 Fill="Green"
                 Stretch="Uniform" />
             <TextBlock
+                x:Name="titleCtl"
                 VerticalAlignment="Center"
                 FontSize="26"
-                Text="公用底板" />
+                Text="{Binding Title}" />
         </StackPanel>
-        <ContentControl VerticalContentAlignment="Stretch"
-    HorizontalContentAlignment="Stretch"  x:Name="PART_View" Grid.Row="1" />
+        <ContentControl
+            x:Name="PART_View"
+            Grid.Row="1"
+            VerticalContentAlignment="Stretch"
+      VerticalAlignment="Stretch"
+           />
         <DockPanel
             Grid.Row="2"
             Background="#6459DF"
@@ -68,15 +75,9 @@
                 VerticalAlignment="Center"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
-                <Button
-                    Click="Button_Click"
-                    Content="执行" />
-                <Button
-                    Click="Button_Click_1"
-                    Content="取消" />
-                <Button
-                    Click="Button_Click_2"
-                    Content="确认" />
+                <Button Click="Button_Click" Content="执行" />
+                <Button Click="Button_Click_1" Content="取消" />
+                <Button Click="Button_Click_2" Content="确认" />
             </StackPanel>
         </DockPanel>
     </Grid>

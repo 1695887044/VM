@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:halcon="http://schemas.mvtec.com/halcondotnet"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:Plugin.GrabImage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="980"
@@ -86,7 +86,7 @@
                 <GroupBox Header="图像参数" />
             </hc:TabItem>
         </hc:TabControl>
-        <halconCt:ImageEdit HImage="{Binding DisplayImage}" Grid.Column="1"/>
+        <halconCt:ImageEdit Grid.Column="1" HImage="{Binding DisplayImage}" />
 
     </Grid>
 </UserControl>
