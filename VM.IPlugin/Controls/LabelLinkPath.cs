@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
 using VM.IPlugin.Models.VarModels;
+using VM.IPlugin.Enums;
 
 namespace VM.IPlugin.Controls
 {
@@ -12,8 +13,6 @@ namespace VM.IPlugin.Controls
         Button? LinkButton, ClearButton;
         TextBlock? HeadTextBlock;
         TextBox? ContentBox;
-        Tuple<string, string> P1;
-        Tuple<string, string> P2;
         public bool BindMode
         {
             get { return (bool)GetValue(BindModeProperty); }
@@ -101,7 +100,7 @@ namespace VM.IPlugin.Controls
 
         public static readonly DependencyProperty OperatorCommandProperty =
             DependencyProperty.Register("OperatorCommand", typeof(ICommand), typeof(LabelLinkPath));
-
+        LinkPathParam p1, p2;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -109,20 +108,30 @@ namespace VM.IPlugin.Controls
             ClearButton = this.GetTemplateChild("PART_ClearButton") as Button;
             HeadTextBlock = this.GetTemplateChild("PART_HeadTextBlock") as TextBlock;
             ContentBox = this.GetTemplateChild("PART_ContentBox") as TextBox;
-            P1 = new Tuple<string, string>("Link", this.LinkParam);
-            P2 = new Tuple<string, string>("Clear", this.LinkParam);
+            p1 = new(LinkPathType.Link, this.LinkParam);
+            p2 = new(LinkPathType.Clear, this.LinkParam);
             LinkButton.Click += (s, e) =>
             {
 
-                OperatorCommand?.Execute(P1);
+                OperatorCommand?.Execute(p1);
             };
             ClearButton.Click += (s, e) =>
             {
-                OperatorCommand?.Execute(P2);
+                OperatorCommand?.Execute(p2);
             };
         }
 
 
 
+    }
+    public record class LinkPathParam
+    {
+        public LinkPathType PathType { get; set; }
+        public string Param { get; set; }
+        public LinkPathParam(LinkPathType pathType, string param)
+        {
+            PathType = pathType;
+            Param = param;
+        }
     }
 }

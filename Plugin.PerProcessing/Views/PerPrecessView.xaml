@@ -13,6 +13,7 @@
     xmlns:local="clr-namespace:Plugin.PerProcessing.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Plugin.PerProcessing.Model"
+    xmlns:views="clr-namespace:Plugin.PerProcessing.Controls"
     Width="980"
     Height="680"
     d:DesignHeight="450"
@@ -53,41 +54,40 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
+        <DataTemplate DataType="{x:Type model:ThresholdParam}">
+            <views:ThresholdView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type model:VarThresholdParam}">
+            <views:VarThresholdView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TabControl>
-            <TabItem Header="基本参数">
+        <TabControl hc:TabControl.ShowCloseButton="False">
+            <TabItem
+                hc:IconElement.Geometry="{StaticResource AddGeometry}"
+                hc:IconElement.Height="16"
+                hc:IconElement.Width="16"
+                Header="基本参数">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80" />
                         <RowDefinition Height="80" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <GroupBox  Header="图像链接">
-                        <linkCt:LinkPathBlock Header="路径" IsReadOnlay="True"  LinkPathName="{Binding LinkPath}" LinkPathCommand="{Binding LinkPathCommand}" />
+                    <GroupBox Header="图像链接">
+                        <linkCt:LabelLinkPath Header="图像链接" OperatorCommand="{Binding LinkPathCommand}" />
                     </GroupBox>
-                    <GroupBox
-                        Grid.Row="1"
-                        Header="ROI类型">
-                        <StackPanel
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <RadioButton Margin="10,0" Content="全图" />
-                            <RadioButton Margin="10,0" Content="ROI链接" />
-                        </StackPanel>
-                    </GroupBox>
-                    <ListBox
-                        x:Name="src"
-                        Grid.Row="2"
-                        ItemsSource="{Binding RoiData}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="参数设置">
+            <TabItem
+                hc:IconElement.Geometry="{StaticResource AddGeometry}"
+                hc:IconElement.Height="16"
+                hc:IconElement.Width="16"
+                Header="参数设置">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
@@ -280,13 +280,13 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <ctl:DisplayParam Grid.Row="2" />
+                    <ContentControl Grid.Row="2" Content="{Binding CurrentItem.ToolParamer}" />
                 </Grid>
             </TabItem>
         </TabControl>
         <halconCt:ImageEdit
             Grid.Column="1"
             DrawObjectList="{Binding RoiData}"
-            HImage="{Binding CurrentHImage, Mode=TwoWay}" />
+            HImage="{Binding CurrentHImage}" />
     </Grid>
 </UserControl>

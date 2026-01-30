@@ -5,19 +5,38 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:VM.IPlugin.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    AllowsTransparency="True"
     Background="Transparent"
     ResizeMode="NoResize"
-    AllowsTransparency="True"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#07C160" />
-            <Setter Property="Width" Value="50" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="Margin" Value="2" />
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Margin" Value="10,2" />
+            <Setter Property="FontSize" Value="16" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Opacity" Value="0.6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Geometry x:Key="info">
             M512 224m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z M544 392h-64c-4.4 0-8 3.6-8 8v464c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V400c0-4.4-3.6-8-8-8z
@@ -26,37 +45,38 @@
     <Grid x:Name="PART_grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="38" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
-            Background="#6459DF"
+            Background="#1D4ED8"
             MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
             Orientation="Horizontal">
             <Path
                 x:Name="IconCtl"
-                Width="30"
-                Height="30"
-                Margin="5,4"
+                Width="24"
+                Height="24"
+                Margin="5,4,20,4"
                 Data="{Binding IconCtl}"
-                Fill="Green"
+                Fill="White"
                 Stretch="Uniform" />
             <TextBlock
                 x:Name="titleCtl"
                 VerticalAlignment="Center"
-                FontSize="26"
+                FontSize="20"
+                Foreground="White"
                 Text="{Binding Title}" />
         </StackPanel>
         <ContentControl
             x:Name="PART_View"
             Grid.Row="1"
-            VerticalContentAlignment="Stretch"
-      VerticalAlignment="Stretch"
-           />
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
         <DockPanel
             Grid.Row="2"
-            Background="#6459DF"
+            Background=" #FFFFFF"
+            TextElement.FontSize="16"
             LastChildFill="True">
             <TextBlock
                 x:Name="textBlock"
@@ -75,9 +95,23 @@
                 VerticalAlignment="Center"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
-                <Button Click="Button_Click" Content="执行" />
-                <Button Click="Button_Click_1" Content="取消" />
-                <Button Click="Button_Click_2" Content="确认" />
+                <Button
+                    Background="#16A34A"
+                    BorderThickness="0.4"
+                    Click="Button_Click"
+                    Content="执行"
+                    Foreground="White" />
+                <Button
+                    Background="Transparent"
+                    BorderThickness="0.4"
+                    Click="Button_Click_1"
+                    Content="取消" />
+                <Button
+                    Background="#2563EB"
+                    BorderThickness="0.4"
+                    Click="Button_Click_2"
+                    Content="确认"
+                    Foreground="White" />
             </StackPanel>
         </DockPanel>
     </Grid>

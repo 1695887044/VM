@@ -22,6 +22,11 @@ namespace VM.IPlugin.Enums
              Maintain,       // 维护
              Complete        // 完成
         }
-    
+    public enum LinkPathType
+    {
+        Link,
+        Clear
+    }
+
 
 }

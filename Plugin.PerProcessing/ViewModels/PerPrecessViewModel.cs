@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using VM.Halcon.Models;
 using VM.IPlugin;
+using VM.IPlugin.Controls;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
@@ -12,14 +13,14 @@ namespace Plugin.PerProcessing.ViewModels
 {
     public class PerPrecessViewModel : ModuleViewModelBase
     {
-        
-        private ObservableCollection<DrawingObjectInfo> roiData = new();
+        private bool useRoi;
 
-        public ObservableCollection<DrawingObjectInfo> RoiData
+        public bool UseRoi
         {
-            get { return roiData; }
-            set { roiData = value; RaisePropertyChanged(); }
+            get { return useRoi; }
+            set { useRoi = value; RaisePropertyChanged(); }
         }
+
         private string linkPath;
 
         public string LinkPath
@@ -28,6 +29,13 @@ namespace Plugin.PerProcessing.ViewModels
             set { linkPath = value; RaisePropertyChanged(); }
         }
 
+        private VarValue<HImage> curImage;
+
+        public VarValue<HImage> CurImage
+        {
+            get { return curImage; }
+            set { curImage = value; RaisePropertyChanged(); }
+        }
 
         private IToolData currentData;
 
@@ -55,12 +63,12 @@ namespace Plugin.PerProcessing.ViewModels
             set { m_ToolData = value; RaisePropertyChanged(); }
         }
 
-        public DelegateCommand<string> LinkPathCommand { get; private set; }
+        public DelegateCommand<LinkPathParam> LinkPathCommand { get; private set; }
         public DelegateCommand<string> DataOperateCommand { get; private set; }
         public DelegateCommand<string> ToolDataOperateCommand { get; private set; }
         public PerPrecessViewModel(IEventAggregator aggregator)
         {
-            LinkPathCommand = new DelegateCommand<string>(LinkMethod);
+            LinkPathCommand = new DelegateCommand<LinkPathParam>(LinkMethod);
             DataOperateCommand = new DelegateCommand<string>(ChangedToolMethod);
             ToolDataOperateCommand =new DelegateCommand<string>(ToolDataOperate);
             this.aggregator = aggregator;
@@ -87,22 +95,20 @@ namespace Plugin.PerProcessing.ViewModels
             CurrentItem= data;
         }
 
-        private void LinkMethod(string obj)
+        private void LinkMethod(LinkPathParam p)
         {
-            if (obj == "Link")
+           if(p.PathType == VM.IPlugin.Enums.LinkPathType.Link)
             {
-                OpenLinkargs openLinkargs = new OpenLinkargs();
-                openLinkargs.guid = ModuleData.ModuleGuid;
-                openLinkargs.name = "GrabImage";
+                var openLinkargs = new OpenLinkargs();
                 openLinkargs.Fiter = (s => s.DataType == "HImage");
-                OpenVarLinkView(openLinkargs);
-                return;
-            }
-            if(_linkvar != null)
-            {
-                _linkvar.OnValueChanged -= Linkvar_OnValueChanged;
-                _linkvar = null;
-                LinkPath =string.Empty;
+                openLinkargs.CallBack = s => {
+
+                    if (s.varValue is VarValue<HImage> d)
+                    {
+                        CurImage = d;
+                        CurrentHImage = d.Value;
+                    }
+                };
             }
         }
 
@@ -155,11 +161,6 @@ namespace Plugin.PerProcessing.ViewModels
         private void Linkvar_OnValueChanged(object? sender, HImage e)
         {
             CurrentHImage = e;
-        }
-        public override void RegisterOut()
-        {
-            base.RegisterOut();
-            ModuleData.AppendOutVar("预处理图像", "HImage", CurrentHImage);
         }
     }
 }

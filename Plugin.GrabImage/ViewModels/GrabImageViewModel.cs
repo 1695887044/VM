@@ -1,6 +1,6 @@
-﻿using HalconDotNet;
+﻿using System.ComponentModel.DataAnnotations;
+using HalconDotNet;
 using Microsoft.Win32;
-using System.ComponentModel.DataAnnotations;
 using VM.IPlugin;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
@@ -10,31 +10,39 @@ namespace Plugin.GrabImage.ViewModels
     internal class GrabImageViewModel : ModuleViewModelBase
     {
         #region  //Commands
-            public DelegateCommand SelectImageCommand { get; private set; }
-            public DelegateCommand LinkViewCommand { get; private set; }
+        public DelegateCommand SelectImageCommand { get; private set; }
+        public DelegateCommand LinkViewCommand { get; private set; }
         #endregion
 
         #region //Props
-            private VarValue<string> imageSourcePath = new();
-            public VarValue<string> ImageSourcePath
+        private VarValue<string> imageSourcePath = new();
+        public VarValue<string> ImageSourcePath
+        {
+            get { return imageSourcePath; }
+            set
             {
-                get { return imageSourcePath; }
-                set { imageSourcePath = value; RaisePropertyChanged(); }
+                imageSourcePath = value;
+                RaisePropertyChanged();
             }
-
+        }
 
         private HImage displayImage;
         private readonly IEventAggregator eventAggregator;
-        [Display(Name = "输出图像",Description ="测试")]
+
+        [Display(Name = "输出图像", Description = "采集-源图像")]
         public HImage DisplayImage
         {
             get { return displayImage; }
-            set { displayImage = value; RaisePropertyChanged(); }
+            set
+            {
+                displayImage = value;
+                RaisePropertyChanged();
+            }
         }
         #endregion
 
 
-        public GrabImageViewModel( IEventAggregator eventAggregator)
+        public GrabImageViewModel(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
             initCommands();
@@ -43,7 +51,7 @@ namespace Plugin.GrabImage.ViewModels
         private void initCommands()
         {
             SelectImageCommand = new DelegateCommand(ExecuteSelectImage);
-            LinkViewCommand =new DelegateCommand(OpenLink);
+            LinkViewCommand = new DelegateCommand(OpenLink);
         }
 
         private void OpenLink()
@@ -54,26 +62,31 @@ namespace Plugin.GrabImage.ViewModels
             openLinkargs.Fiter = (s => s.DataType == "HImage");
             OpenVarLinkView(openLinkargs);
         }
-         
+
         /// <summary>
         /// 触发选择图片
         /// </summary>
         private void ExecuteSelectImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
-            if (openFileDialog.ShowDialog() != true) return;
+            openFileDialog.Filter =
+                "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
+            if (openFileDialog.ShowDialog() != true)
+                return;
             var img = new HImage();
             ImageSourcePath.Value = openFileDialog.FileName;
             img.ReadImage(openFileDialog.FileName);
-            ModuleData.SetVarValue<HImage>("DisplayImage", (s =>
-            {
-                s.Value = img;
-                DisplayImage = s.Value;
-                eventAggregator.GetEvent<RefreshUIEvent<HImage>>().Publish(s);
-            }
-            ));
-           
+            ModuleData.SetVarValue<HImage>(
+                "DisplayImage",
+                (
+                    s =>
+                    {
+                        s.Value = img;
+                        DisplayImage = s.Value;
+                        eventAggregator.GetEvent<RefreshUIEvent<HImage>>().Publish(s);
+                    }
+                )
+            );
         }
 
         public override bool Cancel()
@@ -93,7 +106,7 @@ namespace Plugin.GrabImage.ViewModels
 
         public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
         {
-            if(changedEvent.varValue is VarValue<HImage> linkvar)
+            if (changedEvent.varValue is VarValue<HImage> linkvar)
             {
                 linkvar.OnValueChanged += Linkvar_OnValueChanged;
                 DisplayImage = linkvar.Value;
@@ -103,12 +116,6 @@ namespace Plugin.GrabImage.ViewModels
         private void Linkvar_OnValueChanged(object? sender, HImage e)
         {
             DisplayImage = e;
-        }
-
-        public override void RegisterOut()
-        {
-            base.RegisterOut();
-           // ModuleData.AppendOutVar("图像", "HImage" ,  DisplayImage);
         }
     }
 }

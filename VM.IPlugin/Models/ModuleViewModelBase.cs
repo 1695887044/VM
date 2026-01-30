@@ -50,12 +50,12 @@ namespace VM.IPlugin
         /// 确定
         /// </summary>
         /// <returns></returns>
-        public abstract bool Confirm();
+        public virtual bool Confirm()=> true;
         /// <summary>
         /// 取消
         /// </summary>
         /// <returns></returns>
-        public abstract bool Cancel();
+        public virtual bool Cancel() => true;
         /// <summary>
         /// 模块状态发生改变  
         /// </summary>
@@ -68,7 +68,10 @@ namespace VM.IPlugin
         /// <summary>
         /// 🔗链接变量发生改变
         /// </summary>
-        public abstract void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent);
+        public virtual void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
+        {
+
+        }
         
         /// <summary>
         /// 打开变量链接视图
@@ -83,6 +86,19 @@ namespace VM.IPlugin
             {
                 args.Fiter = (s => true);
             }
+            OpenVarLinkViewEvent?.Invoke(this, args);
+        }
+        protected void OpenVarLinkView<T>(OpenLinkargs<T> args)
+        {
+            if (args == null)
+            {
+                return;
+            }
+            if (args.Fiter == null)
+            {
+                args.Fiter = (s => s.DataType == typeof(T).Name);
+            }
+        
             OpenVarLinkViewEvent?.Invoke(this, args);
         }
         protected void OpenVarLinkView( Func<IVarValue,bool> Fiter, Action<IVarChangedEventParamModel> callback)
@@ -111,8 +127,7 @@ namespace VM.IPlugin
         /// 事件
         /// </summary>
         public event EventHandler<ModuleEventArgs>? ModuleStateChanged ;
-        public event EventHandler<OpenLinkargs>? OpenVarLinkViewEvent;
-
+        public event EventHandler<EventArgs>? OpenVarLinkViewEvent;
 
         public void ExecuteModule()
         {
@@ -152,18 +167,10 @@ namespace VM.IPlugin
                     value = default;
                 }
                 var genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                var at = prop.GetCustomAttribute<DisplayAttribute>();
                 // 调用泛型方法
-                genericMethod.Invoke(null, new object[] { ModuleData, prop.Name, prop.PropertyType.Name, value });
+                genericMethod.Invoke(null, new object[] { ModuleData, prop.Name,at.Name, prop.PropertyType.Name, value });
             }
-        }
-        public virtual void RegisterOut()
-        {
-            ModuleData.AppendOutVar("状态", "StateEvent", StateEvent.Initializing);
-            //ModuleData.AppendOutVar("时间", "int",0 );
-        }
-        public virtual void RegisterIn()
-        {
-            
         }
         /// <summary>
         /// 注册属性变更通知

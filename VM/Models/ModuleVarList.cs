@@ -38,6 +38,10 @@ namespace VM.Start.Models
                 VarModels = new ObservableCollection<IVarValue>()
             };
                
-    }
+        }
+        public override string ToString()
+        {
+            return this.DisplayName;
+        }
     }
 }

@@ -2,10 +2,10 @@
     x:Class="Plugin.PerProcessing.Controls.DisplayParam"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Plugin.PerProcessing.Controls"
-    xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
     xmlns:com="clr-namespace:Plugin.PerProcessing.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
+    xmlns:local="clr-namespace:Plugin.PerProcessing.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Plugin.PerProcessing.Model"
     d:DesignHeight="250"
@@ -13,117 +13,35 @@
     Background="White"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <ext:EnumBindingSource x:Key="VarThresholdSource" EnumType="{x:Type com:eVarThresholdType}"/>
-        <ext:EnumBindingSource x:Key="TransImageChannelSource" EnumType="{x:Type com:eTransImageChannel}"/>
-        <ext:EnumBindingSource x:Key="TransImageTypeSource" EnumType="{x:Type com:eTransImageType}"/>
-        <ext:EnumBindingSource x:Key="MirrorImageSource" EnumType="{x:Type com:eMirrorImageType}"/>
-        <ext:EnumBindingSource x:Key="RotateImageSource" EnumType="{x:Type com:eRotateImageAngle}"/>
-        <DataTemplate DataType="{x:Type model:ThresholdTool}">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Margin="20,10,10,10" Orientation="Horizontal">
-                    <TextBlock
-                        Width="60"
-                        VerticalAlignment="Center"
-                        Text="低阈值:" />
-                    <Slider
-                      Width="200"
-                        Margin="5,0"
-                        Maximum="255"
-                        Minimum="0"
-                        Value="{Binding ToolParamer.ThresholdLow}" />
-                </StackPanel>
-                <StackPanel Margin="20,10,10,10" Orientation="Horizontal">
-                    <TextBlock
-                        Width="60"
-                        VerticalAlignment="Center"
-                        Text="高阈值:" />
-                    <Slider
-                        Width="200"
-                        Margin="5,0"
-                        Maximum="255"
-                        Minimum="0"
-                        Value="{Binding ToolParamer.ThresholdHight}" />
-                </StackPanel>
-                <StackPanel Margin="20,10,10,10" Orientation="Horizontal">
-                    <CheckBox
-                        MinWidth="200"
-                        HorizontalAlignment="Center"
-                        Content="黑白反转"
-                        IsChecked="{Binding ToolParamer.ThresholdReverse}"
-                        IsEnabled="True" />
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type model:VarThresholdTool}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="7*" />
-                </Grid.ColumnDefinitions>
-                <UniformGrid Rows="4">
-                    <TextBlock
-                    Margin="2"
-                    VerticalAlignment="Center"
-                    Text="宽度" />
-                    <TextBlock
-                    Margin="2"
-                    VerticalAlignment="Center"
-                    Text="高度" />
-                    <TextBlock
-                    Margin="2"
-                    VerticalAlignment="Center"
-                    Text="阈值偏移" />
-                    <TextBlock
-                    Margin="2"
-                    VerticalAlignment="Center"
-                    Text="比较类型" />
-                </UniformGrid>
-                <UniformGrid Rows="4" Grid.Column="1">
-                    <TextBox Text="{Binding ToolParamer.VarThresholdWidth}" Margin="5 0" Background="Transparent" BorderThickness="0 0 0 2"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding ToolParamer.VarThresholdHeight}" Margin="5 0" Background="Transparent" BorderThickness="0 0 0 2"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding ToolParamer.VarThresholdSkew}" Margin="5 0" Background="Transparent" BorderThickness="0 0 0 2"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                    <ComboBox SelectedItem="{Binding ToolParamer.VarThresholdType }" ItemsSource="{Binding Source={StaticResource VarThresholdSource}}"/>
-                </UniformGrid>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type model:TransImageTool}">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="转换类型"/>
-                    <ComboBox SelectedItem="{Binding ToolParamer.TransImageType }" ItemsSource="{Binding Source={StaticResource TransImageTypeSource}}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="显示通道"/>
-                    <ComboBox SelectedItem="{Binding ToolParamer.TransImageChannel }" ItemsSource="{Binding Source={StaticResource TransImageChannelSource}}"/>
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
+        <ext:EnumBindingSource x:Key="VarThresholdSource" EnumType="{x:Type com:eVarThresholdType}" />
+        <ext:EnumBindingSource x:Key="TransImageChannelSource" EnumType="{x:Type com:eTransImageChannel}" />
+        <ext:EnumBindingSource x:Key="TransImageTypeSource" EnumType="{x:Type com:eTransImageType}" />
+        <ext:EnumBindingSource x:Key="MirrorImageSource" EnumType="{x:Type com:eMirrorImageType}" />
+        <ext:EnumBindingSource x:Key="RotateImageSource" EnumType="{x:Type com:eRotateImageAngle}" />
         <DataTemplate DataType="{x:Type model:RotateImageTool}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="旋转角度"/>
-                <ComboBox SelectedItem="{Binding ToolParamer.RotateImageAngle }" ItemsSource="{Binding Source={StaticResource RotateImageSource}}"/>
+                <TextBlock Text="旋转角度" />
+                <ComboBox ItemsSource="{Binding Source={StaticResource RotateImageSource}}" SelectedItem="{Binding ToolParamer.RotateImageAngle}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type model:MirrorImageTool}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="镜像参数"/>
-                <ComboBox SelectedItem="{Binding ToolParamer.MirrorImageType }" ItemsSource="{Binding Source={StaticResource MirrorImageSource}}"/>
+                <TextBlock Text="镜像参数" />
+                <ComboBox ItemsSource="{Binding Source={StaticResource MirrorImageSource}}" SelectedItem="{Binding ToolParamer.MirrorImageType}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type model:ChangeImageTool}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="宽度"/>
-                    <TextBox Text="{Binding Width}"/>
+                    <TextBlock Text="宽度" />
+                    <TextBox Text="{Binding Width}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="高度"/>
-                    <TextBox Text="{Binding Height}"/>
+                    <TextBlock Text="高度" />
+                    <TextBox Text="{Binding Height}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <GroupBox Header="参数" Content="{Binding CurrentItem}">
-       
-    </GroupBox>
+    <GroupBox Content="{Binding CurrentItem}" Header="参数" />
 </UserControl>

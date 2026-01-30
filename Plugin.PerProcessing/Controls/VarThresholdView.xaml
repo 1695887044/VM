@@ -1,0 +1,46 @@
+﻿<UserControl
+    x:Class="Plugin.PerProcessing.Controls.VarThresholdView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:com="clr-namespace:Plugin.PerProcessing.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:Plugin.PerProcessing.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:Background="AliceBlue"
+    d:DesignHeight="300"
+    d:DesignWidth="250"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ext:EnumBindingSource x:Key="VarThresholdSource" EnumType="{x:Type com:eVarThresholdType}" />
+    </UserControl.Resources>
+    <StackPanel>
+        <hc:NumericUpDown
+            Margin="4"
+            hc:InfoElement.Title="宽度"
+            hc:InfoElement.TitlePlacement="Left"
+            Minimum="0"
+            Style="{StaticResource NumericUpDownExtend}"
+            Value="{Binding VarThresholdWidth}" />
+        <hc:NumericUpDown
+            Margin="4"
+            hc:InfoElement.Title="高度"
+            hc:InfoElement.TitlePlacement="Left"
+            Minimum="0"
+            Style="{StaticResource NumericUpDownExtend}"
+            Value="{Binding VarThresholdHeight}" />
+        <hc:NumericUpDown
+            Margin="4"
+            hc:InfoElement.Title="阈值偏移"
+            hc:InfoElement.TitlePlacement="Left"
+            Minimum="0"
+            Style="{StaticResource NumericUpDownExtend}"
+            Value="{Binding VarThresholdSkew}" />
+        <hc:ComboBox
+            hc:InfoElement.Title="比较内容"
+            hc:InfoElement.TitlePlacement="Left"
+            ItemsSource="{Binding Source={StaticResource VarThresholdSource}}"
+            SelectedItem="{Binding VarThresholdType}" />
+    </StackPanel>
+</UserControl>

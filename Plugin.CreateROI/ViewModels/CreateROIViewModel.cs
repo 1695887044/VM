@@ -173,7 +173,7 @@ namespace Plugin.CreateROI.ViewModels
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
                     _roi = e?.NewItems[0] as DrawingObjectInfo;
                     if (_roi == null) return;
-                    roiDict[ModuleData.AppendOutVar("Roi", "HRegion", _roi)] = ModuleData.AppendOutVar("Roi", "HImage", CurrentHImage.ReduceDomain(_roi.Hobject).CropDomain().ToHimage());
+                    //roiDict[ModuleData.AppendOutVar("Roi", "HRegion", _roi)] = ModuleData.AppendOutVar("Roi", "HImage", CurrentHImage.ReduceDomain(_roi.Hobject).CropDomain().ToHimage());
                     break;
             }
         }

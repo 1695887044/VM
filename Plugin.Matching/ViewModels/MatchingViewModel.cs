@@ -8,6 +8,7 @@ using System.Windows.Media;
 using VM.Halcon.Extensions;
 using VM.Halcon.Models;
 using VM.IPlugin;
+using VM.IPlugin.Controls;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
@@ -70,7 +71,7 @@ namespace Plugin.Matching.ViewModels
 
         #region 命令
         public DelegateCommand<string> SelectOperatorCommand { get; init; }
-        public DelegateCommand<Tuple<string,string>> LabelLinkCommand { get; init; }
+        public DelegateCommand<LinkPathParam> LabelLinkCommand { get; init; }
         public DelegateCommand<String> MathchOperatorCommand { get; init; }
 
         private VarValue<HImage> curHImage;
@@ -116,12 +117,12 @@ namespace Plugin.Matching.ViewModels
             MathchingService = MatchingStrategyFactory.CreateStrtegy(MatchType);
         }
 
-         void LinkBindMethod(Tuple<string, string> tuple)
+         void LinkBindMethod(LinkPathParam p1)
         {
-            if (tuple.Item1.Equals("Link"))
+            if (p1.PathType == VM.IPlugin.Enums.LinkPathType.Link)
             {
                 var openLinkargs = new OpenLinkargs();
-                switch (tuple.Item2)
+                switch (p1.Param)
                 {
                     case "Img":
                         openLinkargs.Fiter = (s => s.DataType == "HImage");
@@ -190,9 +191,9 @@ namespace Plugin.Matching.ViewModels
                 HObject drawObj;
                 HOperatorSet.GenEmptyObj(out drawObj);
                 HOperatorSet.SetColor(HWindow, "blue");
-                var hTuples = new HTuple[4];
-                HOperatorSet.DrawRectangle1(HWindow, out hTuples[0], out hTuples[1], out hTuples[2], out hTuples[3]);
-                drawObj = hTuples.GenRectangle();
+                var hTuples = new HTuple[5];     
+                HOperatorSet.DrawRectangle2(HWindow, out hTuples[0], out hTuples[1], out hTuples[2], out hTuples[3], out hTuples[4]);
+                drawObj = hTuples.GenRectangle2();
                 ViewTopText = string.Empty;
                 RoiReigon = new DrawingObjectInfo(VM.Halcon.Enums.DrawShapeType.Rectangle, drawObj, hTuples);
             });
@@ -211,7 +212,7 @@ namespace Plugin.Matching.ViewModels
                 HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row, item.Column, item.Angle, out var tempMat2D);
                 HOperatorSet.AffineTransContourXld(item.Contours, out HObject transformedContours, tempMat2D);
                 TemplateHWindow.DispObj(transformedContours);
-                HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], item.Angle, out var tempMat2D1);
+                HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], item.Angle + RoiReigon.HTuples[2], out var tempMat2D1);
                 HOperatorSet.AffineTransContourXld(item.Contours, out HObject transformedContours1, tempMat2D1);
                 HWindow.DispObj(transformedContours1);
                 HWindow.DispCross(item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], 30, 0);
@@ -252,13 +253,14 @@ namespace Plugin.Matching.ViewModels
         public  override bool Execute()
         {
              if (MathchingService == null) return false;
-             MathchingService?.Run(CurrentHImage);
+            MathchingService.Roi = null;
+            MathchingService?.Run(CurrentHImage);
             foreach (var item in MathchingService.MatchResults)
             {
-                HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], item.Angle, out var tempMat2D1);
+               // HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], item.Angle + RoiReigon.HTuples[2], out var tempMat2D1);
+                HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row , item.Column , item.Angle ,out var tempMat2D1);
                 HOperatorSet.AffineTransContourXld(item.Contours, out HObject transformedContours1, tempMat2D1);
                 HWindow.DispObj(transformedContours1);
-                HWindow.DispCross(item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], 30, 0);
             }
             return true;
         }

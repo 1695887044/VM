@@ -62,7 +62,8 @@ namespace Plugin.Matching.Services
 
         public bool Run(HObject image)
         {
-                if (image == null || modelId == null) return false;
+            MatchResults.Clear();
+            if (image == null || modelId == null) return false;
                 HObject template;
                 template = Roi == null ? image : image.ReduceDomain(Roi.Hobject).CropDomain();
                 HOperatorSet.FindShapeModel(

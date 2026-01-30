@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
 using VM.Start.Dialogs.ViewModels;
 
 namespace VM.Start.Views
@@ -12,5 +13,7 @@ namespace VM.Start.Views
         {
             InitializeComponent();
         }
+
+       
     }
 }

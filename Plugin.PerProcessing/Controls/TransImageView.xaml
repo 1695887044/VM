@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="Plugin.PerProcessing.Controls.TransImageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:Plugin.PerProcessing.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:Background="AliceBlue"
+    d:DesignHeight="300"
+    d:DesignWidth="250"
+    mc:Ignorable="d">
+    <StackPanel>
+        <hc:ComboBox
+            Margin="5,10"
+            hc:InfoElement.Title="转换类型"
+            hc:InfoElement.TitlePlacement="Left"
+            Text="{Binding TransImageType}">
+            <ComboBoxItem>通用比例转换</ComboBoxItem>
+            <ComboBoxItem>RGB</ComboBoxItem>
+            <ComboBoxItem>HSV</ComboBoxItem>
+            <ComboBoxItem>HSI</ComboBoxItem>
+            <ComboBoxItem>YUV</ComboBoxItem>
+        </hc:ComboBox>
+        <hc:ComboBox
+            Margin="5,5"
+            hc:InfoElement.Title="转换通道"
+            hc:InfoElement.TitlePlacement="Left"
+            Text="{Binding TransImageChannel}">
+            <ComboBoxItem>1</ComboBoxItem>
+            <ComboBoxItem>2</ComboBoxItem>
+            <ComboBoxItem>3</ComboBoxItem>
+        </hc:ComboBox>
+    </StackPanel>
+</UserControl>

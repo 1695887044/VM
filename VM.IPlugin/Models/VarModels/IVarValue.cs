@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin.Models.VarModels
@@ -15,8 +16,11 @@ namespace VM.IPlugin.Models.VarModels
 
         public string Expression { get; set; }
 
+        public string DisPlayName { get; set; }
 
         public string Note { get; set; }
+
+        Type? Type { get; }
 
     }
     public class VarValue<T> : BindableBase,IVarValue
@@ -28,6 +32,17 @@ namespace VM.IPlugin.Models.VarModels
             _Data.Name = name;
             _Data.DataType = Datatype;
             _Data.Value = value;
+            _Data.Type = typeof(T);
+            return _Data;
+        }
+        public static VarValue<T> CreateVarValue(string name,string display, string Datatype, T value)
+        {
+            VarValue<T> _Data = new VarValue<T>();
+            _Data.Name = name;
+            _Data.DisPlayName = display;
+            _Data.DataType = Datatype;
+            _Data.Value = value;
+            _Data.Type = typeof(T);
             return _Data;
         }
         private string _linkPath;
@@ -46,22 +61,27 @@ namespace VM.IPlugin.Models.VarModels
             get { return _value; }
             set { _value = value; RaisePropertyChanged(); OnValueChanged?.Invoke(this, _value); }
         }
+
+        public  string DisPlayName { get; set; }
         public long Index { get; set; }
         public string DataType { get; set; }
         public string Name { get; set; }
         public string Expression { get; set; }
         public string Note { get; set; }
 
+        public Type? Type { get; set; }
         public event EventHandler<T>? OnValueChanged;
        
     }
     public static class VarValueExtension
     {
-        public static VarValue<T> AppendOutVar<T>(this ModuleParamer module, string name, string Datatype, T value)
+        public static VarValue<T> AppendOutVar<T>(this ModuleParamer module, string name, string display, string Datatype, T value)
         {
             VarValue<T> _Data = new VarValue<T>();
             _Data.Name = name;
             _Data.DataType = Datatype;
+            _Data.Type = typeof(T);
+            _Data.DisPlayName = display;
             _Data.Value = value;
             _Data.LinkPath = module.ModuleGuid.ToString();
             module.VarOut.Add(_Data);

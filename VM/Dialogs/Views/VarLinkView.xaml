@@ -4,32 +4,55 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="clr-namespace:VM.Start.Behaviors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:VM.Start.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ext="clr-namespace:VM.Start.Behaviors"
     xmlns:prism="http://prismlibrary.com/"
     d:DesignHeight="450"
     d:DesignWidth="800"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="#6459DF"
+    Background="#FFFFFF"
     mc:Ignorable="d">
     <prism:Dialog.WindowStyle>
         <Style TargetType="Window">
-            <Setter Property="WindowStyle" Value="ToolWindow" />
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ShowInTaskbar" Value="False" />
+            <Setter Property="WindowStyle" Value="None" />
+            <Setter Property="AllowsTransparency" Value="True" />
         </Style>
     </prism:Dialog.WindowStyle>
-    <Grid TextElement.Foreground="White">
+    <Grid TextElement.Foreground="Black">
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
+            <RowDefinition Height="56" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="35"
-            Text="变量链接" />
+        <Border>
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="2"
+                    ShadowDepth="0.1"
+                    Color="DarkBlue" />
+            </Border.Effect>
+            <DockPanel VerticalAlignment="Center">
+                <TextBlock
+                    Margin="5,0"
+                    FontSize="34"
+                    Foreground="#2563EB"
+                    Text="🔗" />
+                <TextBlock
+                    Margin="5,0"
+                    FontSize="34"
+                    Text="变量链接" />
+                <Button
+                    HorizontalAlignment="Right"
+                    hc:IconElement.Geometry="{StaticResource CloseGeometry}"
+                    hc:IconElement.Width="30"
+                    BorderThickness="0"
+                    Command="{Binding CloseCommand}"
+                    Style="{StaticResource ButtonIcon}" />
+            </DockPanel>
+        </Border>
         <hc:TabControl
             Grid.Row="1"
             Margin="1"
@@ -40,28 +63,43 @@
             ShowOverflowButton="True">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding DisplayName}" />
+                    <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <hc:TabControl.ContentTemplate>
                 <DataTemplate>
                     <DataGrid
-                        Style="{StaticResource   DataGrid.Small}"
                         AutoGenerateColumns="False"
+                        ColumnWidth="*"
                         HeadersVisibility="Column"
                         IsReadOnly="True"
-                        ColumnWidth="*"
-                        ItemsSource="{Binding VarModels}">
+                        ItemsSource="{Binding VarModels}"
+                        Style="{StaticResource DataGrid.Small}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn  Width="50" Binding="{Binding Index}" Header="索引" />
-                            <DataGridTextColumn Width="140" Binding="{Binding Name}" Header="变量名称" />
-                            <DataGridTextColumn Width="90" Binding="{Binding DataType}" Header="数据类型" />
-                            <DataGridTextColumn Width="160" Binding="{Binding Value}" Header="当前数值" />
-                            <DataGridTextColumn Width="*" Binding="{Binding Note}" Header="注释" />
+                            <DataGridTextColumn
+                                Width="50"
+                                Binding="{Binding Index}"
+                                Header="索引" />
+                            <DataGridTextColumn
+                                Width="140"
+                                Binding="{Binding DisPlayName}"
+                                Header="变量名称" />
+                            <DataGridTextColumn
+                                Width="90"
+                                Binding="{Binding DataType}"
+                                Header="数据类型" />
+                            <DataGridTextColumn
+                                Width="160"
+                                Binding="{Binding Value}"
+                                Header="当前数值" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Note}"
+                                Header="注释" />
                         </DataGrid.Columns>
                         <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle.Small}">
-                                <Setter Property="ext:DoubleClickBehavior.Command" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ConfirmCommand}"/>
+                            <Style BasedOn="{StaticResource DataGridRowStyle.Small}" TargetType="DataGridRow">
+                                <Setter Property="ext:DoubleClickBehavior.Command" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ConfirmCommand}" />
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>

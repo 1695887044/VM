@@ -11,9 +11,14 @@ namespace VM.Start.Dialogs.ViewModels
         public  GlobalVarService VarService { get; set; }
 
         public DelegateCommand<IVarValue> ConfirmCommand { get; init; }
+
+        public DelegateCommand CloseCommand { get; init; }
         public VarLinkViewModel(GlobalVarService varService)
         {
             ConfirmCommand = new DelegateCommand<IVarValue>(ConfirmExecte);
+            CloseCommand = new(() => {
+                RequestClose.Invoke();
+            });
             VarService = varService;
         }
         /// <summary>
