@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
                 <ResourceDictionary Source=" /Themes/LabeledContentControl.xaml"/>
                 <ResourceDictionary Source=" /Themes/LabelValueControl.xaml"/>
+                <ResourceDictionary Source=" /Themes/LabelLinkPath.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

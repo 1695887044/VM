@@ -1,8 +1,10 @@
 ﻿using HalconDotNet;
+using Microsoft.Win32;
 using Plugin.PerProcessing.Model;
 using Plugin.PerProcessing.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using VM.Halcon.Models;
 using VM.IPlugin;
 using VM.IPlugin.Controls;
@@ -13,24 +15,10 @@ namespace Plugin.PerProcessing.ViewModels
 {
     public class PerPrecessViewModel : ModuleViewModelBase
     {
-        private bool useRoi;
 
-        public bool UseRoi
-        {
-            get { return useRoi; }
-            set { useRoi = value; RaisePropertyChanged(); }
-        }
-
-        private string linkPath;
-
-        public string LinkPath
-        {
-            get { return linkPath; }
-            set { linkPath = value; RaisePropertyChanged(); }
-        }
 
         private VarValue<HImage> curImage;
-
+        
         public VarValue<HImage> CurImage
         {
             get { return curImage; }
@@ -45,7 +33,7 @@ namespace Plugin.PerProcessing.ViewModels
             set { currentData = value; RaisePropertyChanged(); }
         }
 
-        private HImage hImageMemory;
+     
 
         private HImage currentHImage;
         [Display(Name = "输出图像")]
@@ -72,6 +60,7 @@ namespace Plugin.PerProcessing.ViewModels
             DataOperateCommand = new DelegateCommand<string>(ChangedToolMethod);
             ToolDataOperateCommand =new DelegateCommand<string>(ToolDataOperate);
             this.aggregator = aggregator;
+
         }
 
         private void ToolDataOperate(string obj)
@@ -99,68 +88,26 @@ namespace Plugin.PerProcessing.ViewModels
         {
            if(p.PathType == VM.IPlugin.Enums.LinkPathType.Link)
             {
-                var openLinkargs = new OpenLinkargs();
-                openLinkargs.Fiter = (s => s.DataType == "HImage");
-                openLinkargs.CallBack = s => {
-
-                    if (s.varValue is VarValue<HImage> d)
-                    {
-                        CurImage = d;
-                        CurrentHImage = d.Value;
-                    }
-                };
+                OpenVarLinkView<HImage>(s => CurImage = s.varValue);
+                ModuleData.SetVarValue(nameof(CurrentHImage), CurImage.Value);
             }
         }
-
-        public override bool Cancel()
-        {
-            return true;
-        }
-
-        public override bool Confirm()
-        {
-            return true;
-        }
-
+        private HImage hImageMemory;
         public override bool Execute()
         {
-            if(_linkvar != null && _linkvar.Value != null)
-            {
-                CurrentHImage = _linkvar.Value;
-            }
-            if (CurrentHImage == null) return false;
-            HImage TempOutImage = hImageMemory == null ? CurrentHImage.Clone() : hImageMemory.Clone();
+            if (CurImage == null || CurImage.Value == null) return false;
+            HImage TempOutImage = hImageMemory == null ? CurImage.Value.Clone() : hImageMemory.Clone();
             HImage TempInImage = new HImage();
             foreach (var tool in M_ToolData)
             {
                 if (!tool.IsEnabled) continue;
                 TempInImage = new HImage(TempOutImage);
                 TempOutImage = ComMethods.MethodService.ImageOperator(TempInImage,tool);
-            }        
-            ModuleData.SetVarValue<HImage>("预处理图像", (s =>
-            {
-                s.Value = TempOutImage;
-                CurrentHImage = TempOutImage;
             }
-            ));
+            ModuleData.SetVarValue(nameof(CurrentHImage), TempOutImage);
             return true;
 
         }
-        VarValue<HImage> _linkvar;
-        public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
-        {
-            if (changedEvent.varValue is VarValue<HImage> linkvar)
-            {
-                _linkvar = linkvar;
-                _linkvar.OnValueChanged += Linkvar_OnValueChanged;
-                LinkPath = $"{_linkvar.LinkPath}&&{_linkvar.Name}";
-                CurrentHImage = null;
-               CurrentHImage = _linkvar.Value;
-            }
-        }
-        private void Linkvar_OnValueChanged(object? sender, HImage e)
-        {
-            CurrentHImage = e;
-        }
+
     }
 }

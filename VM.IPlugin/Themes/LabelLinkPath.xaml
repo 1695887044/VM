@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cs="clr-namespace:VM.IPlugin.Controls">
     <Style TargetType="cs:LabelLinkPath">
+     
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="cs:LabelLinkPath">
@@ -12,7 +13,7 @@
                         BorderBrush="#D0D0D0"
                         BorderThickness="1"
                         CornerRadius="8">
-                        <Grid>
+                        <Grid Height="35">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70" />
                                 <ColumnDefinition />
@@ -32,13 +33,17 @@
                                 Orientation="Horizontal">
                                 <Button
                                     Name="PART_LinkButton"
-                                    Width="16"
-                                    Height="16"
-                                    Margin="2"
+                                    Width="30"
+                                    Height="30"
+                                    Padding="2"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Content="🔗"
+                                    FontFamily="Segoe UI Emoji"
                                     ToolTip="链接" />
+                                <!--  新增：指定支持Emoji的字体  -->
                                 <Button
                                     Name="PART_ClearButton"
                                     Width="16"
@@ -56,8 +61,7 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 FontSize="10"
-                                Foreground="#333"
-                                />
+                                Foreground="#333" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -7,29 +7,36 @@ using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin
 {
-
-    public abstract class ModuleViewModelBase:BindableBase
+    public abstract class ModuleViewModelBase : BindableBase
     {
-
         Stopwatch stopwatch { get; set; } = new Stopwatch();
 
         public ModuleEventArgs Args { get; set; } = new();
-       
-        private string displayTime ="0";
 
-        [Display(Name ="执行时间")]
-        public string DisplayTime
+        private int displayTime = 0;
+
+        [Display(Name = "执行时间")]
+        public int DisplayTime
         {
             get { return displayTime; }
-            set { displayTime = value;RaisePropertyChanged(); }
+            set
+            {
+                displayTime = value;
+                RaisePropertyChanged();
+            }
         }
 
         private StateEvent state;
+
         [Display(Name = "状态")]
         public StateEvent State
         {
             get { return state; }
-            set { state = value; RaisePropertyChanged(); }
+            set
+            {
+                state = value;
+                RaisePropertyChanged();
+            }
         }
 
         private ModuleParamer _moduleData = new();
@@ -46,18 +53,21 @@ namespace VM.IPlugin
         /// </summary>
         /// <returns></returns>
         public abstract bool Execute();
+
         /// <summary>
         /// 确定
         /// </summary>
         /// <returns></returns>
-        public virtual bool Confirm()=> true;
+        public virtual bool Confirm() => true;
+
         /// <summary>
         /// 取消
         /// </summary>
         /// <returns></returns>
         public virtual bool Cancel() => true;
+
         /// <summary>
-        /// 模块状态发生改变  
+        /// 模块状态发生改变
         /// </summary>
         /// <param name="args"></param>
         protected virtual void OnModuleStateChanged(StateEvent state)
@@ -65,49 +75,32 @@ namespace VM.IPlugin
             Args.ActState = state;
             ModuleStateChanged?.Invoke(this, Args);
         }
+
         /// <summary>
         /// 🔗链接变量发生改变
         /// </summary>
-        public virtual void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
-        {
+        public virtual void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent) { }
 
-        }
-        
         /// <summary>
         /// 打开变量链接视图
         /// </summary>
-        protected void OpenVarLinkView(OpenLinkargs args =null,Action Fiter =null, Action callback =null)
+        protected void OpenVarLinkView<T>(Action<VarChangedEventParamModel<T>> callBack)
         {
-            if(args == null)
-            {
-                args = new OpenLinkargs();
-            }
-            if(args.Fiter == null)
-            {
-                args.Fiter = (s => true);
-            }
+            var targs = new OpenLinkargs<T>(callBack);
+            OpenVarLinkViewEvent?.Invoke(this, targs);
+        }
+
+        protected void OpenVarLinkView(
+            Func<IVarValue, bool> Fiter,
+            Action<IVarChangedEventParamModel> callback
+        )
+        {
+            var args = new OpenLinkargs();
+            args.Fiter = Fiter;
+            args.CallBack = callback;
             OpenVarLinkViewEvent?.Invoke(this, args);
         }
-        protected void OpenVarLinkView<T>(OpenLinkargs<T> args)
-        {
-            if (args == null)
-            {
-                return;
-            }
-            if (args.Fiter == null)
-            {
-                args.Fiter = (s => s.DataType == typeof(T).Name);
-            }
-        
-            OpenVarLinkViewEvent?.Invoke(this, args);
-        }
-        protected void OpenVarLinkView( Func<IVarValue,bool> Fiter, Action<IVarChangedEventParamModel> callback)
-        {
-             var args = new OpenLinkargs();
-              args.Fiter = Fiter;
-              args.CallBack = callback;
-            OpenVarLinkViewEvent?.Invoke(this, args);
-        }
+
         protected void OpenVarLinkView(OpenLinkargs args = null)
         {
             if (args == null)
@@ -122,12 +115,12 @@ namespace VM.IPlugin
         }
         #endregion
 
-        #region 
+        #region
         /// <summary>
         /// 事件
         /// </summary>
-        public event EventHandler<ModuleEventArgs>? ModuleStateChanged ;
-        public event EventHandler<EventArgs>? OpenVarLinkViewEvent;
+        public event EventHandler<ModuleEventArgs>? ModuleStateChanged;
+        public event EventHandler<IOpenLinkargs>? OpenVarLinkViewEvent;
 
         public void ExecuteModule()
         {
@@ -145,14 +138,15 @@ namespace VM.IPlugin
             }
             stopwatch.Stop();
             OnModuleStateChanged(StateEvent.Stop);
-            DisplayTime = stopwatch.ElapsedMilliseconds.ToString();
+            DisplayTime = (int)stopwatch.ElapsedMilliseconds;
         }
 
         #region 创建模块时,初始化一些属性
         public virtual void ModuleInit()
         {
             //拿到所有标注Display特性的属性
-            var propertys = this.GetType().GetProperties()
+            var propertys = this.GetType()
+                .GetProperties()
                 .Where(p => Attribute.IsDefined(p, typeof(DisplayAttribute)));
             //注册输出变量
             foreach (var prop in propertys)
@@ -160,29 +154,22 @@ namespace VM.IPlugin
                 var value = prop.GetValue(this);
                 //Halcon 注册的时候就是Null
                 // 获取 AppendOutVar 方法的 MethodInfo
-                var method = typeof(VarValueExtension).GetMethods().First(p => p.Name.Equals("AppendOutVar"));
+                var method = typeof(VarValueExtension)
+                    .GetMethods()
+                    .First(p => p.Name.Equals("AppendOutVar"));
                 // 构造泛型方法
-                if(value == null)
+                if (value == null)
                 {
                     value = default;
                 }
                 var genericMethod = method.MakeGenericMethod(prop.PropertyType);
                 var at = prop.GetCustomAttribute<DisplayAttribute>();
                 // 调用泛型方法
-                genericMethod.Invoke(null, new object[] { ModuleData, prop.Name,at.Name, prop.PropertyType.Name, value });
+                genericMethod.Invoke(
+                    null,
+                    new object[] { ModuleData, prop.Name, at.Name, prop.PropertyType.Name, value }
+                );
             }
-        }
-        /// <summary>
-        /// 注册属性变更通知
-        /// </summary>
-        private bool RegisterSubScrip<T>(IVarValue varValue, Delegate handler)
-        {
-            if(varValue == null) return false;
-            if(varValue  is VarValue<T> _var)
-            {
-                
-            }
-            return false;
         }
         #endregion
         #endregion

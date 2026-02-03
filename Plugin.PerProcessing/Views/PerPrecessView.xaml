@@ -74,12 +74,13 @@
                 Header="基本参数">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="80" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="80" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <GroupBox Header="图像链接">
-                        <linkCt:LabelLinkPath Header="图像链接" OperatorCommand="{Binding LinkPathCommand}" />
+
+                        <linkCt:LabelLinkPath Header="图像链接" Value="{Binding CurImage}" OperatorCommand="{Binding LinkPathCommand}" />
                     </GroupBox>
                 </Grid>
             </TabItem>
@@ -284,9 +285,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <halconCt:ImageEdit
-            Grid.Column="1"
-            DrawObjectList="{Binding RoiData}"
-            HImage="{Binding CurrentHImage}" />
+        <halconCt:ImageDisplay Grid.Column="1" HImage="{Binding CurrentHImage, Mode=TwoWay}" />
     </Grid>
 </UserControl>

@@ -187,7 +187,7 @@ namespace Plugin.CreateROI.ViewModels
             {
                 OpenLinkargs openLinkargs = new OpenLinkargs();
                 openLinkargs.guid = ModuleData.ModuleGuid;
-                openLinkargs.name = "GrabImage";
+                openLinkargs.Name = "GrabImage";
                 openLinkargs.Fiter = (s => s.DataType == "HImage");
                 OpenVarLinkView(openLinkargs);
                 return;

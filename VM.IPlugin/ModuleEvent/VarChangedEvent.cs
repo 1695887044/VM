@@ -2,10 +2,6 @@
 
 namespace VM.IPlugin.ModuleEvent
 {
-    public class VarChangedEvent : PubSubEvent<IVarChangedEventParamModel> { }
-
-    public class VarChangedEvent<T> : PubSubEvent<VarChangedEventParamModel<T>> { }
-
     public class RefreshUIEvent<T> : PubSubEvent<VarValue<T>>
     {
 
@@ -25,29 +21,6 @@ namespace VM.IPlugin.ModuleEvent
         public IVarValue varValue { get; set; }
         public string Note { get; set; }
     }
-    //public class VarChangedEventParamModel<T> : VarChangedEventParamModel, IVarChangedEventParam<T>
-    //{
-
-    //    public T varValue { get; set; }
-    //}
-
-    //public interface IVarChangedEventParamModel
-    //{
-    //     string SendName { get; set; }
-    //     string LinkName { get; set; }
-
-    //        IVarValue varValue { get; set; }
-    //     string Name { get; set; }
-    //     string DataType { get; set; }
-    //     bool IsAdd { get; set; }
-
-    //     string Note { get; set; }
-    //}
-    //public interface IVarChangedEventParam<T> : IVarChangedEventParamModel
-    //{
-    //    public T varValue { get; set; }
-    //}
-    
     public class VarChangedEventParamModel<T> : VarChangedEventParamModel, IVarChangedEventParam<T>
     {
 

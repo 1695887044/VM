@@ -1,27 +1,43 @@
 ﻿using VM.IPlugin;
+using VM.IPlugin.Controls;
+using VM.IPlugin.Models;
+using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 
 namespace Plugin.DiplayData.ViewModels
 {
-    internal class DisplayDataViewModel : ModuleViewModelBase
+    public class DisplayDataViewModel : ModuleViewModelBase, ILinkable
     {
-        public override bool Cancel()
+        private VarValue<int> _indexLink;
+
+        public VarValue<int> IndexLink
         {
-           return true;
+            get { return _indexLink; }
+            set
+            {
+                _indexLink = value;
+                RaisePropertyChanged();
+            }
         }
 
-        public override bool Confirm()
+        public DelegateCommand<LinkPathParam> LinkPathCommand { get; init; }
+
+        public DisplayDataViewModel()
         {
-            return true;
+            LinkPathCommand = new(LinkMethods);
+        }
+
+        private void LinkMethods(LinkPathParam param)
+        {
+            if (param.PathType == VM.IPlugin.Enums.LinkPathType.Link)
+            {
+                OpenVarLinkView<int>(s => IndexLink = s.varValue);
+            }
         }
 
         public override bool Execute()
         {
             return true;
-        }
-        public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

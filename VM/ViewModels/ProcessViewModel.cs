@@ -1,5 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Windows;
 using VM.IPlugin;
 using VM.IPlugin.Consts;
@@ -81,8 +82,7 @@ namespace VM.Start.ViewModels
         {
             if (!(node.View is FrameworkElement content)) return;
             _currentNode = node;
-            node.ViewModel.OpenVarLinkViewEvent += OpenVarLinkView;
-           
+            node.ViewModel.OpenVarLinkViewEvent += OpenVarLinkView; 
              _ = new PluginView().ShowView(content, node.ViewModel,node.Name,node.IconText);
             node.ViewModel.OpenVarLinkViewEvent -= OpenVarLinkView;
         }
@@ -91,7 +91,7 @@ namespace VM.Start.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OpenVarLinkView(object? sender, OpenLinkargs e)
+        private void OpenVarLinkView(object? sender, IOpenLinkargs e)
         {
             //根据传入的参数筛选数据
             globalVarService.RefreshDisplayVarList(e.Fiter,_currentNode);
@@ -99,10 +99,10 @@ namespace VM.Start.ViewModels
             dialogService.ShowDialog("VarLinkView", (s) => {
                 if (s.Result != ButtonResult.OK) return;
                 s.Parameters.ContainsKey(GlobalConst.LinkVarEventParamterKey);
+                IVarValue v = s.Parameters.GetValue<IVarValue>(GlobalConst.LinkVarEventParamterKey);
                 VarChangedEventParamModel varEvent = new VarChangedEventParamModel();
-                varEvent.varValue= s.Parameters.GetValue<IVarValue>(GlobalConst.LinkVarEventParamterKey);
+                varEvent.varValue = v;
                 e.CallBack?.Invoke(varEvent);
-                _currentNode.ViewModel.OnLinkVarPathChanged(varEvent);
             });
         }
         #region 控件拖拽

@@ -22,7 +22,17 @@ namespace VM
         protected override Window CreateShell()
         {
             Container.Resolve<PluginService>().InitPlugin();
+            App.Current.DispatcherUnhandledException += (s, e) => MessageBox.Show(e.Exception.Message);
+            TaskScheduler.UnobservedTaskException += (s, e) => MessageBox.Show(e.Exception.Message);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                if (e.ExceptionObject is Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            };
             return Container.Resolve<MainShell>();
+          
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {

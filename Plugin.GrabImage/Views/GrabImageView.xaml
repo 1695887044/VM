@@ -38,7 +38,7 @@
                         <RowDefinition Height="80" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <GroupBox Header="采集模式">
+                    <hc:Card Header="采集模式" Style="{StaticResource InputElementBaseStyle}">
                         <UniformGrid Columns="3">
                             <RadioButton
                                 hc:IconElement.Geometry="{StaticResource 指定}"
@@ -54,36 +54,32 @@
                                 Content="相机采集"
                                 Style="{StaticResource RadioButtonIcon}" />
                         </UniformGrid>
-                    </GroupBox>
+                    </hc:Card>
                     <GroupBox Grid.Row="1" Header="指定图像">
                         <StackPanel
                             Margin="0,100,0,0"
                             HorizontalAlignment="Center"
                             Orientation="Vertical">
                             <StackPanel Margin="0,-130,0,0" Orientation="Horizontal">
+
                                 <Button
                                     Margin="0,0,30,0"
                                     hc:IconElement.Geometry="{StaticResource 选择}"
                                     Command="{Binding SelectImageCommand}"
                                     Content="选择文件" />
-                                <Button
-                                    hc:IconElement.Geometry="{StaticResource 链接}"
-                                    Command="{Binding LinkViewCommand}"
-                                    Content="链接路径" />
                             </StackPanel>
                             <hc:TextBox
+                                Width="300"
+                                HorizontalAlignment="Left"
                                 hc:InfoElement.TitlePlacement="Top"
                                 hc:InfoElement.TitleWidth="60"
                                 hc:TitleElement.Title="路径："
                                 IsReadOnly="True"
-                                Text="{Binding ImageSourcePath.Value}"
+                                Text="{Binding ImageSourcePath}"
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>
                     </GroupBox>
                 </Grid>
-            </hc:TabItem>
-            <hc:TabItem hc:IconElement.Geometry="{StaticResource TwoPageModeGeometry}" Header="图像参数">
-                <GroupBox Header="图像参数" />
             </hc:TabItem>
         </hc:TabControl>
         <halconCt:ImageEdit Grid.Column="1" HImage="{Binding DisplayImage}" />

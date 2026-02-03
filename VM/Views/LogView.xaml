@@ -29,7 +29,7 @@
                 Background="Green"
                 BadgeMargin="0,-5,-10,0"
                 Foreground="White"
-                Text="{Binding service.LogSource[0].Count, Mode=OneTime}">
+                Text="1">
                 <Button
                     hc:IconElement.Geometry="{StaticResource info}"
                     Command="{Binding OperatorCommmand}"
@@ -41,7 +41,7 @@
                 Background="Orange"
                 BadgeMargin="0,-5,-10,0"
                 Foreground="White"
-                Text="{Binding service.LogSource[1].Count}">
+                Text="1">
                 <Button
                     hc:IconElement.Geometry="{StaticResource warn}"
                     Command="{Binding OperatorCommmand}"
@@ -64,7 +64,7 @@
                 Background="Red"
                 BadgeMargin="0,-5,-10,0"
                 Foreground="White"
-                Text="{Binding service.LogSource[3].Count}">
+                Text="1">
                 <Button
                     hc:IconElement.Geometry="{StaticResource alarm}"
                     Command="{Binding OperatorCommmand}"

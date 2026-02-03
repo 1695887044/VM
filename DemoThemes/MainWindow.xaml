@@ -12,7 +12,6 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <hc:NumericUpDown hc:InfoElement.Title="宽度"   />
-        <hc:NumericUpDown Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="21" Style="{StaticResource NumericUpDownExtend}"/>
+        <cs:LabelLinkPath Header="擦撒撒"/>
     </Grid>
 </Window>

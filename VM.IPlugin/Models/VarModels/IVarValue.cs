@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Markup;
 using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin.Models.VarModels
@@ -112,6 +113,73 @@ namespace VM.IPlugin.Models.VarModels
             catch (Exception ex)
             {
                 
+            }
+        }
+        public static void SetVarValue<T>(this ModuleParamer module, string name, T Value)
+        {
+            try
+            {
+                var data = module.VarOut?.Find(s => s.Name == name);
+                if (data != null && data is VarValue<T> d)
+                {
+                    d.Value = Value;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public static void SetVarValue<T>(this ModuleParamer module, string name, T Value ,out VarValue<T> varValue)
+        {
+            try
+            {
+                var data = module.VarOut?.Find(s => s.Name == name);
+                if (data != null && data is VarValue<T> d)
+                {
+                    d.Value = Value;
+                    varValue = d;
+                    return;
+                }
+                varValue = null;
+            }
+            catch (Exception ex)
+            {
+                varValue = null;
+            }
+        }
+        public static void SetVarValue<T>(this ModuleParamer module, T Src, T Value, out VarValue<T> varValue)
+        {
+            try
+            {
+                Src = Value;
+                var data = module.VarOut?.Find(s => s.Name == nameof(Src));
+                if (data != null && data is VarValue<T> d)
+                {
+                    d.Value = Value;
+                    varValue = d;
+                    return;
+                }
+                varValue = null;
+            }
+            catch (Exception ex)
+            {
+                varValue = null;
+            }
+        }
+        public static void SetVarValue<T>(this ModuleParamer module, VarValue<T> src, T Value)
+        {
+            try
+            {
+                var data = module.VarOut?.Find(s => s.Equals(src));
+                if (data != null && data is VarValue<T> d)
+                {
+                    d.Value = Value;
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
         public static void RemoveVarValue(this ModuleParamer module, IVarValue data) 

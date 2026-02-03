@@ -30,6 +30,7 @@ namespace VM.Start.Dialogs.ViewModels
             IDialogParameters dialogParameters = new DialogParameters();
             dialogParameters.Add(GlobalConst.LinkVarEventParamterKey, obj);
             RequestClose.Invoke(dialogParameters,ButtonResult.OK);
+           
             OnDialogClosed();
         }
 
