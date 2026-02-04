@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Windows.Markup;
 using VM.IPlugin.ModuleEvent;
 
@@ -7,7 +6,6 @@ namespace VM.IPlugin.Models.VarModels
 {
     public interface IVarValue
     {
-
         string LinkPath { get; set; }
         long Index { get; set; }
 
@@ -22,11 +20,10 @@ namespace VM.IPlugin.Models.VarModels
         public string Note { get; set; }
 
         Type? Type { get; }
-
     }
-    public class VarValue<T> : BindableBase,IVarValue
-    {
 
+    public class VarValue<T> : BindableBase, IVarValue
+    {
         public static VarValue<T> CreateVarValue(string name, string Datatype, T value)
         {
             VarValue<T> _Data = new VarValue<T>();
@@ -36,7 +33,13 @@ namespace VM.IPlugin.Models.VarModels
             _Data.Type = typeof(T);
             return _Data;
         }
-        public static VarValue<T> CreateVarValue(string name,string display, string Datatype, T value)
+
+        public static VarValue<T> CreateVarValue(
+            string name,
+            string display,
+            string Datatype,
+            T value
+        )
         {
             VarValue<T> _Data = new VarValue<T>();
             _Data.Name = name;
@@ -46,24 +49,33 @@ namespace VM.IPlugin.Models.VarModels
             _Data.Type = typeof(T);
             return _Data;
         }
+
         private string _linkPath;
 
         public string LinkPath
         {
             get { return _linkPath; }
-            set { _linkPath = value; RaisePropertyChanged(); }
+            set
+            {
+                _linkPath = value;
+                RaisePropertyChanged();
+            }
         }
 
         private T _value;
 
-
         public T Value
         {
             get { return _value; }
-            set { _value = value; RaisePropertyChanged(); OnValueChanged?.Invoke(this, _value); }
+            set
+            {
+                _value = value;
+                RaisePropertyChanged();
+                OnValueChanged?.Invoke(this, _value);
+            }
         }
 
-        public  string DisPlayName { get; set; }
+        public string DisPlayName { get; set; }
         public long Index { get; set; }
         public string DataType { get; set; }
         public string Name { get; set; }
@@ -72,11 +84,27 @@ namespace VM.IPlugin.Models.VarModels
 
         public Type? Type { get; set; }
         public event EventHandler<T>? OnValueChanged;
-       
     }
+
     public static class VarValueExtension
     {
-        public static VarValue<T> AppendOutVar<T>(this ModuleParamer module, string name, string display, string Datatype, T value)
+        /// <summary>
+        /// 反射调用
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="module"></param>
+        /// <param name="name"></param>
+        /// <param name="display"></param>
+        /// <param name="Datatype"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static VarValue<T> AppendOutVar<T>(
+            this ModuleParamer module,
+            string name,
+            string display,
+            string Datatype,
+            T value
+        )
         {
             VarValue<T> _Data = new VarValue<T>();
             _Data.Name = name;
@@ -88,34 +116,39 @@ namespace VM.IPlugin.Models.VarModels
             module.VarOut.Add(_Data);
             return _Data;
         }
-        public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name) 
+
+        public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name)
         {
             try
             {
-                return   module.VarOut?.Find(s=>s.Name == name );
+                return module.VarOut?.Find(s => s.Name == name);
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
-        public static void SetVarValue<T>(this ModuleParamer module, string name,Action<VarValue<T>?> setter)
+
+        public static VarValue<T> SetVarValue<T>(this ModuleParamer module, T src, T Value)
         {
             try
             {
-                var data =  module.VarOut?.Find(s => s.Name == name);
-                if(data != null && data is VarValue<T> d)
+                var data = module.VarOut?.Find(s => s.Name == nameof(src));
+                if (data != null && data is VarValue<T> d)
                 {
-                    setter(d);
+                    d.Value = Value;
+                    return d;
                 }
-                
+                return null;
             }
             catch (Exception ex)
             {
-                
+                return null;
             }
         }
-        public static void SetVarValue<T>(this ModuleParamer module, string name, T Value)
+
+
+        public static VarValue<T> SetVarValue<T>(this ModuleParamer module, string name, T Value)
         {
             try
             {
@@ -123,89 +156,38 @@ namespace VM.IPlugin.Models.VarModels
                 if (data != null && data is VarValue<T> d)
                 {
                     d.Value = Value;
+                    return d;
                 }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
-            }
-            catch (Exception ex)
-            {
 
-            }
-        }
-        public static void SetVarValue<T>(this ModuleParamer module, string name, T Value ,out VarValue<T> varValue)
-        {
-            try
-            {
-                var data = module.VarOut?.Find(s => s.Name == name);
-                if (data != null && data is VarValue<T> d)
-                {
-                    d.Value = Value;
-                    varValue = d;
-                    return;
-                }
-                varValue = null;
-            }
-            catch (Exception ex)
-            {
-                varValue = null;
-            }
-        }
-        public static void SetVarValue<T>(this ModuleParamer module, T Src, T Value, out VarValue<T> varValue)
-        {
-            try
-            {
-                Src = Value;
-                var data = module.VarOut?.Find(s => s.Name == nameof(Src));
-                if (data != null && data is VarValue<T> d)
-                {
-                    d.Value = Value;
-                    varValue = d;
-                    return;
-                }
-                varValue = null;
-            }
-            catch (Exception ex)
-            {
-                varValue = null;
-            }
-        }
-        public static void SetVarValue<T>(this ModuleParamer module, VarValue<T> src, T Value)
-        {
-            try
-            {
-                var data = module.VarOut?.Find(s => s.Equals(src));
-                if (data != null && data is VarValue<T> d)
-                {
-                    d.Value = Value;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-        public static void RemoveVarValue(this ModuleParamer module, IVarValue data) 
+
+        public static void RemoveVarValue(this ModuleParamer module, IVarValue data)
         {
             try
             {
                 module.VarOut?.Remove(data);
             }
-            catch (Exception ex)
-            {
-                
-            }
+            catch (Exception ex) { }
         }
+
         public static void RemoveVarValue(this ModuleParamer module, string name)
         {
             try
             {
-               IVarValue  v =   module.VarOut?.Find(s => s.Name == name);
-                if (v != null) { 
-                 module.VarOut?.Remove(v);               
+                IVarValue v = module.VarOut?.Find(s => s.Name == name);
+                if (v != null)
+                {
+                    module.VarOut?.Remove(v);
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception ex) { }
         }
     }
 }

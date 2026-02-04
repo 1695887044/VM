@@ -29,6 +29,7 @@
                         <linkCt:LinkPathBlock
                             Header="路径"
                             IsReadOnlay="True"
+                            
                             LinkPathCommand="{Binding LinkPathCommand}"
                             LinkPathName="{Binding LinkPath}" />
                     </GroupBox>

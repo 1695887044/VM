@@ -5,24 +5,11 @@ namespace Plugin.Blob.ViewModels
 {
     internal class BlobViewModel : ModuleViewModelBase
     {
-        public override bool Cancel()
+
+        protected override bool Execute()
         {
             return true;
         }
 
-        public override bool Confirm()
-        {
-            return true;
-        }
-
-        public override bool Execute()
-        {
-            return true;
-        }
-
-        public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -29,12 +29,12 @@
                             Fill="LightGray" />
                         <TextBox
                             Grid.Column="2"
+                            Name="PART_ValueBox"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Background="Transparent"
                             BorderBrush="White"
                             BorderThickness="0,0,0,1"
-                            IsReadOnly="{TemplateBinding IsReadOnlay}"
                             Text="{TemplateBinding LinkPathName}"
                             TextWrapping="Wrap" />
                         <StackPanel

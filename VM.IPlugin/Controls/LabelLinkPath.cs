@@ -10,6 +10,8 @@ namespace VM.IPlugin.Controls
 {
     public class LabelLinkPath : Control
     {
+        bool UserEditable;
+        Type genericType;
         Button? LinkButton, ClearButton;
         TextBlock? HeadTextBlock;
         TextBox? ContentBox;
@@ -121,7 +123,49 @@ namespace VM.IPlugin.Controls
             };
         }
 
-
+        private void updateValue(object sender, TextChangedEventArgs e)
+        {
+            //解锁用户编辑功能
+            if (Value is VarValue<string> strVar && genericType == typeof(string))
+            {
+                strVar.Value = ContentBox.Text;
+            }
+            else if (Value is VarValue<int> intVar && genericType == typeof(int))
+            {
+                if (int.TryParse(ContentBox.Text, out int v))
+                {
+                    intVar.Value = v;
+                }
+            }
+            else if (Value is VarValue<double> doubleVar && genericType == typeof(double))
+            {
+                if (double.TryParse(ContentBox.Text, out double v))
+                {
+                    doubleVar.Value = v;
+                }
+            }
+            else if (Value is VarValue<float> floatVar && genericType == typeof(float))
+            {
+                if (float.TryParse(ContentBox.Text, out float v))
+                {
+                    floatVar.Value = v;
+                }
+            }
+            else if (Value is VarValue<bool> boolVar && genericType == typeof(bool))
+            {
+                if (bool.TryParse(ContentBox.Text, out bool v))
+                {
+                    boolVar.Value = v;
+                }
+            }
+            else if (Value is VarValue<long> longVar && genericType == typeof(long))
+            {
+                if (long.TryParse(ContentBox.Text, out long v))
+                {
+                    longVar.Value = v;
+                }
+            }
+        }
 
     }
     public record class LinkPathParam

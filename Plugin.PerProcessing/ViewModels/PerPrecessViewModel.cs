@@ -93,7 +93,7 @@ namespace Plugin.PerProcessing.ViewModels
             }
         }
         private HImage hImageMemory;
-        public override bool Execute()
+        protected override bool Execute()
         {
             if (CurImage == null || CurImage.Value == null) return false;
             HImage TempOutImage = hImageMemory == null ? CurImage.Value.Clone() : hImageMemory.Clone();

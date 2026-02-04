@@ -67,10 +67,10 @@ namespace Plugin.GrabImage.ViewModels
             HImage image = new HImage();
             image.ReadImage(ImageSourcePath);
             DisplayImage = image;
-            ModuleData.SetVarValue(nameof(DisplayImage), DisplayImage, out var data);
+            var data = ModuleData.SetVarValue(nameof(DisplayImage), DisplayImage);
             eventAggregator.GetEvent<RefreshUIEvent<HImage>>().Publish(data);
         }
-        public override bool Execute()
+        protected override bool Execute()
         {
             return true;
         }

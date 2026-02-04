@@ -9,9 +9,9 @@ namespace VM.IPlugin
 {
     public abstract class ModuleViewModelBase : BindableBase
     {
+        #region Properties
         Stopwatch stopwatch { get; set; } = new Stopwatch();
 
-        public ModuleEventArgs Args { get; set; } = new();
 
         private int displayTime = 0;
 
@@ -36,6 +36,7 @@ namespace VM.IPlugin
             {
                 state = value;
                 RaisePropertyChanged();
+                ModuleStateChanged?.Invoke(this, state);
             }
         }
 
@@ -46,13 +47,13 @@ namespace VM.IPlugin
             get { return _moduleData; }
             set { _moduleData = value; }
         }
-
+        #endregion
         #region Methods
         /// <summary>
         /// 模块执行
         /// </summary>
         /// <returns></returns>
-        public abstract bool Execute();
+        protected abstract bool Execute();
 
         /// <summary>
         /// 确定
@@ -66,15 +67,6 @@ namespace VM.IPlugin
         /// <returns></returns>
         public virtual bool Cancel() => true;
 
-        /// <summary>
-        /// 模块状态发生改变
-        /// </summary>
-        /// <param name="args"></param>
-        protected virtual void OnModuleStateChanged(StateEvent state)
-        {
-            Args.ActState = state;
-            ModuleStateChanged?.Invoke(this, Args);
-        }
 
         /// <summary>
         /// 🔗链接变量发生改变
@@ -90,55 +82,32 @@ namespace VM.IPlugin
             OpenVarLinkViewEvent?.Invoke(this, targs);
         }
 
-        protected void OpenVarLinkView(
-            Func<IVarValue, bool> Fiter,
-            Action<IVarChangedEventParamModel> callback
-        )
-        {
-            var args = new OpenLinkargs();
-            args.Fiter = Fiter;
-            args.CallBack = callback;
-            OpenVarLinkViewEvent?.Invoke(this, args);
-        }
-
-        protected void OpenVarLinkView(OpenLinkargs args = null)
-        {
-            if (args == null)
-            {
-                args = new OpenLinkargs();
-            }
-            if (args.Fiter == null)
-            {
-                args.Fiter = (s => true);
-            }
-            OpenVarLinkViewEvent?.Invoke(this, args);
-        }
         #endregion
 
         #region
         /// <summary>
         /// 事件
         /// </summary>
-        public event EventHandler<ModuleEventArgs>? ModuleStateChanged;
+        public event EventHandler<StateEvent>? ModuleStateChanged;
         public event EventHandler<IOpenLinkargs>? OpenVarLinkViewEvent;
 
         public void ExecuteModule()
         {
             stopwatch.Restart();
             stopwatch.Start();
-            OnModuleStateChanged(StateEvent.Running);
+            DisplayTime = ModuleData.SetVarValue(DisplayTime, 0).Value;
+            State = ModuleData.SetVarValue(State, StateEvent.Running).Value;
             try
             {
                 Execute();
             }
             catch (Exception ex)
             {
-                Args.Message = ex.Message;
-                OnModuleStateChanged(StateEvent.Error);
+                State = ModuleData.SetVarValue(State, StateEvent.Error).Value;
             }
             stopwatch.Stop();
-            OnModuleStateChanged(StateEvent.Stop);
-            DisplayTime = (int)stopwatch.ElapsedMilliseconds;
+            State=ModuleData.SetVarValue(State, StateEvent.Stop).Value;
+            DisplayTime =ModuleData.SetVarValue(DisplayTime, (int)stopwatch.ElapsedMilliseconds).Value;
         }
 
         #region 创建模块时,初始化一些属性

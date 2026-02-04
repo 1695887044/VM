@@ -35,16 +35,8 @@ namespace VM.IPlugin.Views
             return this.ShowDialog();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ActVm.ModuleStateChanged += ActVm_ModuleStateChanged;
-            ActVm.Execute();
-        }
+        private void Button_Click(object sender, RoutedEventArgs e) => ActVm.ExecuteModule();
 
-        private void ActVm_ModuleStateChanged(object? sender, ModuleEventArgs e)
-        {
-            ActVm.State = e.ActState;
-        }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {

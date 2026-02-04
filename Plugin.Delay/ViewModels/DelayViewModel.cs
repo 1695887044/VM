@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using VM.IPlugin;
+using VM.IPlugin.Controls;
 using VM.IPlugin.Enums;
 using VM.IPlugin.Models;
 using VM.IPlugin.Models.VarModels;
@@ -8,88 +10,53 @@ using VM.IPlugin.ModuleEvent;
 namespace Plugin.Delay.ViewModels
 {
     [Serializable]
-    public class DelayViewModel : ModuleViewModelBase
+    public class DelayViewModel : ModuleViewModelBase, ILinkable
     {
-       
-        Stopwatch stopwatch { get; set; } =new Stopwatch();
-        private LinkVarModel _delayTime = new LinkVarModel { Text = "100" };
-         VarValue<int> delayTime;
-        public DelegateCommand LinkViewCommand { get; private set; }
+        public DelegateCommand<LinkPathParam> LinkPathCommand { get; init; }
 
+        private VarValue<int> setDelayValue;
 
-        public LinkVarModel DelayTime
+        public VarValue<int> SetDelayValue
         {
-            get { return _delayTime; }
-            set { _delayTime = value; }
+            get { return setDelayValue; }
+            set
+            {
+                setDelayValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int crtTime;
+
+        [Display(Name = "定时器输出")]
+        public int CrtTime
+        {
+            get { return crtTime; }
+            set
+            {
+                crtTime = value;
+                RaisePropertyChanged();
+            }
         }
 
         public DelayViewModel()
         {
-            LinkViewCommand = new DelegateCommand(OpenLink);
-        }
-        /// <summary>
-        /// 打开变量窗口 加入筛选条件
-        /// </summary>
-        private void OpenLink()
-        {
-            OpenLinkargs openLinkargs = new OpenLinkargs();
-            openLinkargs.guid = ModuleData.ModuleGuid;
-            openLinkargs.Name = "DelayTime";
-            openLinkargs.Fiter = (s => s.DataType == "int");
-            OpenVarLinkView(openLinkargs);
+            LinkPathCommand = new(OpenLink);
         }
 
-        public override bool Execute()
+        private void OpenLink(LinkPathParam param)
         {
-            int _time = delayTime == null ? Convert.ToInt32(DelayTime.Value) : delayTime.Value;
-            stopwatch.Restart();
-            try
-            {
-                OnModuleStateChanged(StateEvent.Running);
-                stopwatch.Start();
-                while (stopwatch.ElapsedMilliseconds <= _time ||  !stopwatch.IsRunning)
-                {
-                    DisplayTime = stopwatch.ElapsedMilliseconds.ToString();
-                    Thread.Sleep(2);
-                }
-                stopwatch.Stop();
-                OnModuleStateChanged(StateEvent.Complete);
-                return stopwatch.ElapsedMilliseconds >= _time;
-            }
-            catch (Exception ex)
-            {
-                stopwatch.Stop();
-                OnModuleStateChanged(StateEvent.Error);
-                return false;
-            }
-        }
-        /// <summary>
-        /// 链接变量发生改变
-        /// </summary>
-        /// <param name="changedEvent"></param>
-        public override void OnLinkVarPathChanged(VarChangedEventParamModel changedEvent)
-        {
-            if(changedEvent.varValue is VarValue<int> model)
-            {
-                DelayTime.Text = $"{model.LinkPath}&{model.Name}";
-                delayTime = model;
-            }
-           
-        }
-        public override bool Confirm()
-        {         
-            
-            return true;
+            OpenVarLinkView<int>(s => SetDelayValue = s.varValue);
         }
 
-        public override bool Cancel()
+        protected override bool Execute()
         {
-            stopwatch.Stop();
-            OnModuleStateChanged(StateEvent.Paused);
+            for (int i = 0; i < SetDelayValue.Value / 10; i++)
+            {
+                CrtTime = i * 10;
+                System.Threading.Thread.Sleep(10);
+            }
             return true;
         }
-        
-       
-    
     }
 }

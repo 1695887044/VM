@@ -35,7 +35,7 @@ namespace Plugin.DiplayData.ViewModels
             }
         }
 
-        public override bool Execute()
+        protected override bool Execute()
         {
             return true;
         }
