@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <CubicEase x:Key="WD.CubicEaseInOut" EasingMode="EaseInOut" />
+    <PowerEase x:Key="WD.PowerEaseInOut" EasingMode="EaseInOut" />
+    <ExponentialEase x:Key="WD.ExponentialEaseOut" EasingMode="EaseOut" />
+    <SineEase x:Key="WD.SineEaseOut" EasingMode="EaseOut" />
+    <SineEase x:Key="WD.SineEaseInOut" EasingMode="EaseInOut" />
+    <BackEase x:Key="WD.BackEaseEaseInOut" EasingMode="EaseInOut" />
+
+    <Storyboard x:Key="Anim.Icon.ScaleUp">
+        <DoubleAnimation
+            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+            To="1.2"
+            Duration="0:0:0.25">
+            <DoubleAnimation.EasingFunction>
+                <CircleEase EasingMode="EaseOut" />
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+        <DoubleAnimation
+            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+            To="1.2"
+            Duration="0:0:0.25">
+            <DoubleAnimation.EasingFunction>
+                <CircleEase EasingMode="EaseOut" />
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <Storyboard x:Key="Anim.Icon.Restore">
+        <DoubleAnimation
+            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+            To="1"
+            Duration="0:0:0.2" />
+        <DoubleAnimation
+            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+            To="1"
+            Duration="0:0:0.2" />
+    </Storyboard>
+
+    <Storyboard x:Key="Anim.CheckMark.Draw">
+        <DoubleAnimation
+            Storyboard.TargetProperty="(Shape.StrokeDashOffset)"
+            From="20"
+            To="0"
+            Duration="0:0:0.2" />
+        <DoubleAnimation
+            Storyboard.TargetProperty="Opacity"
+            To="1"
+            Duration="0:0:0.1" />
+    </Storyboard>
+</ResourceDictionary>

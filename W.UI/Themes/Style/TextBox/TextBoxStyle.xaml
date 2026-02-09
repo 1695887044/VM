@@ -1,0 +1,204 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:W.UI.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Shared/HeadStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="M.S.TextBox1" TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="35" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="#333" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            x:Name="HeadPart"
+                            Grid.Column="0"
+                            Margin="2,0,8,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource HeadTitle}" />
+                        <TextBlock
+                            x:Name="IconPart"
+                            Grid.Column="1"
+                            Margin="0,0,6,0"
+                            VerticalAlignment="Center"
+                            RenderTransformOrigin="0.5,0.5"
+                            Style="{StaticResource HeadIcon}" />
+                        <Border
+                            x:Name="border"
+                            Grid.Column="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5"
+                            SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="watermark" Style="{StaticResource watermark}" />
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    Focusable="False"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    VerticalScrollBarVisibility="Hidden" />
+                                <Button Grid.Column="1" Style="{StaticResource ClearButton}" />
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="#66AFE9" />
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="#007ACC" />
+                            <Setter Property="BorderThickness" Value="1.5" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="5"
+                                        Opacity="0.4"
+                                        ShadowDepth="0"
+                                        Color="#007ACC" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="#F5F5F5" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="#DDD" />
+                            <Setter Property="Foreground" Value="#AAA" />
+                        </Trigger>
+
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="BorderBrush" Value="#FF4444" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="5"
+                                        Opacity="0.4"
+                                        ShadowDepth="0"
+                                        Color="#FF4444" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="M.S.TextBox2" BasedOn="{StaticResource M.S.TextBox1}" TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="35" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="#333" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid x:Name="TemplateRoot">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            x:Name="HeadPart"
+                            Grid.Column="0"
+                            Style="{StaticResource HeadTitle}" />
+
+                        <TextBlock
+                            x:Name="IconPart"
+                            Grid.Column="1"
+                            Style="{StaticResource HeadIcon}" />
+
+                        <Border
+                            x:Name="border"
+                            Grid.Column="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    x:Name="watermark"
+                                    Margin="{TemplateBinding Padding}"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource watermark}" />
+
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    Padding="{TemplateBinding Padding}"
+                                    Focusable="False"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    VerticalScrollBarVisibility="Hidden" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Style="{StaticResource ClearButton}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#66AFE9" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#007ACC" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="1" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="6"
+                                        Opacity="0.2"
+                                        ShadowDepth="0"
+                                        Color="#007ACC" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#FF4444" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="6"
+                                        Opacity="0.3"
+                                        ShadowDepth="0"
+                                        Color="#FF4444" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

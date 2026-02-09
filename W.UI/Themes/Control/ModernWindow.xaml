@@ -1,0 +1,121 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvts="clr-namespace:W.UI.Core.Converters"
+    xmlns:local="clr-namespace:W.UI.Controls">
+    <SolidColorBrush x:Key="W.Bg.Main" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="W.Bg.Sidebar" Color="#08000000" />
+    <SolidColorBrush x:Key="W.Bg.Card" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="W.Border.Light" Color="#D1D1D1" />
+
+    <Style x:Key="W.Btn.Nav" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd"
+                            Margin="4,2"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                        <ContentPresenter x:Name="cp"
+                                          Margin="8,0"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#0F000000" />
+                        </Trigger>
+
+                        <!--<MultiTrigger>
+                            <MultiCondition>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiCondition>
+                            <Setter TargetName="bd" Property="Background" Value="#E81123" />
+                            <Setter Property="Foreground" Value="White" />
+                        </MultiTrigger>-->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#08000000" />
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.96" ScaleY="0.96" CenterX="23" CenterY="16"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:ModernWindow}">
+        <Setter Property="Background" Value="{StaticResource W.Bg.Main}" />
+        <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ModernWindow}">
+                    <Border Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="45" />
+                                    <RowDefinition Height="1" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0" IsHitTestVisible="False">
+                                        <Image Source="{TemplateBinding Icon}" Width="16" Height="16">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Source" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <TextBlock Text="{TemplateBinding Title}" 
+                                                   Margin="10,0,0,0" 
+                                                   FontSize="12" 
+                                                   Foreground="#333333" 
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <Button
+                                            x:Name="PART_Min"
+                                            Width="46"
+                                            Height="32"
+                                            Content="&#xE921;"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="10"
+                                            Style="{StaticResource W.Btn.Nav}" />
+                                        <Button
+                                            x:Name="PART_Close"
+                                            Width="46"
+                                            Height="32"
+                                            Content="&#xE8BB;"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="10"
+                                            Style="{StaticResource W.Btn.Nav}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Line Grid.Row="1" X1="0" X2="1" Stretch="Fill" Stroke="{StaticResource W.Border.Light}" />
+
+                                <ContentPresenter Grid.Row="2" Margin="1" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

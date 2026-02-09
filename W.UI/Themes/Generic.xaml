@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <ResourceDictionary.MergedDictionaries>
+
+
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Geometry.xaml" />
+
+
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Shared/HeadStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Colors.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Font.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/ControlBasic.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Animations.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Light.Color.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Button/ButtonStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/CheckBox/CheckBoxStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Expander/ExpanderStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/ComboBox/ComboBoxStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Label/LabelStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Scroll/ScrollStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/TextBox/TextBoxStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/TextBlock/TextBlockStyle.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/AutoPropertyGrid.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/DateRangePicker.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/ModernNumericInput.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/StatusIndicator.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/TimePick.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/PasswordBoxEx.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/ModernWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/AlarmBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/GenericPropertyEditor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

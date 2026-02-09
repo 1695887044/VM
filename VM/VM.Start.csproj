@@ -36,6 +36,7 @@
     <ProjectReference Include="..\VM.Halcon\VM.Halcon.csproj" />
     <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
     <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />
+    <ProjectReference Include="..\W.UI\W.UI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

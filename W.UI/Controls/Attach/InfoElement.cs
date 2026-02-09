@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using W.UI.Core.Data;
+
+namespace W.UI.Controls
+{
+    public class InfoElement:TitleElement
+    {
+        /// <summary>
+        ///     占位符
+        /// </summary>
+        public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.RegisterAttached(
+            "Placeholder", typeof(string), typeof(InfoElement),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetPlaceholder(DependencyObject element, string value) =>
+            element.SetValue(PlaceholderProperty, value);
+
+        public static string GetPlaceholder(DependencyObject element) => (string)element.GetValue(PlaceholderProperty);
+
+        /// <summary>
+        ///     是否必填
+        /// </summary>
+        public static readonly DependencyProperty NecessaryProperty = DependencyProperty.RegisterAttached(
+            "Necessary", typeof(bool), typeof(InfoElement),
+            new FrameworkPropertyMetadata(ValueBoxes.FalseBox, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetNecessary(DependencyObject element, bool value) =>
+            element.SetValue(NecessaryProperty, ValueBoxes.BooleanBox(value));
+
+        public static bool GetNecessary(DependencyObject element) => (bool)element.GetValue(NecessaryProperty);
+
+        /// <summary>
+        ///     标记
+        /// </summary>
+        public static readonly DependencyProperty SymbolProperty = DependencyProperty.RegisterAttached(
+            "Symbol", typeof(string), typeof(InfoElement),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetSymbol(DependencyObject element, string value) => element.SetValue(SymbolProperty, value);
+
+        public static string GetSymbol(DependencyObject element) => (string)element.GetValue(SymbolProperty);
+
+        /// <summary>
+        ///     内容高度
+        /// </summary>
+        public static readonly DependencyProperty ContentHeightProperty = DependencyProperty.RegisterAttached(
+            "ContentHeight", typeof(double), typeof(InfoElement),
+            new FrameworkPropertyMetadata(28.0, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetContentHeight(DependencyObject element, double value) =>
+            element.SetValue(ContentHeightProperty, value);
+
+        public static double GetContentHeight(DependencyObject element) => (double)element.GetValue(ContentHeightProperty);
+
+        /// <summary>
+        ///     最小内容高度
+        /// </summary>
+        public static readonly DependencyProperty MinContentHeightProperty = DependencyProperty.RegisterAttached(
+            "MinContentHeight", typeof(double), typeof(InfoElement),
+            new FrameworkPropertyMetadata(28.0, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetMinContentHeight(DependencyObject element, double value)
+            => element.SetValue(MinContentHeightProperty, value);
+
+        public static double GetMinContentHeight(DependencyObject element)
+            => (double)element.GetValue(MinContentHeightProperty);
+
+        /// <summary>
+        ///     最大内容高度
+        /// </summary>
+        public static readonly DependencyProperty MaxContentHeightProperty = DependencyProperty.RegisterAttached(
+            "MaxContentHeight", typeof(double), typeof(InfoElement),
+            new FrameworkPropertyMetadata(double.PositiveInfinity, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetMaxContentHeight(DependencyObject element, double value)
+            => element.SetValue(MaxContentHeightProperty, value);
+
+        public static double GetMaxContentHeight(DependencyObject element)
+            => (double)element.GetValue(MaxContentHeightProperty);
+
+        /// <summary>
+        ///     正则表达式
+        /// </summary>
+        public static readonly DependencyProperty RegexPatternProperty = DependencyProperty.RegisterAttached(
+            "RegexPattern", typeof(string), typeof(InfoElement), new PropertyMetadata(default(string)));
+
+        public static void SetRegexPattern(DependencyObject element, string value)
+            => element.SetValue(RegexPatternProperty, value);
+
+        public static string GetRegexPattern(DependencyObject element)
+            => (string)element.GetValue(RegexPatternProperty);
+
+        public static readonly DependencyProperty ShowClearButtonProperty = DependencyProperty.RegisterAttached(
+            "ShowClearButton", typeof(bool), typeof(InfoElement),
+            new FrameworkPropertyMetadata(ValueBoxes.FalseBox, FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetShowClearButton(DependencyObject element, bool value)
+            => element.SetValue(ShowClearButtonProperty, ValueBoxes.BooleanBox(value));
+
+        public static bool GetShowClearButton(DependencyObject element)
+            => (bool)element.GetValue(ShowClearButtonProperty);
+
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.RegisterAttached(
+            "IsReadOnly", typeof(bool), typeof(InfoElement), new PropertyMetadata(ValueBoxes.FalseBox));
+
+        public static void SetIsReadOnly(DependencyObject element, bool value) =>
+            element.SetValue(IsReadOnlyProperty, ValueBoxes.BooleanBox(value));
+
+        public static bool GetIsReadOnly(DependencyObject element) => (bool)element.GetValue(IsReadOnlyProperty);
+    }
+    public static class InfoElementExt
+    {
+
+        public static readonly RoutedUICommand ClearCommand = new RoutedUICommand(
+            "Clear", "ClearCommand", typeof(InfoElement));
+
+        static InfoElementExt()
+        {
+            // 意思是：只要是在 TextBox 上触发的 ClearCommand，就执行清除逻辑
+            CommandManager.RegisterClassCommandBinding(typeof(TextBox),
+                new CommandBinding(ClearCommand, OnExecuteClear));
+        }
+
+        private static void OnExecuteClear(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                textBox.Clear(); // 清除文本
+                textBox.Focus(); // 习惯性清空后重新聚焦
+            }
+        }
+    }
+}

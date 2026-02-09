@@ -8,6 +8,7 @@ namespace Plugin.PerProcessing.Model
         public eOperatorType SubType { get; set; } = eOperatorType.二值化;
         private int thresholdLow;
 
+        
         public int ThresholdLow
         {
             get { return thresholdLow; }

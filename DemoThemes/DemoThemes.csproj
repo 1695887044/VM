@@ -10,4 +10,11 @@
     <ItemGroup>
         <PackageReference Include="HandyControl" Version="3.5.1" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="ThemeCs\" />
+      <Folder Include="Themes\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\W.UI\W.UI.csproj" />
+    </ItemGroup>
 </Project>

@@ -1,0 +1,87 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converts="clr-namespace:W.UI.Core.Converters"
+    xmlns:local="clr-namespace:W.UI.Controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Colors.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Animations.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Font.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Basic/Geometry.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Shared/HeadStyle.xaml" />-->
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="WD.ControlBasicStyle" TargetType="Control">
+        <Setter Property="FontSize" Value="{StaticResource WD.PrimaryFontSize}" />
+        <Setter Property="FontFamily" Value="{StaticResource WD.FontFamily}" />
+        <Setter Property="FontStyle" Value="{StaticResource WD.FontStyle}" />
+        <Setter Property="FontWeight" Value="{StaticResource WD.FontWeight}" />
+        <Setter Property="FontStretch" Value="{StaticResource WD.FontStretch}" />
+        <Setter Property="TextElement.FontSize" Value="{StaticResource WD.PrimaryFontSize}" />
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource WD.FontFamily}" />
+        <Setter Property="TextElement.FontStyle" Value="{StaticResource WD.FontStyle}" />
+        <Setter Property="TextElement.FontWeight" Value="{StaticResource WD.FontWeight}" />
+        <Setter Property="TextElement.FontStretch" Value="{StaticResource WD.FontStretch}" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource WD.PrimaryTextBrush}" />
+        <Setter Property="TextBlock.FontSize" Value="{StaticResource WD.PrimaryFontSize}" />
+        <Setter Property="TextBlock.FontFamily" Value="{StaticResource WD.FontFamily}" />
+        <Setter Property="TextBlock.FontStyle" Value="{StaticResource WD.FontStyle}" />
+        <Setter Property="TextBlock.FontWeight" Value="{StaticResource WD.FontWeight}" />
+        <Setter Property="TextBlock.FontStretch" Value="{StaticResource WD.FontStretch}" />
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource WD.PrimaryTextBrush}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value=" 0.6" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <sys:Double x:Key="WD.EnabledOpacity">0.7</sys:Double>
+    <sys:Double x:Key="WD.CornerRadius">4</sys:Double>
+    <sys:Double x:Key="WD.Height">32</sys:Double>
+    <sys:Double x:Key="WD.ThumbWidth">16</sys:Double>
+    <sys:Double x:Key="WD.ThumbCornerRadius">8</sys:Double>
+    <sys:Double x:Key="WD.RepeatButtonSize">6</sys:Double>
+    <Thickness x:Key="WD.Padding">6</Thickness>
+    <DropShadowEffect
+        x:Key="WD.PrimaryShadowDepth"
+        BlurRadius="5"
+        Direction="270"
+        Opacity=".42"
+        RenderingBias="Performance"
+        ShadowDepth="1"
+        Color="{StaticResource WD.ShadowDepthColor}" />
+    <DropShadowEffect
+        x:Key="WD.PopupShadowDepth"
+        BlurRadius="12"
+        Opacity="0.1"
+        ShadowDepth="2"
+        Color="{StaticResource WD.BlackColor}" />
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <converts:StringNotNullToBoolConverter x:Key="StringIsEmpty"/>
+    <converts:CornerRadiusToSurroundConverter x:Key="WD.CornerRadiusToSurroundConverter" />
+    <converts:WidthHeightToRectConverter x:Key="WD.WidthHeightToRectConverter" />
+    <converts:FalseToVisibilityConverter x:Key="WD.FalseToVisibilityConverter" />
+    <converts:MultiBoolToVisibilityConverter x:Key="WD.MultiBoolToVisibilityConverter" />
+    <converts:DatePickerToCurrentConverter x:Key="WD.DatePickerToCurrentConverter" />
+    <converts:NullToVisibilityConverter x:Key="WD.NullToVisibilityConverter" />
+    <converts:NullToVisibilityConverter x:Key="WD.NullToVisibilityConverter_Inverse" Inverse="True" />
+    <converts:DirectionalThicknessConverter x:Key="WD.DirectionalThicknessConverter" />
+    <Thickness x:Key="WD.TabItemBorderThickness">0,0,0,2</Thickness>
+
+    <Style TargetType="ToolTip">
+        <Setter Property="Visibility" Value="Visible" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

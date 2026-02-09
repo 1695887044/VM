@@ -6,6 +6,7 @@
     xmlns:ctl="clr-namespace:Plugin.PerProcessing.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:w="clr-namespace:W.UI.Controls;assembly=W.UI"
     xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
     xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -80,7 +81,10 @@
                     </Grid.RowDefinitions>
                     <GroupBox Header="图像链接">
 
-                        <linkCt:LabelLinkPath Header="图像链接" Value="{Binding CurImage}" OperatorCommand="{Binding LinkPathCommand}" />
+                        <linkCt:LabelLinkPath
+                            Header="图像链接"
+                            OperatorCommand="{Binding LinkPathCommand}"
+                            Value="{Binding CurImage}" />
                     </GroupBox>
                 </Grid>
             </TabItem>
@@ -92,7 +96,6 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
-                        <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel>
@@ -281,7 +284,6 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <ContentControl Grid.Row="2" Content="{Binding CurrentItem.ToolParamer}" />
                 </Grid>
             </TabItem>
         </TabControl>
