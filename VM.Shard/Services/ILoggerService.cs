@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace VM.Shard.Services
 {
     public enum Log_Level
@@ -11,11 +13,21 @@ namespace VM.Shard.Services
     }
     public interface ILoggerService
     {
-        void LogDebug(string message);
-        void LogInfo(string message);
-        void LogWarn(string message);
-        void LogError(string message);
-        void LogFatal(string message);
+        void LogDebug(string message, bool IsDebug = false,[CallerMemberName] string memberName = "",
+                  [CallerFilePath] string filePath = "",
+                  [CallerLineNumber] int lineNumber = 0);
+        void LogInfo(string message, bool IsDebug = false, [CallerMemberName] string memberName = "",
+                  [CallerFilePath] string filePath = "",
+                  [CallerLineNumber] int lineNumber = 0);
+        void LogWarn(string message, bool IsDebug = false, [CallerMemberName] string memberName = "",
+                  [CallerFilePath] string filePath = "",
+                  [CallerLineNumber] int lineNumber = 0);
+        void LogError(string message, bool IsDebug = false, [CallerMemberName] string memberName = "",
+                  [CallerFilePath] string filePath = "",
+                  [CallerLineNumber] int lineNumber = 0);
+        void LogFatal(string message, bool IsDebug = false, [CallerMemberName] string memberName = "",
+                  [CallerFilePath] string filePath = "",
+                  [CallerLineNumber] int lineNumber = 0);
 
         void ShowLog();
     }

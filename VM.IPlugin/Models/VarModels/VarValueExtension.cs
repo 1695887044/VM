@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace VM.IPlugin.Models.VarModels
         /// <param name="Datatype"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static VarValue<T> AppendOutVar<T>(
+        public static DataPort<T> AppendOutVar<T>(
             this ModuleParamer module,
             string name,
             string display,
@@ -26,18 +27,19 @@ namespace VM.IPlugin.Models.VarModels
             T value
         )
         {
-            VarValue<T> _Data = new VarValue<T>();
-            _Data.Name = name;
-            _Data.DataType = Datatype;
-            _Data.Type = typeof(T);
-            _Data.DisPlayName = display;
-            _Data.Value = value;
-            _Data.LinkPath = module.ModuleGuid.ToString();
+            DataPort<T> _Data = new DataPort<T>()
+            {
+                Name = name,
+                DisPlayName = display,
+                Value = value,
+                DisplayName = module.ModuleGuid.ToString(),
+
+            };
             module.VarOut.Add(_Data);
             return _Data;
         }
 
-        public static IVarValue? GetVarValue<T>(this ModuleParamer module, string name)
+        public static IDataPort? GetVarValue<T>(this ModuleParamer module, string name)
         {
             try
             {
@@ -49,30 +51,28 @@ namespace VM.IPlugin.Models.VarModels
             }
         }
 
-        public static VarValue<T> SetVarValue<T>(this ModuleParamer module, T src, T Value)
+        public static DataPort<T> SetVarValue<T>(this ModuleParamer module, T src, T Value, [CallerArgumentExpression("src")] string srcName = null)
         {
-            try
+            if (module?.VarOut == null || string.IsNullOrEmpty(srcName)) return null;
+            if(src != null) src = Value;
+            // 2. 查找匹配项
+            var data = module.VarOut.Find(s => s.Name == srcName);
+
+            // 3. 类型与值处理
+            if (data is DataPort<T> target)
             {
-                var data = module.VarOut?.Find(s => s.Name == nameof(src));
-                if (data != null && data is VarValue<T> d)
-                {
-                    d.Value = Value;
-                    return d;
-                }
-                return null;
+                target.Value = Value;
+                return target;
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return null;
         }
 
-        public static VarValue<T> SetVarValue<T>(this ModuleParamer module, string name, T Value)
+        public static DataPort<T> SetVarValue<T>(this ModuleParamer module, string name, T Value)
         {
             try
             {
                 var data = module.VarOut?.Find(s => s.Name == name);
-                if (data != null && data is VarValue<T> d)
+                if (data != null && data is DataPort<T> d)
                 {
                     d.Value = Value;
                     return d;
@@ -85,7 +85,7 @@ namespace VM.IPlugin.Models.VarModels
             }
         }
 
-        public static void RemoveVarValue(this ModuleParamer module, IVarValue data)
+        public static void RemoveVarValue(this ModuleParamer module, IDataPort data)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace VM.IPlugin.Models.VarModels
         {
             try
             {
-                IVarValue v = module.VarOut?.Find(s => s.Name == name);
+                IDataPort v = module.VarOut?.Find(s => s.Name == name);
                 if (v != null)
                 {
                     module.VarOut?.Remove(v);

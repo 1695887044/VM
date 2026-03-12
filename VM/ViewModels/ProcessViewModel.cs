@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
+using System.Xml.Linq;
 using VM.IPlugin;
 using VM.IPlugin.Consts;
 using VM.IPlugin.Models.VarModels;
@@ -25,8 +26,9 @@ namespace VM.Start.ViewModels
         #endregion
 
         private readonly IDialogService dialogService;
-        private readonly GlobalVarService globalVarService;
+        private readonly GlobalDataService globalVarService;
         private readonly ILoggerService loggerService;
+        private readonly IMessageService messageService;
         private IProcessNode _currentNode;
         private IProcessNode selectNodeItem;
 
@@ -42,7 +44,7 @@ namespace VM.Start.ViewModels
   
 
 
-        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalVarService globalVarService,ILoggerService loggerService)
+        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalDataService globalVarService,ILoggerService loggerService,IMessageService messageService)
         {
 
             DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
@@ -52,6 +54,7 @@ namespace VM.Start.ViewModels
             this.dialogService = dialogService;
             this.globalVarService = globalVarService;
             this.loggerService = loggerService;
+            this.messageService = messageService;
             ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
         }
         /// <summary>
@@ -61,13 +64,30 @@ namespace VM.Start.ViewModels
         private void MenuOperate(string obj)
         {
             if (SelectNodeItem == null) return;
-            ProcessDatas.Remove(SelectNodeItem);
-            int tempi = 1;
-            foreach (var processData in ProcessDatas) 
+
+            switch (obj)
             {
-                processData.SortId = tempi;
-                tempi = tempi + 1;
+                case "重命名":
+                   SelectNodeItem.Name =   messageService.ShowPropertyView(SelectNodeItem.Name);
+                    break;
+                case "编辑注释":
+                    SelectNodeItem.Remark = messageService.ShowPropertyView(SelectNodeItem.Remark);
+                    break;
+                case "禁用": break;
+                case "粘贴": break;
+                case "删除":
+                    ProcessDatas.Remove(SelectNodeItem);
+                    int tempi = 1;
+                    foreach (var processData in ProcessDatas)
+                    {
+                        processData.SortId = tempi;
+                        tempi = tempi + 1;
+                    }
+                    break;
+                default:
+                    break;
             }
+           
         }
 
         private void ExecuteFlowOnce()
@@ -99,7 +119,7 @@ namespace VM.Start.ViewModels
             dialogService.ShowDialog("VarLinkView", (s) => {
                 if (s.Result != ButtonResult.OK) return;
                 s.Parameters.ContainsKey(GlobalConst.LinkVarEventParamterKey);
-                IVarValue v = s.Parameters.GetValue<IVarValue>(GlobalConst.LinkVarEventParamterKey);
+                IDataPort v = s.Parameters.GetValue<IDataPort>(GlobalConst.LinkVarEventParamterKey);
                 VarChangedEventParamModel varEvent = new VarChangedEventParamModel();
                 varEvent.varValue = v;
                 e.CallBack?.Invoke(varEvent);
@@ -152,6 +172,7 @@ namespace VM.Start.ViewModels
                 SortId = ProcessDatas.Count > 0 ? ProcessDatas.Last().SortId + 1 : 1,
                 Token = Guid.NewGuid(),
                 Tag = args.Tag,
+                
                 IconText = args.IconText,
                 ViewModel = (ModuleViewModelBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewModelType),
                 View = (IModuleViewBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewType),

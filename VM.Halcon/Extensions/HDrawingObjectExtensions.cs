@@ -1,4 +1,5 @@
 ﻿using HalconDotNet;
+using VM.Halcon.Models;
 
 
 namespace VM.Halcon.Extensions
@@ -22,5 +23,17 @@ namespace VM.Halcon.Extensions
             }
             return hTuples;
         }
+        public static HTuple[] GetDrawObjectCenter(this DrawingObjectInfo hDrawingObject)
+        {
+            HTuple[] hTuples = null;
+            if(hDrawingObject.ShapeType == Enums.DrawShapeType.Rectangle2)
+            {
+                hTuples = new HTuple[2];
+                hTuples[0] = hDrawingObject.HTuples[0] + hDrawingObject.HTuples[2] / 2;
+                hTuples[1] = hDrawingObject.HTuples[1] + hDrawingObject.HTuples[3] / 2;
+            }
+            return hTuples;
+        }
     }
+  
 }

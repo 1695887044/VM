@@ -2,7 +2,7 @@
 
 namespace VM.IPlugin.ModuleEvent
 {
-    public class RefreshUIEvent<T> : PubSubEvent<VarValue<T>>
+    public class RefreshUIEvent<T> : PubSubEvent<DataPort<T>>
     {
 
     }
@@ -18,13 +18,13 @@ namespace VM.IPlugin.ModuleEvent
         public string DataType { get; set; }
         public bool IsAdd { get; set; }
 
-        public IVarValue varValue { get; set; }
+        public IDataPort varValue { get; set; }
         public string Note { get; set; }
     }
     public class VarChangedEventParamModel<T> : VarChangedEventParamModel, IVarChangedEventParam<T>
     {
 
-        public VarValue<T> varValue { get; set; }
+        public DataPort<T> varValue { get; set; }
     }
 
     public interface IVarChangedEventParamModel
@@ -32,7 +32,7 @@ namespace VM.IPlugin.ModuleEvent
         string SendName { get; set; }
         string LinkName { get; set; }
 
-        IVarValue varValue { get; set; }
+        IDataPort varValue { get; set; }
         string Name { get; set; }
         string DataType { get; set; }
         bool IsAdd { get; set; }
@@ -41,6 +41,6 @@ namespace VM.IPlugin.ModuleEvent
     }
     public interface IVarChangedEventParam<T> : IVarChangedEventParamModel
     {
-        public VarValue<T> varValue { get; set; }
+        public DataPort<T> varValue { get; set; }
     }
 }

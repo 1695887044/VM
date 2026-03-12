@@ -16,6 +16,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
+        <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Prism.Core" Version="9.0.537" />

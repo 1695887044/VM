@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:w="clr-namespace:W.UI.Controls;assembly=W.UI"
+   
     xmlns:local="clr-namespace:DemoThemes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
@@ -12,16 +13,12 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel>
 
-            <TextBlock Text="SDADSA" Style="{StaticResource M.S.Text.Header}"/>
-            <TextBlock Text="saDASsasa1" Style="{StaticResource M.S.Text.Label}"/>
-            <TextBlock Text="DSASD" Style="{StaticResource M.S.Text.Value}"/>
-        </StackPanel>
-        <w:AutoPropertyGrid Grid.Row="1" BindingObject="{Binding Data}"/>
+        <WindowsFormsHost Margin="1" Grid.Row="1" x:Name="winFormHost">
+            
+        </WindowsFormsHost>
+
+
+
     </Grid>
 </Window>

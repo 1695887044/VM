@@ -1,6 +1,7 @@
 ﻿using AvalonDock;
 using System.Windows;
 using VM.Shard.Extensions;
+using VM.Shard.Services;
 using VM.Start.Models;
 using VM.Start.Services;
 
@@ -21,14 +22,17 @@ namespace VM.Start
         private DockingManager _layoutRoot;
         private readonly IRegionManager region;
         private readonly PrismProvider prism;
+        private readonly IMessageService messageService;
+
         public DelegateCommand<string> ViewCommand { get; init; }
         public DelegateCommand<Object> LoadedCommand { get; init; }
         public DelegateCommand<string> AppComs { get; init; }
 
-        public MainShellModel(PrismProvider prism, SystemInfo systemInfo)
+        public MainShellModel(PrismProvider prism, SystemInfo systemInfo,IMessageService messageService)
         {
             this.prism = prism;
             ProjectInfo = systemInfo;
+            this.messageService = messageService;
             ViewCommand =new DelegateCommand<string>(ViewExecute);
             LoadedCommand = new DelegateCommand<Object>(LoadedExecute);
             AppComs = new DelegateCommand<string>(appCommands);
@@ -77,13 +81,7 @@ namespace VM.Start
             switch (obj)
             {
                 case "NewSolution":
-                    IDialogParameters keyValues = new DialogParameters();
-                    keyValues.Add("Title","新建解决方案");
-                    keyValues.Add("Message", "创建新的解决方案会覆盖掉当前已有的解决方案，确认继续？");
-                    keyValues.Add("MsgType", 1);
-                    prism.DialogService.ShowDialog("MessageView", keyValues ,(s) => {
-
-                    });
+                    messageService.ShowMessage("创建新的解决方案会覆盖掉当前已有的解决方案，确认继续",true);
                     break;
             }
         }

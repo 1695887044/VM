@@ -5,36 +5,24 @@ using HalconDotNet;
 using Microsoft.Win32;
 using Plugin.Matching.Models;
 using Plugin.Matching.Services;
+using Plugin.Matching.Views;
 using VM.Halcon.Extensions;
 using VM.Halcon.Models;
 using VM.IPlugin;
 using VM.IPlugin.Controls;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
+using VM.Shard.Attritubess;
 
 namespace Plugin.Matching.ViewModels
 {
-    enum MatchMode
-    {
-        [Description("形状模板匹配")]
-        ShapeModel,
-
-        [Description("灰度模板匹配")]
-        NccModel,
-
-        [Description("局部形变匹配")]
-        LocalDeformable,
-    }
-
-    enum RegionMode
-    {
-        [Description("矩形")]
-        Rectgion1,
-
-        [Description("矩形-带方向")]
-        Rectgion2,
-    }
-
+    [PluginInfo(
+        DisplayName = "模板匹配",
+        PluginName = "Matching",
+        View = typeof(MatchingView),
+        ViewModel = typeof(MatchingViewModel),
+        Category = "检测识别"
+    )]
     public class MatchingViewModel : ModuleViewModelBase
     {
         #region //View 关于Halcon的变量
@@ -93,9 +81,9 @@ namespace Plugin.Matching.ViewModels
         public DelegateCommand<LinkPathParam> LabelLinkCommand { get; init; }
         public DelegateCommand<String> MathchOperatorCommand { get; init; }
 
-        private VarValue<HImage> curHImage;
+        private DataPort<HImage> curHImage;
 
-        public VarValue<HImage> CurHImage
+        public DataPort<HImage> CurHImage
         {
             get { return curHImage; }
             set
@@ -104,9 +92,9 @@ namespace Plugin.Matching.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private VarValue<DrawingObjectInfo> curRoi;
+        private DataPort<DrawingObjectInfo> curRoi;
 
-        public VarValue<DrawingObjectInfo> CurRoi
+        public DataPort<DrawingObjectInfo> CurRoi
         {
             get { return curRoi; }
             set
@@ -131,9 +119,9 @@ namespace Plugin.Matching.ViewModels
             }
         }
 
-        private VarValue<DrawingObjectInfo> _currentRegion;
+        private DataPort<DrawingObjectInfo> _currentRegion;
 
-        public VarValue<DrawingObjectInfo> CurrentRegion
+        public DataPort<DrawingObjectInfo> CurrentRegion
         {
             get { return _currentRegion; }
             set
@@ -195,82 +183,46 @@ namespace Plugin.Matching.ViewModels
 
         async Task createModel()
         {
-            ViewTopText = "请在图像上绘制模板区域";
             if (CurrentHImage == null)
                 return;
+            ViewTopText = "请在图像上绘制模板区域";
             IsDrawing = true;
             var t = CurrentHImage.CopyImage();
             CurrentHImage = null;
             CurrentHImage = t;
-            await Task.Run(() =>
-            {
-                HObject drawObj;
-                HOperatorSet.GenEmptyObj(out drawObj);
-                HOperatorSet.SetColor(HWindow, "blue");
-                var hTuples = new HTuple[5];
-                HOperatorSet.DrawRectangle2(
-                    HWindow,
-                    out hTuples[0],
-                    out hTuples[1],
-                    out hTuples[2],
-                    out hTuples[3],
-                    out hTuples[4]
-                );
-                drawObj = hTuples.GenRectangle2();
-                ViewTopText = string.Empty;
-                RoiReigon = new DrawingObjectInfo(
-                    VM.Halcon.Enums.DrawShapeType.Rectangle,
-                    drawObj,
-                    hTuples
-                );
-            });
+            RoiReigon = await HWindow.DrawShapeAsync();
             IsDrawing = false;
-
+            ViewTopText = string.Empty;
             //使用模板
             MathchingService.Roi = RoiReigon;
             await MathchingService.CreateTemplate(CurrentHImage, RoiReigon.Hobject);
             MathchingService.Run(CurrentHImage);
-            //仿射区域
+            //仿射区域 有两个区域要显示 模板 ||  仿射匹配结果
             TemplateImage = CurrentHImage.ReduceDomain(RoiReigon.Hobject).CropDomain().ToHimage();
             TemplateHWindow.SetDraw("margin");
             TemplateHWindow.SetColor("green");
             foreach (var item in MathchingService.MatchResults)
             {
-                HOperatorSet.VectorAngleToRigid(
+                TemplateHWindow.TransformAndDisplay(
+                    item.Contours,
                     0,
                     0,
                     0,
                     item.Row,
                     item.Column,
-                    item.Angle,
-                    out var tempMat2D
+                    item.Angle
                 );
-                HOperatorSet.AffineTransContourXld(
+                //这边是从中心点开始算的
+                //矩形计算中点
+                var center = RoiReigon.GetDrawObjectCenter();
+                HWindow.TransformAndDisplay(
                     item.Contours,
-                    out HObject transformedContours,
-                    tempMat2D
-                );
-                TemplateHWindow.DispObj(transformedContours);
-                HOperatorSet.VectorAngleToRigid(
                     0,
                     0,
                     0,
-                    item.Row + RoiReigon.HTuples[0],
-                    item.Column + RoiReigon.HTuples[1],
-                    item.Angle + RoiReigon.HTuples[2],
-                    out var tempMat2D1
-                );
-                HOperatorSet.AffineTransContourXld(
-                    item.Contours,
-                    out HObject transformedContours1,
-                    tempMat2D1
-                );
-                HWindow.DispObj(transformedContours1);
-                HWindow.DispCross(
-                    item.Row + RoiReigon.HTuples[0],
-                    item.Column + RoiReigon.HTuples[1],
-                    30,
-                    0
+                    RoiReigon.HTuples[0]+ item.Row,
+                      RoiReigon.HTuples[1]+ item.Column,
+                    item.Angle
                 );
             }
         }
@@ -283,7 +235,6 @@ namespace Plugin.Matching.ViewModels
             MathchingService?.Run(CurrentHImage);
             foreach (var item in MathchingService.MatchResults)
             {
-                // HOperatorSet.VectorAngleToRigid(0, 0, 0, item.Row + RoiReigon.HTuples[0], item.Column + RoiReigon.HTuples[1], item.Angle + RoiReigon.HTuples[2], out var tempMat2D1);
                 HOperatorSet.VectorAngleToRigid(
                     0,
                     0,

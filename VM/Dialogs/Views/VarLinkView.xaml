@@ -77,16 +77,12 @@
                         Style="{StaticResource DataGrid.Small}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                Width="50"
-                                Binding="{Binding Index}"
-                                Header="索引" />
-                            <DataGridTextColumn
                                 Width="140"
                                 Binding="{Binding DisPlayName}"
                                 Header="变量名称" />
                             <DataGridTextColumn
-                                Width="90"
-                                Binding="{Binding DataType}"
+                                Width="auto"
+                                Binding="{Binding Type}"
                                 Header="数据类型" />
                             <DataGridTextColumn
                                 Width="160"

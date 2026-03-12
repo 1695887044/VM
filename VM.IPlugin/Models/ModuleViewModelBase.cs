@@ -7,6 +7,7 @@ using VM.IPlugin.ModuleEvent;
 
 namespace VM.IPlugin
 {
+    [Serializable]
     public abstract class ModuleViewModelBase : BindableBase
     {
         #region Properties
@@ -79,6 +80,11 @@ namespace VM.IPlugin
         protected void OpenVarLinkView<T>(Action<VarChangedEventParamModel<T>> callBack)
         {
             var targs = new OpenLinkargs<T>(callBack);
+            OpenVarLinkViewEvent?.Invoke(this, targs);
+        }
+        protected void OpenVarLinkView(Func<IDataPort, bool> fiter, Action<IVarChangedEventParamModel> callBack)
+        {
+            var targs = new OpenLinkargs(fiter, callBack);
             OpenVarLinkViewEvent?.Invoke(this, targs);
         }
 

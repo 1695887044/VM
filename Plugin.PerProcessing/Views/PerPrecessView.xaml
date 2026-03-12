@@ -3,18 +3,17 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:com="clr-namespace:Plugin.PerProcessing.Common"
-    xmlns:ctl="clr-namespace:Plugin.PerProcessing.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="urn:gong-wpf-dragdrop"
-    xmlns:w="clr-namespace:W.UI.Controls;assembly=W.UI"
     xmlns:ext="clr-namespace:Plugin.PerProcessing.Extensions"
     xmlns:halconCt="clr-namespace:VM.Halcon.Controls;assembly=VM.Halcon"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:linkCt="clr-namespace:VM.IPlugin.Controls;assembly=VM.IPlugin"
     xmlns:local="clr-namespace:Plugin.PerProcessing.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Plugin.PerProcessing.Model"
-    xmlns:views="clr-namespace:Plugin.PerProcessing.Controls"
+    xmlns:w="clr-namespace:W.UI.Controls;assembly=W.UI"
     Width="980"
     Height="680"
     d:DesignHeight="450"
@@ -55,16 +54,10 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
-        <DataTemplate DataType="{x:Type model:ThresholdParam}">
-            <views:ThresholdView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type model:VarThresholdParam}">
-            <views:VarThresholdView />
-        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="320" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TabControl hc:TabControl.ShowCloseButton="False">
@@ -97,16 +90,19 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="280" />
                     </Grid.RowDefinitions>
-                    <StackPanel>
+                    <StackPanel Height="30" Orientation="Horizontal">
                         <Menu
-                            Margin="10,0,0,0"
+                            Width="45"
+                            Margin="2"
+                            HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             ToolTip="添加">
                             <MenuItem
                                 HorizontalAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Header="➕">
+                                Header="添加">
                                 <MenuItem
                                     HorizontalAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -203,8 +199,19 @@
                                 </MenuItem>
                             </MenuItem>
                         </Menu>
+                        <Button
+                            Width="45"
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Command="{Binding DataOperateCommand}"
+                            CommandParameter="显示原图"
+                            Content="原图"
+                            Style="{StaticResource M.S.IconButton}"
+                            ToolTip="显示原图" />
                     </StackPanel>
                     <ListBox
+                        x:Name="personListBox"
                         Grid.Row="1"
                         HorizontalContentAlignment="Stretch"
                         dd:DragDrop.IsDragSource="True"
@@ -257,36 +264,42 @@
                                                 Header="删除" />
                                         </ContextMenu>
                                     </Border.ContextMenu>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            Grid.Column="0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="Bold"
-                                            Text="{Binding Name}" />
-                                        <Rectangle
-                                            Grid.Column="1"
-                                            Height="1"
-                                            Margin="4,0"
-                                            VerticalAlignment="Center"
-                                            Fill="LightGray" />
-                                        <TextBlock
-                                            Grid.Column="2"
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Center"
-                                            Text="{Binding ToolParamer.DisplayValue}" />
-                                    </Grid>
+                                    <ContentControl>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="Bold"
+                                                Text="{Binding Name}" />
+                                            <Rectangle
+                                                Grid.Column="1"
+                                                Height="1"
+                                                Margin="4,0"
+                                                VerticalAlignment="Center"
+                                                Fill="LightGray" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding ToolParamer.DisplayValue}" />
+                                        </Grid>
+                                    </ContentControl>
+
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <w:EasyAutoPropertyGrid Grid.Row="2" BindingObject="{Binding CurrentItem.ToolParamer}" />
                 </Grid>
             </TabItem>
+
+
         </TabControl>
-        <halconCt:ImageDisplay Grid.Column="1" HImage="{Binding CurrentHImage, Mode=TwoWay}" />
+        <halconCt:ImageDisplay Grid.Column="1" HImage="{Binding CurrentHImage}" />
     </Grid>
 </UserControl>

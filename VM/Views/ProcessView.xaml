@@ -152,6 +152,109 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="processListBox1"
+       BasedOn="{StaticResource ListBox.Small}"
+       TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+            <Setter Property="ScrollViewer.PanningMode" Value="Both" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="0,2" />
+                        <Setter Property="Padding" Value="4,6" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border MinHeight="32"
+                                    Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4" 
+                                    SnapsToDevicePixels="true">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="ListBoxItem.IsSelected" Value="False" />
+                                    <Condition Property="UIElement.IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#574EB9" />
+                                <Setter Property="Opacity" Value="0.7" />
+                            </MultiTrigger>
+                            <Trigger Property="ListBoxItem.IsSelected" Value="true">
+                                <Setter Property="Background" Value="#574EB9" />
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="60" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.InputBindings>
+                                <MouseBinding Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DoubleClickCommand}"
+                                      CommandParameter="{Binding}"
+                                      MouseAction="LeftDoubleClick" />
+                            </Grid.InputBindings>
+
+                            <Path Grid.Column="0"
+                          Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="{Binding IconText}"
+                          Fill="White"
+                          Stretch="Uniform" />
+
+                            <TextBlock Grid.Column="1" 
+                               VerticalAlignment="Center" 
+                               Margin="4,0,12,0" 
+                               FontWeight="SemiBold"> <Run Text="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(ItemsControl.AlternationIndex), Mode=OneWay}" />
+                        <Run Text="." />
+                        <Run Text="{Binding Name}" />
+                            </TextBlock>
+
+                            <TextBlock Grid.Column="2"
+                               VerticalAlignment="Center"
+                               Margin="0,0,12,0"
+                               FontStyle="Italic"
+                               Foreground="#4ADE80" Text="{Binding Remark}"
+                               TextTrimming="CharacterEllipsis" ToolTip="{Binding Remark}" />
+                            <TextBlock Grid.Column="3" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Right"> <Run Text="{Binding CostTime}" FontWeight="Bold" />
+                        <Run Text=" ms" FontSize="11" Foreground="#A1A1AA" /></TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -197,26 +300,26 @@
             AlternationCount="10000"
             SelectedItem="{Binding SelectNodeItem}"
             ItemsSource="{Binding ProcessDatas}"
-            Style="{StaticResource processListBox}"
+            Style="{StaticResource processListBox1}"
             Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <ListBox.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Mode=Self}}" FontFamily="{StaticResource iconfont}">
-                    <MenuItem Header="重命名" Icon="&#xe6e3;" />
-                    <MenuItem Header="编辑注释" Icon="&#xe61e;" />
+                    <MenuItem Header="重命名" Icon="&#xe6e3;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="编辑注释" Icon="&#xe61e;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
                     <Separator />
-                    <MenuItem Header="执行选中模块" Icon="&#xe67b;" />
-                    <MenuItem Header="从此处执行" Icon="&#xe63d;" />
-                    <MenuItem Header="显示所有" Icon="&#xe62b;" />
-                    <MenuItem Header="启用超级工具" Icon="&#xe65d;" />
+                    <MenuItem Header="执行选中模块" Icon="&#xe67b;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="从此处执行" Icon="&#xe63d;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="显示所有" Icon="&#xe62b;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="启用超级工具" Icon="&#xe65d;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}"  />
                     <Separator />
-                    <MenuItem Header="设置断点" Icon="&#xe62c;" />
-                    <MenuItem Header="模块参数" Icon="&#xe652;" />
+                    <MenuItem Header="设置断点" Icon="&#xe62c;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="模块参数" Icon="&#xe652;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}"  />
                     <Separator />
-                    <MenuItem Header="剪切" Icon="&#xe61b;" />
-                    <MenuItem Header="复制" Icon="&#xe623;" />
-                    <MenuItem Header="粘贴" Icon="&#xe624;" />
-                    <MenuItem Header="禁用" Icon="&#xe627;" />
-                    <MenuItem Header="删除模块" Icon="&#xe8b6;" Command="{Binding MenuOperateCommand}" CommandParameter="Dele" />
+                    <MenuItem Header="剪切" Icon="&#xe61b;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="复制" Icon="&#xe623;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="粘贴" Icon="&#xe624;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="禁用" Icon="&#xe627;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
+                    <MenuItem Header="删除" Icon="&#xe8b6;" Command="{Binding MenuOperateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Header}" />
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

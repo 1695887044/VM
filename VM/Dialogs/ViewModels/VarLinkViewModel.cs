@@ -8,14 +8,14 @@ namespace VM.Start.Dialogs.ViewModels
     public class VarLinkViewModel : BindableBase, IDialogAware
     {
         public string Title { get;  } = "变量链接";
-        public  GlobalVarService VarService { get; set; }
+        public  GlobalDataService VarService { get; set; }
 
-        public DelegateCommand<IVarValue> ConfirmCommand { get; init; }
+        public DelegateCommand<IDataPort> ConfirmCommand { get; init; }
 
         public DelegateCommand CloseCommand { get; init; }
-        public VarLinkViewModel(GlobalVarService varService)
+        public VarLinkViewModel(GlobalDataService varService)
         {
-            ConfirmCommand = new DelegateCommand<IVarValue>(ConfirmExecte);
+            ConfirmCommand = new DelegateCommand<IDataPort>(ConfirmExecte);
             CloseCommand = new(() => {
                 RequestClose.Invoke();
             });
@@ -25,7 +25,7 @@ namespace VM.Start.Dialogs.ViewModels
         /// 用户确认变量链接
         /// </summary>
         /// <param name="obj"></param>
-        private void ConfirmExecte(IVarValue obj)
+        private void ConfirmExecte(IDataPort obj)
         {
             IDialogParameters dialogParameters = new DialogParameters();
             dialogParameters.Add(GlobalConst.LinkVarEventParamterKey, obj);

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using VM.IPlugin.Services;
 using VM.Shard.Helper;
 using VM.Shard.Services;
 using VM.Start;
@@ -44,9 +43,8 @@ namespace VM
             containerRegistry.RegisterDialog<VarLinkView, VarLinkViewModel>();
             containerRegistry.RegisterSingleton<PrismProvider>();
             containerRegistry.RegisterSingleton<SystemInfo>();
-            containerRegistry.RegisterSingleton<IMessageService,MessageService>();
-            containerRegistry.RegisterDialog<InputMessageView, InputMessageViewModel>("InputView");
-            containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalVarService>();
+            containerRegistry.RegisterSingleton<IMessageService, MessageService>();
+            containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalDataService>();
             containerRegistry.RegisterSingleton<ILoggerService, LogService>();
         }
         protected override IModuleCatalog CreateModuleCatalog()

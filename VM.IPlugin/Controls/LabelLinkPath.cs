@@ -45,15 +45,15 @@ namespace VM.IPlugin.Controls
 
 
 
-        public string LinkParam
+        public object LinkParam
         {
-            get { return (string)GetValue(LinkParamProperty); }
+            get { return (object)GetValue(LinkParamProperty); }
             set { SetValue(LinkParamProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for LinkParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LinkParamProperty =
-            DependencyProperty.Register("LinkParam", typeof(string), typeof(LabelLinkPath), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("LinkParam", typeof(object), typeof(LabelLinkPath), new PropertyMetadata(null));
 
 
 
@@ -70,7 +70,7 @@ namespace VM.IPlugin.Controls
         {
             if (d is LabelLinkPath ctl)
             {
-                if(e.NewValue is IVarValue _Var)
+                if(e.NewValue is IDataPort _Var)
                 {
                     ctl.UpdateTextValue(_Var);
                 }
@@ -88,10 +88,10 @@ namespace VM.IPlugin.Controls
             ContentBox.Text = Value.ToString();
         }
 
-        private void UpdateTextValue(IVarValue _var)
+        private void UpdateTextValue(IDataPort _var)
         {
             ContentBox.IsReadOnly = true;
-            ContentBox.Text = _var.LinkPath + "/" + _var.Name;
+            ContentBox.Text = _var.DisplayName + "/" + _var.Name;
         }
 
         public ICommand OperatorCommand
@@ -126,39 +126,39 @@ namespace VM.IPlugin.Controls
         private void updateValue(object sender, TextChangedEventArgs e)
         {
             //解锁用户编辑功能
-            if (Value is VarValue<string> strVar && genericType == typeof(string))
+            if (Value is DataPort<string> strVar && genericType == typeof(string))
             {
                 strVar.Value = ContentBox.Text;
             }
-            else if (Value is VarValue<int> intVar && genericType == typeof(int))
+            else if (Value is DataPort<int> intVar && genericType == typeof(int))
             {
                 if (int.TryParse(ContentBox.Text, out int v))
                 {
                     intVar.Value = v;
                 }
             }
-            else if (Value is VarValue<double> doubleVar && genericType == typeof(double))
+            else if (Value is DataPort<double> doubleVar && genericType == typeof(double))
             {
                 if (double.TryParse(ContentBox.Text, out double v))
                 {
                     doubleVar.Value = v;
                 }
             }
-            else if (Value is VarValue<float> floatVar && genericType == typeof(float))
+            else if (Value is DataPort<float> floatVar && genericType == typeof(float))
             {
                 if (float.TryParse(ContentBox.Text, out float v))
                 {
                     floatVar.Value = v;
                 }
             }
-            else if (Value is VarValue<bool> boolVar && genericType == typeof(bool))
+            else if (Value is DataPort<bool> boolVar && genericType == typeof(bool))
             {
                 if (bool.TryParse(ContentBox.Text, out bool v))
                 {
                     boolVar.Value = v;
                 }
             }
-            else if (Value is VarValue<long> longVar && genericType == typeof(long))
+            else if (Value is DataPort<long> longVar && genericType == typeof(long))
             {
                 if (long.TryParse(ContentBox.Text, out long v))
                 {
@@ -171,8 +171,8 @@ namespace VM.IPlugin.Controls
     public record class LinkPathParam
     {
         public LinkPathType PathType { get; set; }
-        public string Param { get; set; }
-        public LinkPathParam(LinkPathType pathType, string param)
+        public Object Param { get; set; }
+        public LinkPathParam(LinkPathType pathType, Object param)
         {
             PathType = pathType;
             Param = param;

@@ -39,7 +39,6 @@ namespace VM.Halcon.Base
         }
 
 
-
         public string TopText
         {
             get { return (string)GetValue(TopTextProperty); }
@@ -77,6 +76,7 @@ namespace VM.Halcon.Base
             DependencyProperty.Register("HWindow", typeof(HWindow), typeof(HalconBase), new PropertyMetadata(null));
 
 
+
         // new PropertyMetadata(HImageChangedCallBack)
         public HImage HImage
         {
@@ -84,7 +84,7 @@ namespace VM.Halcon.Base
             set { SetValue(HImageProperty, value); }
         }
         public static readonly DependencyProperty HImageProperty =
-            DependencyProperty.Register("HImage", typeof(HImage), typeof(HalconBase), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HImageChangedCallBack));
+            DependencyProperty.Register("HImage", typeof(HImage), typeof(HalconBase), new FrameworkPropertyMetadata(new HImage(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HImageChangedCallBack));
 
 
 

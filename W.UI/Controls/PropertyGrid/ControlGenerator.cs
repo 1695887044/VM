@@ -58,8 +58,7 @@ namespace W.UI.Controls
                 });
             comboBox.DisplayMemberPath = "Value";
             comboBox.SelectedValuePath = "Key";
-           // comboBox.IsReadOnly = ReadOnly;
-            comboBox.IsEnabled = ReadOnly;
+            comboBox.IsEnabled = !ReadOnly;
             ControlGeneratorExtensions.SetTwoWayBinding(
                 comboBox,
                 System.Windows.Controls.Primitives.Selector.SelectedValueProperty,
@@ -167,6 +166,7 @@ namespace W.UI.Controls
             if (att == null)
             {
                 var ctl = new ToggleButton();
+                ctl.Style = (Style)Application.Current.FindResource("M.S.ToggleButton.Switch");
                 ControlGeneratorExtensions.SetTwoWayBinding(
                     ctl,
                     ToggleButton.IsCheckedProperty,
@@ -178,6 +178,7 @@ namespace W.UI.Controls
             }
             //命令按钮  
             var ctl2 = new Button();
+            ctl2.Style = (Style)Application.Current.FindResource("M.S.Button1");
             return ctl2;
         }
     }

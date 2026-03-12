@@ -8,11 +8,21 @@ namespace VM.Start.Dialogs.ViewModels
 {
     public class MessageViewModel:IDialogAware
     {
-        public string Message { get; set; } = "消息提示";
+        public Object Data { get; set; } = "消息提示";
 
         public string Title { get; set; }= "弹窗";
 
         public int MsgType { get; set; } = 1;
+
+        private bool _isReadOnly;
+
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { _isReadOnly = value; }
+        }
+
+
 
         ButtonResult result = ButtonResult.None;
 
@@ -44,14 +54,18 @@ namespace VM.Start.Dialogs.ViewModels
 
         public void OnDialogClosed()
         {
-            RequestClose.Invoke(null, result);
+            IDialogParameters keyValuePairs = new DialogParameters();
+            keyValuePairs.Add("Result", result);
+            keyValuePairs.Add("Data", Data);
+            RequestClose.Invoke(keyValuePairs, result);
         }
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
             Title=parameters["Title"].ToString();
-            Message = parameters["Message"].ToString();
-            _ = Int32.TryParse(parameters["MsgType"].ToString(), out int MsgType);
+            Data = parameters["Data"].ToString();
+            IsReadOnly =parameters.ContainsKey("ReadOnly") && bool.TryParse(parameters["ReadOnly"].ToString(), out bool readOnly) && readOnly;
+            _ = Int32.TryParse(parameters["level"].ToString(), out int MsgType);
         }
     }
 }

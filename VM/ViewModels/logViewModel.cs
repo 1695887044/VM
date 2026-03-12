@@ -15,6 +15,7 @@ namespace VM.Start.ViewModels
         {
             this.service = service as LogService;
             OperatorCommmand = new DelegateCommand<string>(OPeratorMethod);
+           
         }
 
         private void OPeratorMethod(string obj)

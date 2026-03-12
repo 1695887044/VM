@@ -8,9 +8,9 @@ namespace VM.IPlugin
         public Guid ModuleGuid = Guid.NewGuid();
 
         public Object? Uid {  get; set; }
-        public List<IVarValue> VarIn { get; set; } =new List<IVarValue>();
-        public List<IVarValue> VarOut { get; set; } = new List<IVarValue>();
+        public List<IDataPort> VarIn { get; set; } =new List<IDataPort>();
+        public List<IDataPort> VarOut { get; set; } = new List<IDataPort>();
 
-        public List<IVarValue> VarCache { get; set; } = new List<IVarValue>();
+        public List<IDataPort> VarCache { get; set; } = new List<IDataPort>();
     }
 }

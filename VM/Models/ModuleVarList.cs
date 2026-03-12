@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using VM.IPlugin.Models.VarModels;
 
 namespace VM.Start.Models
@@ -20,9 +18,9 @@ namespace VM.Start.Models
         /// </summary>
         public string Remarks { get; set; } = string.Empty;
 
-        private ObservableCollection<IVarValue> varModels = new();
+        private ObservableCollection<IDataPort> varModels = new();
 
-        public ObservableCollection<IVarValue> VarModels
+        public ObservableCollection<IDataPort> VarModels
         {
             get { return varModels; }
             set { varModels = value; RaisePropertyChanged(); }
@@ -35,7 +33,7 @@ namespace VM.Start.Models
                 DisplayName = this.DisplayName,
                 ModuleNo = this.ModuleNo,
                 Remarks = this.Remarks,
-                VarModels = new ObservableCollection<IVarValue>()
+                VarModels = new ObservableCollection<IDataPort>()
             };
                
         }

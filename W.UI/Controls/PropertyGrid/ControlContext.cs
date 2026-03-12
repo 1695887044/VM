@@ -200,10 +200,10 @@ namespace W.UI.Controls
             return new TextBlock
             {
                 Text = display?.Name,
-                FontSize = 13,
+           
                 Foreground = new SolidColorBrush(Color.FromRgb(71, 85, 105)),
                 TextTrimming = TextTrimming.CharacterEllipsis,
-                Style = (Style)Application.Current.FindResource("M.S.Text.Label"),
+                Style = (Style)Application.Current.FindResource("M.S.Text.Header"),
                 ToolTip = display.Description
             };
         }

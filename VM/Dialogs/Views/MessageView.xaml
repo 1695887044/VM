@@ -5,126 +5,155 @@
     xmlns:cvts="clr-namespace:VM.Start.Dialogs.Converts"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:local="clr-namespace:VM.Start.Dialogs.Views"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:VM.Start.Behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    Width="500"
-    Height="320"
-    Background="#F0F8FF"
+    Width="460"
+    Height="240"
+    Background="Transparent"
     mc:Ignorable="d">
+
     <UserControl.Resources>
         <cvts:MsgTypeConvert x:Key="MsgCvt" />
+
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1F2937" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7280" />
+        <SolidColorBrush x:Key="BorderBrush" Color="#E5E7EB" />
     </UserControl.Resources>
+
     <prism:Dialog.WindowStyle>
         <Style TargetType="Window">
             <Setter Property="WindowStyle" Value="None" />
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
             <Setter Property="AllowsTransparency" Value="True" />
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="ShowInTaskbar" Value="False" />
         </Style>
     </prism:Dialog.WindowStyle>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition />
-            <RowDefinition Height="50" />
-        </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            Background="AliceBlue"
-            Orientation="Horizontal">
-            <GridSplitter
-                Width="2"
-                Margin="0,2"
-                Background="Gray" />
-            <Grid>
-                <Path
-                    Width="45"
-                    Height="45"
-                    Margin="10,2"
-                    HorizontalAlignment="Left"
-                    Data="{StaticResource info}"
-                    Fill="Green"
-                    Stretch="UniformToFill"
-                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=1}" />
 
-                <Path
-                    Width="40"
-                    Height="40"
-                    Margin="10,4"
-                    HorizontalAlignment="Left"
-                    Data="{StaticResource warn}"
-                    Fill="Orange"
-                    Stretch="UniformToFill"
-                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=2}" />
-                <Path
-                    Width="45"
-                    Height="45"
-                    Margin="10,2"
-                    HorizontalAlignment="Left"
-                    Data="{StaticResource alarm}"
-                    Fill="DarkRed"
-                    Stretch="UniformToFill"
-                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=3}" />
-                <Path
-                    Width="45"
-                    Height="45"
-                    Margin="10,2"
-                    HorizontalAlignment="Left"
-                    Data="{StaticResource error}"
-                    Fill="Red"
-                    Stretch="UniformToFill"
-                    Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=4}" />
-            </Grid>
-            <GridSplitter
-                Width="2"
-                Margin="2"
-                Background="Gray" />
-            <TextBlock
-                VerticalAlignment="Center"
-                FontSize="26"
-                FontWeight="Light"
-                Text="{Binding Title}" />
-        </StackPanel>
+    <Border
+        Margin="10"
+        Background="{StaticResource SurfaceBrush}"
+        BorderBrush="{StaticResource BorderBrush}"
+        BorderThickness="1"
+        CornerRadius="8">
+        <Border.Effect>
+            <DropShadowEffect
+                BlurRadius="20"
+                Opacity="0.1"
+                ShadowDepth="4"
+                Color="#000000" />
+        </Border.Effect>
 
-        <ScrollViewer
-            Grid.Row="1"
-            Background="#F0F8FF"
-            HorizontalScrollBarVisibility="Auto"
-            Opacity="0.9"
-            VerticalScrollBarVisibility="Auto">
-            <TextBox
-                MaxWidth="500"
-                Margin="5,15,5,10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+
+            <Border
+                Grid.Row="0"
                 Background="Transparent"
-                BorderThickness="0"
-                FontSize="24"
-                Foreground="Black"
-                IsReadOnly="True"
-                Text="{Binding Message}"
-                TextAlignment="Center"
-                TextWrapping="Wrap" />
-        </ScrollViewer>
-        <StackPanel
-            Grid.Row="2"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <Button
-                hc:IconElement.Geometry="{StaticResource cancel}"
-                Command="{Binding ButtomByTagCommand}"
-                CommandParameter="cancel"
-                Content="取消"
-                Style="{StaticResource ButtonDashed}" />
-            <Button
-                Margin="20,0"
-                hc:IconElement.Geometry="{StaticResource submit}"
-                Command="{Binding ButtomByTagCommand}"
-                CommandParameter="ok"
-                Content="确定"
-                Style="{StaticResource ButtonDashed}" />
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1">
+                <i:Interaction.Behaviors>
+                    <local:WindowDragBehavior />
+                </i:Interaction.Behaviors>
 
-        </StackPanel>
-    </Grid>
+                <Grid Margin="20,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid
+                        Grid.Column="0"
+                        Margin="0,0,12,0"
+                        VerticalAlignment="Center">
+                        <Path
+                            Width="24"
+                            Height="24"
+                            Data="{StaticResource info}"
+                            Fill="#10B981"
+                            Stretch="Uniform"
+                            Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=1}" />
+                        <Path
+                            Width="24"
+                            Height="24"
+                            Data="{StaticResource warn}"
+                            Fill="#F59E0B"
+                            Stretch="Uniform"
+                            Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=2}" />
+                        <Path
+                            Width="24"
+                            Height="24"
+                            Data="{StaticResource alarm}"
+                            Fill="#EF4444"
+                            Stretch="Uniform"
+                            Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=3}" />
+                        <Path
+                            Width="24"
+                            Height="24"
+                            Data="{StaticResource error}"
+                            Fill="#DC2626"
+                            Stretch="Uniform"
+                            Visibility="{Binding MsgType, Converter={StaticResource MsgCvt}, ConverterParameter=4}" />
+                    </Grid>
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="DemiBold"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        Text="{Binding Title}" />
+                </Grid>
+            </Border>
+
+            <ScrollViewer
+                Grid.Row="1"
+                Margin="20,20,20,0"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <TextBox
+                    FontSize="14"
+                    Foreground="{StaticResource TextSecondaryBrush}"
+                    IsReadOnly="{Binding IsReadOnly}"
+                    Text="{Binding Data}"
+                    TextWrapping="Wrap" />
+            </ScrollViewer>
+
+            <Border
+                Grid.Row="2"
+                Background="#F9FAFB"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,1,0,0"
+                CornerRadius="0,0,8,8">
+                <StackPanel
+                    Margin="0,0,20,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button
+                        Width="80"
+                        Height="32"
+                        Margin="0,0,12,0"
+                        Command="{Binding ButtomByTagCommand}"
+                        CommandParameter="cancel"
+                        Content="取消"
+                        Style="{DynamicResource ButtonDefault}" />
+                    <Button
+                        Width="80"
+                        Height="32"
+                        Command="{Binding ButtomByTagCommand}"
+                        CommandParameter="ok"
+                        Content="确定"
+                        Style="{DynamicResource ButtonPrimary}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>

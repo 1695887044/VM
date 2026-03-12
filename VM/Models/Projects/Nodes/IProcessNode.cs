@@ -23,7 +23,7 @@ namespace VM.Start.Models.Projects.Nodes
         /// <summary>
         /// 运行时间
         /// </summary>
-        public string CostTime { get; set; }
+        public string CostTime { get; set; } 
         /// <summary>
         /// 运行中
         /// </summary>

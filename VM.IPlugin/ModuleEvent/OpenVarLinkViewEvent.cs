@@ -9,7 +9,7 @@ namespace VM.IPlugin.ModuleEvent
 
         public Object? Tag { get; set; }
 
-        public Func<IVarValue, bool> Fiter { get; set; }
+        public Func<IDataPort, bool> Fiter { get; set; }
 
         public Action<IVarChangedEventParamModel> CallBack { get; }
     }
@@ -20,19 +20,14 @@ namespace VM.IPlugin.ModuleEvent
 
         public Object? Tag { get; set; }
 
-        public Func<IVarValue, bool> Fiter { get; set; }
+        public Func<IDataPort, bool> Fiter { get; set; }
 
         public OpenLinkargs() { }
 
-        public OpenLinkargs(string fiter, Action<IVarChangedEventParamModel> callBack)
+        public OpenLinkargs(Func<IDataPort, bool> fiter , Action<IVarChangedEventParamModel> callBack )
         {
-            Fiter = (s => s.DataType == "HImage");
+            Fiter = fiter;
             CallBack = callBack;
-        }
-
-        public OpenLinkargs(string n)
-        {
-            Name = n;
         }
 
         public Action<IVarChangedEventParamModel> CallBack { get; set; }
@@ -44,13 +39,13 @@ namespace VM.IPlugin.ModuleEvent
 
         public Object? Tag { get; set; }
 
-        public Func<IVarValue, bool> Fiter { get; set; }
+        public Func<IDataPort, bool> Fiter { get; set; }
 
         public OpenLinkargs() { }
 
         public OpenLinkargs(Action<VarChangedEventParamModel<T>> callBack)
         {
-            Fiter = (s => s.DataType == typeof(T).Name);
+            Fiter = (s => s.Type == typeof(T));
             CallBack = callBack;
         }
 
@@ -70,7 +65,7 @@ namespace VM.IPlugin.ModuleEvent
                 //设置属性值
                 if (genericInstance is VarChangedEventParamModel<T> d)
                 {
-                    if(obj.varValue is VarValue<T> _d)
+                    if(obj.varValue is DataPort<T> _d)
                     {
                         d.varValue = _d;
                         CallBack?.Invoke(d);

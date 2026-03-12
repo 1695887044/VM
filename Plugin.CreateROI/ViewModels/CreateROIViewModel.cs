@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using HalconDotNet;
+using Plugin.CreateROI.Views;
 using VM.Halcon.Enums;
 using VM.Halcon.Extensions;
 using VM.Halcon.Models;
@@ -8,10 +9,19 @@ using VM.IPlugin.Controls;
 using VM.IPlugin.Models;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
-using VM.IPlugin.Services;
+using VM.Shard.Attritubess;
+using VM.Shard.Services;
 
 namespace Plugin.CreateROI.ViewModels
 {
+    [Serializable]
+    [PluginInfo(
+        DisplayName = "ROI",
+        PluginName = "ROI",
+        View = typeof(CreateROIView),
+        ViewModel = typeof(CreateROIViewModel),
+        Category = "检测识别"
+    )]
     public class CreateROIViewModel : ModuleViewModelBase, ILinkable
     {
         private readonly IMessageService messageService;
@@ -50,19 +60,15 @@ namespace Plugin.CreateROI.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public VarValue<HImage> SrcImage { get; set; }
+        private DataPort<HImage> _srcImage;
 
-        private string linkPath;
-
-        public string LinkPath
+        public DataPort<HImage> SrcImage
         {
-            get { return linkPath; }
-            set
-            {
-                linkPath = value;
-                RaisePropertyChanged();
-            }
+            get { return _srcImage; }
+            set { _srcImage = value; RaisePropertyChanged(); }
         }
+
+
         private HImage currentHImage;
 
         public HImage CurrentHImage
@@ -76,7 +82,7 @@ namespace Plugin.CreateROI.ViewModels
         }
         public HWindow HWindow { get; set; }
 
-        Dictionary<VarValue<DrawingObjectInfo>, VarValue<HImage>> roiDict = new();
+        Dictionary<DataPort<DrawingObjectInfo>, DataPort<HImage>> roiDict = new();
         private DrawingObjectInfo selectRoi;
 
         public DrawingObjectInfo SelectRoi
@@ -120,7 +126,7 @@ namespace Plugin.CreateROI.ViewModels
         {
             if (obj == "A")
             {
-                var str = messageService.InputShow("ROI区域重命名", SelectRoi.RoiName);
+                var str = messageService.ShowPropertyView(SelectRoi.RoiName, true);
                 SelectRoi.RoiName = string.IsNullOrEmpty(str) ? SelectRoi.RoiName : str;
             }
             if (obj == "C")

@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Media;
 using W.UI.Attributes;
 using W.UI.Core.Data;
@@ -17,7 +13,7 @@ namespace W.UI.Controls
 {
     public class AutoPropertyGrid : Control
     {
-       const string DefaultName=  "默认分组" ;
+        const string DefaultName = "默认分组";
         public List<IControlGenerator> Generators { get; } = new List<IControlGenerator>();
         public List<IControlProcessor> Processors { get; } = new List<IControlProcessor>();
 
@@ -37,7 +33,6 @@ namespace W.UI.Controls
 
         static AutoPropertyGrid()
         {
-            // 关联默认样式
             DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(AutoPropertyGrid),
                 new FrameworkPropertyMetadata(typeof(AutoPropertyGrid))
@@ -49,7 +44,7 @@ namespace W.UI.Controls
             Generators.Add(new EnumGenerator());
             Generators.Add(new StructValueGenerator());
             Generators.Add(new BoolStateGenerator());
-            Generators.Add(new TypeGenerator());          
+            Generators.Add(new TypeGenerator());
         }
 
         private static void OnBindingObjectChanged(
@@ -57,10 +52,14 @@ namespace W.UI.Controls
             DependencyPropertyChangedEventArgs e
         )
         {
-            var control = (AutoPropertyGrid)d;
+           var control = (AutoPropertyGrid)d;
             control.UpdatePropertyGrid();
         }
-
+        //public override void OnApplyTemplate()
+        //{
+        //    base.OnApplyTemplate();
+        //    this.UpdatePropertyGrid();
+        //}
         /// <summary>
         /// 核心逻辑：解析属性并生成TabControl+输入控件
         /// </summary>
@@ -71,7 +70,7 @@ namespace W.UI.Controls
 
             var tabControl = GetTemplateChild("PART_TabControl") as TabControl;
             if (tabControl == null)
-                throw new InvalidOperationException("模板中未找到PART_TabControl");
+                return;
 
             tabControl.Items.Clear();
             // 属性获取
@@ -100,12 +99,11 @@ namespace W.UI.Controls
                 var tabItem = new TabItem { Header = group.Key };
 
                 // 进行二级分组（GroupAttribute）
-                var secondLevelGroups = group
-                    .GroupBy(p =>
-                    {
-                        var attr = p.GetCustomAttribute<SuperDisplayAttribute>();
-                        return attr?.GroupPath?.Split('/').ElementAtOrDefault(1) ?? DefaultName;
-                    });
+                var secondLevelGroups = group.GroupBy(p =>
+                {
+                    var attr = p.GetCustomAttribute<SuperDisplayAttribute>();
+                    return attr?.GroupPath?.Split('/').ElementAtOrDefault(1) ?? DefaultName;
+                });
                 // 统一调用二级分组的生成方法
                 tabItem.Content = CreateGroupContent(secondLevelGroups);
 
@@ -129,7 +127,7 @@ namespace W.UI.Controls
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     Margin = new Thickness(0, 0, 0, 10),
                     Header = group.Key,
-                    Style = (Style)Application.Current.TryFindResource("M.S.Expander1")
+                    Style = (Style)Application.Current.TryFindResource("M.S.Expander1"),
                 };
                 IconElement.SetIcon(expander, FluentIcons.编辑);
                 // 3. 生成该组内的所有属性行
@@ -193,9 +191,9 @@ namespace W.UI.Controls
             TitlePlacementType direction = TitlePlacementType.Left
         )
         {
-            //var att = prop.GetCustomAttribute<PropertyItemAttribute>();
+            var att = prop.GetCustomAttribute<PropertyItemAttribute>();
             // 1. 基础生产：创建控件
-            var control = CreateControl(prop, BindingObject, display.IsReadOnly);
+            var control = att ==null ? CreateControl(prop, BindingObject, display.IsReadOnly): CreateControl(prop, att.Type);
             // 2. 初始化容器
             var rootGrid = new Grid(); // 用于承载 Label 和 Control 的容器
             var controlWrapper = new StackPanel(); // 用于承载 Control 和 ErrorTip 的容器
@@ -227,7 +225,11 @@ namespace W.UI.Controls
             return context.RootCellGrid;
         }
 
-        public FrameworkElement CreateControl(PropertyInfo prop, object bindingSource,bool ReadOnly)
+        public FrameworkElement CreateControl(
+            PropertyInfo prop,
+            object bindingSource,
+            bool ReadOnly=false
+        )
         {
             // 按照优先级排序，寻找第一个匹配的生成器
             var generator = Generators

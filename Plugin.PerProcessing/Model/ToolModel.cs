@@ -10,8 +10,9 @@ namespace Plugin.PerProcessing.Model
         public string Note { get; set; }
         public eOperatorType SubType { get; set; }
 
+
     }
-    public abstract class ToolDataBase<T>:BindableBase, IToolData where T:class, new()
+    public abstract class ToolDataBase<T>:BindableBase, IToolData where T:IPerParam, new()
     {
         public eOperatorType SubType { get; set; }
         private string note;

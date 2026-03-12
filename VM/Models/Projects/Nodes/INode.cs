@@ -5,7 +5,7 @@ namespace VM.Start.Models.Projects.Nodes
 {
     public interface INode
     {
-        string Name { get; }
+        string Name { get; set; }
 
         eProjectType  NodeType { get; }
 
@@ -15,7 +15,7 @@ namespace VM.Start.Models.Projects.Nodes
 
         String IconText { get; }
 
-        string Remark { get; }
+        string Remark { get; set; } 
 
         string Tag { get; set; }
     }

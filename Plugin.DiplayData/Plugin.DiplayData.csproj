@@ -18,6 +18,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
+        <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Properties\Resources.Designer.cs">

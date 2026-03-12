@@ -23,6 +23,7 @@ namespace VM.Start.Dialogs.Views
         public MessageView()
         {
             InitializeComponent();
+           
         }
     }
 }

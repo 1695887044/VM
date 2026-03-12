@@ -25,13 +25,13 @@
                         <RowDefinition Height="80" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
+
                     <GroupBox Header="图像链接">
-                        <linkCt:LinkPathBlock
+                        <linkCt:LabelLinkPath
                             Header="路径"
-                            IsReadOnlay="True"
-                            
-                            LinkPathCommand="{Binding LinkPathCommand}"
-                            LinkPathName="{Binding LinkPath}" />
+                            LinkParam="Img"
+                            OperatorCommand="{Binding LinkPathCommand}"
+                            Value="{Binding SrcImage,Mode=TwoWay}" />
                     </GroupBox>
                     <GroupBox Grid.Row="1" Header="ROI列表">
                         <ListBox

@@ -21,10 +21,12 @@
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/Scroll/ScrollStyle.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/TextBox/TextBoxStyle.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/TextBlock/TextBlockStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/GroupBox/GroupBoxStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Style/ToggleButton/ToggleButtonStyle.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/AutoPropertyGrid.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/DateRangePicker.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/ModernNumericInput.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/EasyAutoPropertyGrid.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/StatusIndicator.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/TimePick.xaml" />
         <ResourceDictionary Source="pack://application:,,,/W.UI;component/Themes/Control/PasswordBoxEx.xaml" />
