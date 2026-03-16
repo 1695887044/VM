@@ -119,7 +119,7 @@
             AllowDrop="True"
             Background="Transparent"
             BorderThickness="0"
-            ItemsSource="{Binding CurrentProject.Nodes.Children}"
+            ItemsSource="{Binding SolutionManager.CurrentSolution.Children}"
             PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectedItemChanged">
@@ -191,30 +191,32 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <ScrollViewer
                         CanContentScroll="True"
-                        HorizontalScrollBarVisibility="Hidden"
+                        HorizontalScrollBarVisibility="auto"
                         TextElement.Foreground="White"
                         VerticalScrollBarVisibility="Hidden">
                         <StackPanel
                             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}"
                             Cursor="Hand"
                             Orientation="Horizontal">
-                            <TextBlock
-                                Width="15"
-                                VerticalAlignment="Center"
-                                FontFamily="{StaticResource iconfont}"
-                                Text="&#xe670;"
-                                Visibility="Hidden" />
-                            <TextBlock
-                                Margin="2"
-                                HorizontalAlignment="Left"
-                                FontFamily="{DynamicResource FontAwesome}"
-                                FontSize="22"
-                                Text="{Binding IconText}" />
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel
+                                Height="30"
+                                Margin="1"
+                                Orientation="Horizontal"
+                                TextElement.FontSize="22">
+                                <Path
+                                    Width="22"
+                                    Height="26"
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    Data="{Binding IconText}"
+                                    Fill="GreenYellow"
+                                    Stretch="Uniform" />
+
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     Foreground="White"
                                     Text="{Binding Name}" />
+
                                 <TextBlock
                                     Margin="5,0"
                                     VerticalAlignment="Center"

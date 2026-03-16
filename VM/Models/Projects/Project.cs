@@ -10,7 +10,7 @@ namespace VM.Start.Models.Projects
 
         public ProjectInfo Info
         {
-            get { return _info != null ? _info : _info = new ProjectInfo(); }
+            get { return _info ?? new ProjectInfo(); }
             set { _info = value; }
         }
         public INode Nodes { get; set; }=new FolderNode();

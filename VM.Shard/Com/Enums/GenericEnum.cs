@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,19 +52,15 @@ namespace VM.Shard.Com.Enums
         主动执行 = 0,
         调用执行 = 1,
     }
-    public enum eProjectType
+    public enum NodeType
     {
-        /// <summary>
-        /// 流程
-        /// </summary>
-        Process,
-        /// <summary>
-        /// 方法
-        /// </summary>
-        Method,
-        /// <summary>
-        /// 文件夹
-        /// </summary>
+        [Description("解决方案")]
+        Solution,
+        [Description("文件夹")]
         Folder,
+        [Description("流程")]
+        Process,
+        [Description("方法")]
+        Method
     }
 }

@@ -24,7 +24,7 @@ namespace VM.Start.Models.Projects.Nodes
         }
 
         public IModuleViewBase View { get; init; }
-        public eProjectType NodeType { get; set; }
+        public NodeType NodeType { get; set; }
 
         public INode Parent { get; set; }
 

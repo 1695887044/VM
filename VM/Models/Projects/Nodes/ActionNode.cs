@@ -12,7 +12,7 @@ namespace VM.Start.Models.Projects.Nodes
     {
         public string Name { get; set; } = "模块";
 
-        public eProjectType NodeType => eProjectType.Process;
+        public NodeType NodeType => NodeType.Process;
 
         public INode Parent { get; set; }
 

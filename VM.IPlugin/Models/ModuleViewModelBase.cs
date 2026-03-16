@@ -13,7 +13,6 @@ namespace VM.IPlugin
         #region Properties
         Stopwatch stopwatch { get; set; } = new Stopwatch();
 
-
         private int displayTime = 0;
 
         [Display(Name = "执行时间")]
@@ -68,7 +67,6 @@ namespace VM.IPlugin
         /// <returns></returns>
         public virtual bool Cancel() => true;
 
-
         /// <summary>
         /// 🔗链接变量发生改变
         /// </summary>
@@ -82,7 +80,11 @@ namespace VM.IPlugin
             var targs = new OpenLinkargs<T>(callBack);
             OpenVarLinkViewEvent?.Invoke(this, targs);
         }
-        protected void OpenVarLinkView(Func<IDataPort, bool> fiter, Action<IVarChangedEventParamModel> callBack)
+
+        protected void OpenVarLinkView(
+            Func<IDataPort, bool> fiter,
+            Action<IVarChangedEventParamModel> callBack
+        )
         {
             var targs = new OpenLinkargs(fiter, callBack);
             OpenVarLinkViewEvent?.Invoke(this, targs);
@@ -90,7 +92,6 @@ namespace VM.IPlugin
 
         #endregion
 
-        #region
         /// <summary>
         /// 事件
         /// </summary>
@@ -112,41 +113,39 @@ namespace VM.IPlugin
                 State = ModuleData.SetVarValue(State, StateEvent.Error).Value;
             }
             stopwatch.Stop();
-            State=ModuleData.SetVarValue(State, StateEvent.Stop).Value;
-            DisplayTime =ModuleData.SetVarValue(DisplayTime, (int)stopwatch.ElapsedMilliseconds).Value;
+            State = ModuleData.SetVarValue(State, StateEvent.Stop).Value;
+            DisplayTime = ModuleData
+                .SetVarValue(DisplayTime, (int)stopwatch.ElapsedMilliseconds)
+                .Value;
         }
 
         #region 创建模块时,初始化一些属性
         public virtual void ModuleInit()
         {
-            //拿到所有标注Display特性的属性
             var propertys = this.GetType()
-                .GetProperties()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => Attribute.IsDefined(p, typeof(DisplayAttribute)));
-            //注册输出变量
+            var baseMethod = typeof(VarValueExtension).GetMethod(
+                "AppendOutVar",
+                BindingFlags.Static | BindingFlags.Public
+            );
+            if (baseMethod == null)
+                return;
             foreach (var prop in propertys)
             {
                 var value = prop.GetValue(this);
-                //Halcon 注册的时候就是Null
-                // 获取 AppendOutVar 方法的 MethodInfo
-                var method = typeof(VarValueExtension)
-                    .GetMethods()
-                    .First(p => p.Name.Equals("AppendOutVar"));
-                // 构造泛型方法
                 if (value == null)
                 {
                     value = default;
                 }
-                var genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                var genericMethod = baseMethod.MakeGenericMethod(prop.PropertyType);
                 var at = prop.GetCustomAttribute<DisplayAttribute>();
-                // 调用泛型方法
                 genericMethod.Invoke(
                     null,
                     new object[] { ModuleData, prop.Name, at.Name, prop.PropertyType.Name, value }
                 );
             }
         }
-        #endregion
         #endregion
     }
 }

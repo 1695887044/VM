@@ -31,7 +31,7 @@
             </DockingManager.DocumentHeaderTemplate>
             <LayoutRoot>
                 <LayoutPanel Orientation="Horizontal">
-                    <LayoutAnchorablePane DockWidth="190">
+                    <LayoutAnchorablePane DockWidth="220">
                         <LayoutAnchorable
                             Title="[工具栏]"
                             CanAutoHide="True"
@@ -40,7 +40,7 @@
                             Content="{x:Static local:ToolView.Ins}"
                             ContentId="Tool" />
                     </LayoutAnchorablePane>
-                    <LayoutAnchorablePane DockWidth="240">
+                    <LayoutAnchorablePane DockWidth="280">
                         <LayoutAnchorable
                             Title="[流程栏]"
                             CanAutoHide="True"

@@ -1,0 +1,94 @@
+﻿<UserControl
+    x:Class="Plugin.GrabImage.Views.Dock.DirectoryGrabView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:Plugin.GrabImage.Views.Dock"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="350"
+    d:DesignWidth="400"
+    Background="White"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                <ResourceDictionary Source="/Plugin.GrabImage;component/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <GroupBox Header="文件目录">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    hc:TitleElement.Title="循环"
+                    IsChecked="{Binding IsLoop}" />
+                <TextBox
+                    Grid.Column="1"
+                    Margin="10,0"
+                    Padding="2"
+                    IsReadOnly="True"
+                    VerticalAlignment="Center"
+                    Foreground="Black"
+                    Text="{Binding FolderPath}" />
+                <Button
+                    Grid.Column="2"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    HorizontalAlignment="Right"
+                    Command="{Binding BrowseFolderCommand}"
+                    Content="🔍"
+                    Foreground="Black" />
+            </Grid>
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                ItemsSource="{Binding ImageFiles}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn
+                        Width="60"
+                        Binding="{Binding Index}"
+                        Header="索引"
+                        IsReadOnly="True" />
+
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding FileName}"
+                        Header="名称"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </Grid>
+    </GroupBox>
+
+
+</UserControl>

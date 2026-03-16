@@ -8,6 +8,8 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:Plugin.GrabImage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Plugin.GrabImage.ViewModels"
+    xmlns:views="clr-namespace:Plugin.GrabImage.Views.Dock"
     Width="980"
     Height="680"
     d:DesignHeight="450"
@@ -21,6 +23,7 @@
                 <ResourceDictionary Source="/Plugin.GrabImage;component/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+       
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,43 +45,35 @@
                         <UniformGrid Columns="3">
                             <RadioButton
                                 hc:IconElement.Geometry="{StaticResource 指定}"
+                                Command="{Binding ChangeModeCommand}"
+                                CommandParameter="1"
                                 Content="指定图像"
                                 IsChecked="True"
                                 Style="{StaticResource RadioButtonIcon}" />
                             <RadioButton
                                 hc:IconElement.Geometry="{StaticResource 目录}"
+                                Command="{Binding ChangeModeCommand}"
+                                CommandParameter="2"
                                 Content="文件目录"
                                 Style="{StaticResource RadioButtonIcon}" />
                             <RadioButton
                                 hc:IconElement.Geometry="{StaticResource 采集}"
+                                Command="{Binding ChangeModeCommand}"
+                                CommandParameter="3"
                                 Content="相机采集"
                                 Style="{StaticResource RadioButtonIcon}" />
                         </UniformGrid>
                     </hc:Card>
-                    <GroupBox Grid.Row="1" Header="指定图像">
-                        <StackPanel
-                            Margin="0,100,0,0"
-                            HorizontalAlignment="Center"
-                            Orientation="Vertical">
-                            <StackPanel Margin="0,-130,0,0" Orientation="Horizontal">
-
-                                <Button
-                                    Margin="0,0,30,0"
-                                    hc:IconElement.Geometry="{StaticResource 选择}"
-                                    Command="{Binding SelectImageCommand}"
-                                    Content="选择文件" />
-                            </StackPanel>
-                            <hc:TextBox
-                                Width="300"
-                                HorizontalAlignment="Left"
-                                hc:InfoElement.TitlePlacement="Top"
-                                hc:InfoElement.TitleWidth="60"
-                                hc:TitleElement.Title="路径："
-                                IsReadOnly="True"
-                                Text="{Binding ImageSourcePath}"
-                                TextWrapping="WrapWithOverflow" />
-                        </StackPanel>
-                    </GroupBox>
+                    <ContentControl Grid.Row="1" Content="{Binding GrabViewModel }">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type vms:LocalImageViewModel}">
+                                <views:LocalImageView/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type vms:DirectoryGrabViewModel}">
+                                <views:DirectoryGrabView/>
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
                 </Grid>
             </hc:TabItem>
         </hc:TabControl>

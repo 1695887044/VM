@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Markup;
 using VM.Shard.Com.Enums;
 
 namespace VM.Start.Models.Projects.Nodes
@@ -7,16 +8,19 @@ namespace VM.Start.Models.Projects.Nodes
     {
         string Name { get; set; }
 
-        eProjectType  NodeType { get; }
+        NodeType  NodeType { get; }
 
         INode Parent { get; }
 
-        ObservableCollection<INode> Children { get; }
+        ObservableCollection<INode> Children { get;  }
 
         String IconText { get; }
 
         string Remark { get; set; } 
 
         string Tag { get; set; }
+
+
     }
+    
 }

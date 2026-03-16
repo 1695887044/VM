@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using VM.Start.Core.Interfaces;
 using VM.Start.Models.Projects;
 using VM.Start.Models.Projects.Nodes;
 using VM.Start.Services;
@@ -21,7 +22,7 @@ namespace VM.Start.ViewModels
         /// 流程树变化命令
         /// </summary>
         public DelegateCommand<INode> TreeViewChangeCommand { get; init; }
-
+        public ISolutionManager SolutionManager { get; init; }
         public DelegateCommand<string> TreeViewContextMenuCommand {  get; init; }
         private Object selectProcess;
 
@@ -50,13 +51,14 @@ namespace VM.Start.ViewModels
         #endregion
         #region Ctor
 
-        public ToolViewModel(PrismProvider prismProvider)
+        public ToolViewModel(PrismProvider prismProvider,ISolutionManager solutionManager)
         {
             ModuleList= new ObservableCollection<string>();
             ProjectCommand = new DelegateCommand<string>(OnProjectExecute);
             TreeViewChangeCommand = new DelegateCommand<INode>(treeViewChanged);
             TreeViewContextMenuCommand = new DelegateCommand<string>(TreeViewContextMenuExecute);
             ToolBarMouseDownCommand = new DelegateCommand<MouseEventArgs>(ToolBarMouseDown);
+            SolutionManager = solutionManager;
             loadToolBarSource();
         }
         #endregion
@@ -110,10 +112,6 @@ namespace VM.Start.ViewModels
             switch (obj)
             {
                 case "Create_A":
-                     var p = new MethodNode() { Name = "流程0" };
-                    SysConfigProvider.Ins.CurrentProject.Nodes.Children.Add(p);
-                    SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes = p.Nodes;
-                    CurrentProject = SysConfigProvider.Ins.CurrentProject;
                     break;
                 case "Delete_A":
                    

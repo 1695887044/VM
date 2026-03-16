@@ -2,6 +2,7 @@
 using System.Windows;
 using VM.Shard.Extensions;
 using VM.Shard.Services;
+using VM.Start.Core.Interfaces;
 using VM.Start.Models;
 using VM.Start.Services;
 
@@ -23,16 +24,18 @@ namespace VM.Start
         private readonly IRegionManager region;
         private readonly PrismProvider prism;
         private readonly IMessageService messageService;
+        public  ISolutionManager SolutionManager { get; init; }
 
         public DelegateCommand<string> ViewCommand { get; init; }
         public DelegateCommand<Object> LoadedCommand { get; init; }
         public DelegateCommand<string> AppComs { get; init; }
 
-        public MainShellModel(PrismProvider prism, SystemInfo systemInfo,IMessageService messageService)
+        public MainShellModel(PrismProvider prism, SystemInfo systemInfo,IMessageService messageService, ISolutionManager solutionManager)
         {
             this.prism = prism;
             ProjectInfo = systemInfo;
             this.messageService = messageService;
+            this.SolutionManager = solutionManager;
             ViewCommand =new DelegateCommand<string>(ViewExecute);
             LoadedCommand = new DelegateCommand<Object>(LoadedExecute);
             AppComs = new DelegateCommand<string>(appCommands);
@@ -81,7 +84,7 @@ namespace VM.Start
             switch (obj)
             {
                 case "NewSolution":
-                    messageService.ShowMessage("创建新的解决方案会覆盖掉当前已有的解决方案，确认继续",true);
+                    SolutionManager.CreateSolution();
                     break;
             }
         }

@@ -6,6 +6,7 @@ using System.Windows;
 using VM.Shard.Helper;
 using VM.Shard.Services;
 using VM.Start;
+using VM.Start.Core.Interfaces;
 using VM.Start.Core.IOC;
 using VM.Start.Dialogs.ViewModels;
 using VM.Start.Dialogs.Views;
@@ -44,8 +45,10 @@ namespace VM
             containerRegistry.RegisterSingleton<PrismProvider>();
             containerRegistry.RegisterSingleton<SystemInfo>();
             containerRegistry.RegisterSingleton<IMessageService, MessageService>();
+            containerRegistry.RegisterSingleton<ISuperDialogService, SuperDialogService>();
             containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalDataService>();
             containerRegistry.RegisterSingleton<ILoggerService, LogService>();
+            containerRegistry.RegisterSingleton<ISolutionManager, SolutionService>();
         }
         protected override IModuleCatalog CreateModuleCatalog()
         {

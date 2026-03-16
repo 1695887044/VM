@@ -160,15 +160,7 @@
                     <GroupBox Header="结果坐标">
                         <StackPanel>
                             <Border Height="30" Background="Green" />
-                            <DataGrid>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="索引" />
-                                    <DataGridTextColumn Header="Score" />
-                                    <DataGridTextColumn Header="X" />
-                                    <DataGridTextColumn Header="Y" />
-                                    <DataGridTextColumn Header="DEG" />
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <DataGrid ItemsSource="{Binding MathchingService.MatchResults}" IsReadOnly="True" />
                         </StackPanel>
                     </GroupBox>
                 </Grid>

@@ -11,7 +11,6 @@ namespace VM.Start.Services
     /// </summary>
     public class GlobalDataService:BindableBase
     {
-
         public  List<ModuleVarList> GlobalVarList = new();
 
         private  ObservableCollection<ModuleVarList> _displayVarList=new();
@@ -45,8 +44,7 @@ namespace VM.Start.Services
                 if (tempModuleList.VarModels.Count !=0){
                     tempModuleList.DisplayName = $"{item.Name}-{item.SortId - 1}";
                     DisplayVarList.Add(tempModuleList);
-                }
-               
+                }               
             }
             //查找全局变量列表
             foreach (ModuleVarList list in GlobalVarList)

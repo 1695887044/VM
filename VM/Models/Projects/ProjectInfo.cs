@@ -17,7 +17,7 @@ namespace VM.Start.Models.Projects
 
         public eProjectAutoRunMode ProjectRunMode {  get; set; }
 
-        public eProjectType ProjectType { get; set; }
+        public NodeType ProjectType { get; set; }
 
         private bool _refreshUI;
 
