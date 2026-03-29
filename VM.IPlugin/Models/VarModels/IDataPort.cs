@@ -12,7 +12,7 @@ namespace VM.IPlugin.Models.VarModels
         /// <summary>
         /// 绑定的全路径 (如: "CameraTool1.OutImage")，通常用于序列化/反序列化，或表达式解析
         /// </summary>
-        string DisplayName { get; set; }
+        string SourcePath { get; set; }
 
         /// <summary>
         /// 端口内部唯一名称 (如: "InputImage")，主要用于代码检索和内部逻辑
@@ -44,6 +44,7 @@ namespace VM.IPlugin.Models.VarModels
         /// 用于 UI 连线时的颜色区分，以及连接合法性校验
         /// </summary>
         uint Category { get; set; }
+
 
         /// <summary>
         /// 端口真实的数据类型 (System.Type)，用于 UI 层面做类型匹配校验 (防呆)

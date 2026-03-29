@@ -19,26 +19,13 @@ namespace Plugin.HalconScript.Views
     /// <summary>
     /// MainView.xaml 的交互逻辑
     /// </summary>
-    public partial class MainView : UserControl, IModuleViewBase
+    public partial class MainView : UserControl
     {
         public MainView()
         {
             InitializeComponent();
         }
 
-        public void CancelView()
-        {
-           
-        }
-
-        public void InitView(ModuleViewModelBase model = null)
-        {
-            this.DataContext = model;
-        }
-
-        public void ShowView()
-        {
-           
-        }
+       
     }
 }

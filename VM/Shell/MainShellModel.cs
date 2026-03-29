@@ -86,6 +86,9 @@ namespace VM.Start
                 case "NewSolution":
                     SolutionManager.CreateSolution();
                     break;
+                case "GlobalVar":
+                    prism.DialogService.ShowDialog("GlobalView"); 
+                    break;
             }
         }
 

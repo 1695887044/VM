@@ -14,7 +14,6 @@
         <PackageReference Include="System.Drawing.Common" Version="8.0.15" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\DemoThemes\DemoThemes.csproj" />
         <ProjectReference Include="..\VM.Halcon\VM.Halcon.csproj" />
         <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
         <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />

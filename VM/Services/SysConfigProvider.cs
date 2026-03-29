@@ -1,8 +1,6 @@
 ﻿
 
 using System.Collections.ObjectModel;
-using VM.Start.Models.Projects;
-using VM.Start.Models.Projects.Nodes;
 using VM.Start.Models.Recipes;
 
 namespace VM.Start.Services
@@ -22,7 +20,6 @@ namespace VM.Start.Services
         }
         #endregion
         public SystemConfigModel SystemConfig;
-        public  Project CurrentProject { get; set; } = new Project();
 
     }
 }

@@ -13,6 +13,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
     </Style>
     <Style
         x:Key="M.S.Expander1"
@@ -37,6 +38,7 @@
                                 x:Name="HeaderSite"
                                 HorizontalAlignment="Stretch"
                                 Cursor="Hand"
+                                FocusVisualStyle="{x:Null}"
                                 IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="{x:Type ToggleButton}">

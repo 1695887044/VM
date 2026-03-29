@@ -7,7 +7,7 @@ namespace Plugin.DiplayData.Views
     /// <summary>
     /// DisplayDataView.xaml 的交互逻辑
     /// </summary>
-    public partial class DisplayDataView : UserControl,IModuleViewBase
+    public partial class DisplayDataView : UserControl
     {
         public DisplayDataView()
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using VM.Shard.Services;
 using VM.Start.Core.Interfaces;
 using VM.Start.Models;
-using VM.Start.Models.Projects.Nodes;
+using VM.Start.Models.Nodes;
 
 namespace VM.Start.Services
 {
@@ -20,7 +20,8 @@ namespace VM.Start.Services
         private SolutionNode _currentSolution;
         private bool _isDirty;
 
-        public List<SolutionNode> SolutionNodes { get;  } = new();
+        public List<SolutionNode> SolutionNodes { get; } = new();
+
         public SolutionService(IMessageService messageService)
         {
             _messageService = messageService;
@@ -29,7 +30,11 @@ namespace VM.Start.Services
         public SolutionNode CurrentSolution
         {
             get { return _currentSolution; }
-            private set { _currentSolution = value; RaisePropertyChanged(); }
+            private set
+            {
+                _currentSolution = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool IsDirty => _isDirty;
@@ -41,8 +46,10 @@ namespace VM.Start.Services
             get { return _currentSelectedNode; }
             set
             {
-                _currentSelectedNode = value;
-                RaisePropertyChanged();
+                if (SetProperty(ref _currentSelectedNode, value))
+                {
+                    SelectedNodeChanged?.Invoke(this, CurrentSelectedNode);
+                }
             }
         }
 
@@ -71,9 +78,9 @@ namespace VM.Start.Services
             var solutionNode = new SolutionNode();
 
             //添加默认属性
-            solutionNode.Children.Add(new MethodNode() { Name = "初始化" });
-            solutionNode.Children.Add(new MethodNode() { Name = "回原" });
-            solutionNode.Children.Add(new MethodNode() { Name = "主流程" });
+            solutionNode.Children.Add(new ProcessNode() { Name = "初始化" });
+            solutionNode.Children.Add(new ProcessNode() { Name = "回原" });
+            solutionNode.Children.Add(new ProcessNode() { Name = "主流程" });
 
             SolutionNodes.Add(solutionNode);
             // 重置状态
@@ -102,7 +109,7 @@ namespace VM.Start.Services
         }
 
         // --- 5. 节点操作管理 (必定触发脏标志和 UI 刷新) ---
-        public void AddNode(INode parentNode, INode newNode)
+        public void AddNode<T>(ContainerNodeBase<T> parentNode, T newNode)
         {
             if (parentNode == null || newNode == null)
                 return;
@@ -110,24 +117,18 @@ namespace VM.Start.Services
             SetDirtyAndNotify();
         }
 
-        public void RemoveNode(INode nodeToRemove)
+        public void RemoveNode<T>(ContainerNodeBase<T> nodeToRemove, T Node)
         {
             if (nodeToRemove == null || nodeToRemove.Parent == null)
                 return;
-            nodeToRemove.Parent.Children.Remove(nodeToRemove);
+            nodeToRemove.Children.Remove(Node);
             SetDirtyAndNotify();
         }
 
-        public void MoveNode(INode sourceNode, INode targetParentNode)
+        public void MoveNode<T>(ContainerNodeBase<T> sourceNode, INode targetParentNode)
         {
             if (sourceNode == null || targetParentNode == null)
                 return;
-            //if (sourceNode.Parent != null)
-            //{
-            //    sourceNode.Parent.RemoveChild(sourceNode);
-            //}
-            //targetParentNode.AddChild(sourceNode);
-
             SetDirtyAndNotify();
         }
 
@@ -190,6 +191,26 @@ namespace VM.Start.Services
         {
             _isDirty = true;
             NodeStructureChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void AddNode<T>(IContainerNode<T> parentNode, INode newNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveNode<T>(IContainerNode<T> nodeToRemove)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNode<T>(ContainerNodeBase<T> parentNode, INode newNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveNode<T>(ContainerNodeBase<T> nodeToRemove)
+        {
+            throw new NotImplementedException();
         }
     }
 }

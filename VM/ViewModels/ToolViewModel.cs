@@ -2,8 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using VM.Start.Core.Interfaces;
-using VM.Start.Models.Projects;
-using VM.Start.Models.Projects.Nodes;
+using VM.Start.Models.Nodes;
 using VM.Start.Services;
 
 namespace VM.Start.ViewModels
@@ -24,8 +23,6 @@ namespace VM.Start.ViewModels
         public DelegateCommand<INode> TreeViewChangeCommand { get; init; }
         public ISolutionManager SolutionManager { get; init; }
         public DelegateCommand<string> TreeViewContextMenuCommand {  get; init; }
-        private Object selectProcess;
-
         private ObservableCollection<string> _moduleList;
 
         public ObservableCollection<string> ModuleList
@@ -34,20 +31,7 @@ namespace VM.Start.ViewModels
             set { _moduleList = value; RaisePropertyChanged(); }
         }
 
-        public Object SelectProcess
-        {
-            get { return selectProcess; }
-            set { selectProcess = value; RaisePropertyChanged(); }
-        }
 
-
-        private Project currentProject;
-
-        public Project CurrentProject
-        {
-            get { return currentProject; }
-            set { currentProject = value; RaisePropertyChanged(); }
-        }
         #endregion
         #region Ctor
 
@@ -57,26 +41,12 @@ namespace VM.Start.ViewModels
             ProjectCommand = new DelegateCommand<string>(OnProjectExecute);
             TreeViewChangeCommand = new DelegateCommand<INode>(treeViewChanged);
             TreeViewContextMenuCommand = new DelegateCommand<string>(TreeViewContextMenuExecute);
-            ToolBarMouseDownCommand = new DelegateCommand<MouseEventArgs>(ToolBarMouseDown);
             SolutionManager = solutionManager;
             loadToolBarSource();
         }
         #endregion
 
         #region 底部工作栏事件
-        /// <summary>
-        /// 鼠标按钮事件-底部工作栏
-        /// </summary>
-        /// <param name="args"></param>
-        private void ToolBarMouseDown(MouseEventArgs args)
-        {
-            FrameworkElement? element = args.OriginalSource as FrameworkElement;
-            if (element == null) return;
-            INode? node = element.DataContext as INode;
-            if (node == null) return;
-            DragDrop.DoDragDrop(element,node, DragDropEffects.Copy);
-
-        }
         /// <summary>
         /// 插件信息加载到工作栏
         /// </summary>
@@ -87,7 +57,7 @@ namespace VM.Start.ViewModels
                 FolderNode folder = new FolderNode() { Name = g.Key };
                 g.ToList().ForEach(p =>
                 {
-                    MethodNode method = new MethodNode() { Name = p.Value.DisplayName, Remark = p.Value.Description , IconText =p.Value.PluginIcon,Tag = p.Value.PluginName};
+                    ToolNode method = new ToolNode() { Name = p.Value.DisplayName, Remark = p.Value.Description, IconText = p.Value.PluginIcon, Tag = p.Value.PluginName };
                     folder.Children.Add(method);
                 });
                 ToolBarSource.Add(folder);
@@ -108,7 +78,6 @@ namespace VM.Start.ViewModels
 
         private void OnProjectExecute(string obj)
         {
-            var sas = SelectProcess;
             switch (obj)
             {
                 case "Create_A":

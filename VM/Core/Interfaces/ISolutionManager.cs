@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VM.Start.Models.Projects.Nodes;
+using VM.Start.Models.Nodes;
 
 namespace VM.Start.Core.Interfaces
 {
@@ -55,17 +55,17 @@ namespace VM.Start.Core.Interfaces
         /// <summary>
         /// 在指定的父节点下添加新节点
         /// </summary>
-        void AddNode(INode parentNode, INode newNode);
+        void AddNode<T>(ContainerNodeBase<T> parentNode, INode newNode);
 
         /// <summary>
         /// 移除节点 (并自动处理该节点下的所有子节点清理)
         /// </summary>
-        void RemoveNode(INode nodeToRemove);
+        void RemoveNode<T>(ContainerNodeBase<T> nodeToRemove);
 
         /// <summary>
         /// 移动节点 (用于支持 WPF 树形菜单的拖拽 - Drag & Drop)
         /// </summary>
-        void MoveNode(INode sourceNode, INode targetParentNode);
+        void MoveNode<T>(ContainerNodeBase<T> sourceNode, INode targetParentNode);
 
         /// <summary>
         /// 克隆/复制节点 (比如用户配好了一个贼复杂的“相机找边流程”，想直接复制一份)
@@ -95,13 +95,9 @@ namespace VM.Start.Core.Interfaces
         event EventHandler SolutionLoaded;
 
         /// <summary>
-        /// 选中节点发生变化事件 (通知右侧属性面板立刻切换界面)
+        /// 选中节点发生变化事件 
         /// </summary>
         event EventHandler<INode> SelectedNodeChanged;
 
-        /// <summary>
-        /// 节点结构发生变化事件 (增删改后，通知界面刷新或者重新校验连线)
-        /// </summary>
-        event EventHandler NodeStructureChanged;
     }
 }

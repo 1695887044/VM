@@ -4,6 +4,7 @@ using System.Reflection;
 using VM.IPlugin.Enums;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
+using VM.Shard.Attritubess;
 
 namespace VM.IPlugin
 {
@@ -13,30 +14,27 @@ namespace VM.IPlugin
         #region Properties
         Stopwatch stopwatch { get; set; } = new Stopwatch();
 
-        private int displayTime = 0;
 
-        [Display(Name = "执行时间")]
+        [OutputPort("DisplayTime")]
         public int DisplayTime
         {
-            get { return displayTime; }
+            get { return ModuleData.VarOut.GetVarValue<int>(); }
             set
             {
-                displayTime = value;
+                ModuleData.VarOut.SetVarValue(value);
                 RaisePropertyChanged();
             }
         }
 
-        private StateEvent state;
-
-        [Display(Name = "状态")]
+        [OutputPort("State")]
         public StateEvent State
         {
-            get { return state; }
+            get { return ModuleData.VarOut.GetVarValue<StateEvent>(); }
             set
             {
-                state = value;
+                ModuleData.VarOut.SetVarValue(value);
                 RaisePropertyChanged();
-                ModuleStateChanged?.Invoke(this, state);
+                ModuleStateChanged?.Invoke(this, value);
             }
         }
 
@@ -102,21 +100,23 @@ namespace VM.IPlugin
         {
             stopwatch.Restart();
             stopwatch.Start();
-            DisplayTime = ModuleData.SetVarValue(DisplayTime, 0).Value;
-            State = ModuleData.SetVarValue(State, StateEvent.Running).Value;
+            DisplayTime = 0;
+            State = StateEvent.Running;
             try
             {
-                Execute();
+                State = Execute() ? StateEvent.Stop : StateEvent.Error;
             }
             catch (Exception ex)
             {
-                State = ModuleData.SetVarValue(State, StateEvent.Error).Value;
+                State = StateEvent.Error;
             }
-            stopwatch.Stop();
-            State = ModuleData.SetVarValue(State, StateEvent.Stop).Value;
-            DisplayTime = ModuleData
-                .SetVarValue(DisplayTime, (int)stopwatch.ElapsedMilliseconds)
-                .Value;
+            finally
+            {
+                stopwatch.Stop();
+                State = StateEvent.Stop;
+                DisplayTime = (int)stopwatch.ElapsedMilliseconds;
+                
+            }
         }
 
         #region 创建模块时,初始化一些属性
@@ -124,7 +124,7 @@ namespace VM.IPlugin
         {
             var propertys = this.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => Attribute.IsDefined(p, typeof(DisplayAttribute)));
+                .Where(p => Attribute.IsDefined(p, typeof(OutputPortAttribute)));
             var baseMethod = typeof(VarValueExtension).GetMethod(
                 "AppendOutVar",
                 BindingFlags.Static | BindingFlags.Public
@@ -139,10 +139,17 @@ namespace VM.IPlugin
                     value = default;
                 }
                 var genericMethod = baseMethod.MakeGenericMethod(prop.PropertyType);
-                var at = prop.GetCustomAttribute<DisplayAttribute>();
+                var at = prop.GetCustomAttribute<OutputPortAttribute>();
                 genericMethod.Invoke(
                     null,
-                    new object[] { ModuleData, prop.Name, at.Name, prop.PropertyType.Name, value }
+                    new object[]
+                    {
+                        ModuleData,
+                        prop.Name,
+                        at.PortName,
+                        prop.PropertyType.Name,
+                        value,
+                    }
                 );
             }
         }

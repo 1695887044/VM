@@ -3,37 +3,28 @@ using VM.IPlugin.Models.VarModels;
 
 namespace VM.Start.Models
 {
-    public class ModuleVarList:BindableBase,ICloneable
+    public class DataPortGroup:BindableBase,ICloneable
     {
-        /// <summary>
-        /// 编号
-        /// </summary>
         public int ModuleNo { get; set; }
-        /// <summary>
-        /// 显示的名称
-        /// </summary>
         public string DisplayName { get; set; }
-        /// <summary>
-        /// 备注
-        /// </summary>
         public string Remarks { get; set; } = string.Empty;
 
-        private ObservableCollection<IDataPort> varModels = new();
+        private ObservableCollection<IDataPort> _ports = new();
 
-        public ObservableCollection<IDataPort> VarModels
+        public ObservableCollection<IDataPort> Ports
         {
-            get { return varModels; }
-            set { varModels = value; RaisePropertyChanged(); }
+            get { return _ports; }
+            set { _ports = value; RaisePropertyChanged(); }
         }
 
         public object Clone()
         {
-            return new ModuleVarList()
+            return new DataPortGroup()
             {
                 DisplayName = this.DisplayName,
                 ModuleNo = this.ModuleNo,
                 Remarks = this.Remarks,
-                VarModels = new ObservableCollection<IDataPort>()
+                Ports = new ObservableCollection<IDataPort>()
             };
                
         }

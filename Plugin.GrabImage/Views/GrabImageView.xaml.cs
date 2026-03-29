@@ -6,7 +6,7 @@ namespace Plugin.GrabImage.Views
     /// <summary>
     /// GrabImageView.xaml 的交互逻辑
     /// </summary>
-    public partial class GrabImageView : UserControl,IModuleViewBase
+    public partial class GrabImageView : UserControl
     {
         public GrabImageView()
         {

@@ -19,7 +19,7 @@ namespace Plugin.Blob.Views
     /// <summary>
     /// BlobView.xaml 的交互逻辑
     /// </summary>
-    public partial class BlobView : UserControl,IModuleViewBase
+    public partial class BlobView : UserControl
     {
         public BlobView()
         {

@@ -12,7 +12,6 @@
     <ItemGroup>
         <ProjectReference Include="..\VM.Halcon\VM.Halcon.csproj" />
         <ProjectReference Include="..\VM.IPlugin\VM.IPlugin.csproj" />
-          <ProjectReference Include="..\DemoThemes\DemoThemes.csproj" PrivateAssets="all" IncludeAssets="compile;build" ExcludeAssets="runtime;contentFiles" />
           <ProjectReference Include="..\VM.Shard\VM.Shard.csproj" />        
     </ItemGroup>
     <ItemGroup>

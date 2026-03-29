@@ -31,23 +31,19 @@ namespace VM.IPlugin.Models.VarModels
                 Name = name,
                 DisPlayName = display,
                 Value = value,
-                DisplayName = module.ModuleGuid.ToString(),
+               // DisplayName = module.ModuleGuid.ToString(),
             };
             module.VarOut.Add(_Data);
             return _Data;
         }
 
-        public static DataPort<T>? GetVarValue<T>(this ModuleParamer module, string name)
-        {
-            return module?.VarOut?.Find(s => s.Name == name) as DataPort<T>;
-        }
 
         public static DataPort<T> SetVarValue<T>(
-            this ModuleParamer module,
-            T src,
-            T Value,
-            [CallerArgumentExpression("src")] string srcName = null
-        )
+               this ModuleParamer module,
+               T src,
+               T Value,
+               [CallerArgumentExpression("src")] string srcName = null
+           )
         {
             if (module?.VarOut == null || string.IsNullOrEmpty(srcName))
                 return null;

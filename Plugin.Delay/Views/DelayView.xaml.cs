@@ -7,7 +7,7 @@ namespace Plugin.Delay.Views
     /// <summary>
     /// DelayView.xaml 的交互逻辑
     /// </summary>
-    public partial class DelayView : UserControl, IModuleViewBase
+    public partial class DelayView : UserControl
     {
         public DelayView()
         {

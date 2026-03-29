@@ -2,12 +2,12 @@
 
 namespace VM.Start.Models
 {
-    public class UserModel:ModelBase
+    public class UserAccount:ModelBase
     {
         /// <summary>
         /// 用户账号
         /// </summary>
-        public string UserId { get; set; }
+        public string AccountId { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>
@@ -22,12 +22,12 @@ namespace VM.Start.Models
         /// <summary>
         /// 用户密码
         /// </summary>
-        private string userPwd;
+        private string _password;
 
-        public string UserPwd
+        public string PasswordHash
         {
-            get { return userPwd; }
-            set { userPwd = value; RaisePropertyChanged(); }
+            get { return _password; }
+            set { _password = value; RaisePropertyChanged(); }
         }
         /// <summary>
         /// 用户角色-权限

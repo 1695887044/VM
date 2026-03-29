@@ -5,15 +5,54 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:ext_b="clr-namespace:VM.Start.Behaviors"
     xmlns:local="clr-namespace:VM.Start.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:w_cvts="clr-namespace:W.UI.Core.Converters;assembly=W.UI"
     d:DesignHeight="450"
     d:DesignWidth="400"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="Transparent"
+    Background="#1F1F1F"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <DataTemplate x:Key="MyDragAdornerTemplate">
+            <Border
+                Padding="12,10"
+                Background="#E62D2D30"
+                BorderBrush="GreenYellow"
+                BorderThickness="1.5"
+                CornerRadius="6"
+                SnapsToDevicePixels="True"
+                UseLayoutRounding="True">
+
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="12"
+                        Opacity="0.5"
+                        ShadowDepth="4"
+                        Color="Black" />
+                </Border.Effect>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    <Path
+                        Width="26"
+                        Height="26"
+                        HorizontalAlignment="Center"
+                        Data="{Binding IconText}"
+                        Fill="GreenYellow"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="#FAFAFA"
+                        Text="{Binding Name}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
         <Style x:Key="FunctionButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="56" />
             <Setter Property="Height" Value="56" />
@@ -54,7 +93,6 @@
             </Setter>
         </Style>
 
-        <!--  图标样式  -->
         <Style x:Key="FunctionIconStyle" TargetType="Path">
             <Setter Property="Width" Value="18" />
             <Setter Property="Height" Value="18" />
@@ -64,7 +102,6 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <!--  文字样式  -->
         <Style x:Key="FunctionTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="9" />
             <Setter Property="Foreground" Value="White" />
@@ -116,115 +153,197 @@
         </ToolBar>
         <TreeView
             Grid.Row="1"
-            AllowDrop="True"
-            Background="Transparent"
+            dd:DragDrop.IsDropTarget="True"
+            ext_b:TreeViewBehavior.BindableSelectedItem="{Binding SolutionManager.CurrentSelectedNode}"
+            Background="#1F1F1F"
             BorderThickness="0"
             ItemsSource="{Binding SolutionManager.CurrentSolution.Children}"
             PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="SelectedItemChanged">
-                    <b:InvokeCommandAction Command="{Binding Path=TreeViewChangeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedItem}" />
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
             <TreeView.ContextMenu>
                 <ContextMenu FontFamily="{StaticResource iconfont}">
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="A"
+                        CommandParameter="Rename"
                         Header="重命名"
                         Icon="&#xe6e3;" />
-                    <MenuItem
-                        Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="B"
-                        Header="流程加密"
-                        Icon="&#xe7a8;">
+                    <MenuItem Header="流程加密" Icon="&#xe7a8;">
                         <MenuItem
                             Command="{Binding TreeViewContextMenuCommand}"
-                            CommandParameter="C"
+                            CommandParameter="Encrypt"
                             Header="加密流程"
                             Icon="&#xe670;" />
                         <MenuItem
                             Command="{Binding TreeViewContextMenuCommand}"
-                            CommandParameter="D"
+                            CommandParameter="Decrypt"
                             Header="解密流程"
                             Icon="&#xe667;" />
                         <MenuItem
                             Command="{Binding TreeViewContextMenuCommand}"
-                            CommandParameter="E"
+                            CommandParameter="ClearAllEncryption"
                             Header="取消所有加密"
                             Icon="&#xe667;" />
                     </MenuItem>
+
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="F"
+                        CommandParameter="CreateFolder"
                         Header="创建文件夹"
                         Icon="&#xe646;" />
                     <Separator />
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="G"
+                        CommandParameter="EditComment"
                         Header="编辑注释"
                         Icon="&#xe61e;" />
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="A"
+                        CommandParameter="Cut"
                         Header="剪切"
                         Icon="&#xe61b;" />
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="A"
+                        CommandParameter="Copy"
                         Header="复制"
                         Icon="&#xe623;" />
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="A"
+                        CommandParameter="Paste"
                         Header="粘贴"
                         Icon="&#xe624;" />
                     <MenuItem
                         Command="{Binding TreeViewContextMenuCommand}"
-                        CommandParameter="A"
+                        CommandParameter="Delete"
                         Header="删除流程"
                         Icon="&#xe8b6;" />
                 </ContextMenu>
             </TreeView.ContextMenu>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TreeViewItem">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        x:Name="Bd"
+                                        Padding="2,4"
+                                        Background="Transparent"
+                                        CornerRadius="3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ToggleButton
+                                                x:Name="Expander"
+                                                ClickMode="Press"
+                                                IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                                <ToggleButton.Template>
+                                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                        <Border Padding="3" Background="Transparent">
+                                                            <Path
+                                                                x:Name="Arrow"
+                                                                Width="12"
+                                                                Height="12"
+                                                                Data="M 3,0 L 8,5 L 3,10"
+                                                                Fill="#94A3B8"
+                                                                RenderTransformOrigin="0.5,0.5"
+                                                                Stretch="Uniform"
+                                                                Stroke="#94A3B8"
+                                                                StrokeThickness="1.5">
+                                                                <Path.RenderTransform>
+                                                                    <RotateTransform Angle="0" />
+                                                                </Path.RenderTransform>
+                                                            </Path>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Setter TargetName="Arrow" Property="RenderTransform">
+                                                                    <Setter.Value>
+                                                                        <RotateTransform Angle="90" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Setter TargetName="Arrow" Property="Fill" Value="#E2E8F0" />
+                                                                <Setter TargetName="Arrow" Property="Stroke" Value="#E2E8F0" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="Arrow" Property="Fill" Value="#0284C7" />
+                                                                <Setter TargetName="Arrow" Property="Stroke" Value="#0284C7" />
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </ToggleButton.Template>
+                                            </ToggleButton>
+                                            <ContentPresenter Grid.Column="1" ContentSource="Header" />
+                                        </Grid>
+                                    </Border>
+                                    <ItemsPresenter
+                                        x:Name="ItemsHost"
+                                        Grid.Row="1"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsExpanded" Value="True">
+                                        <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible" />
+                                    </Trigger>
+                                    <Trigger Property="HasItems" Value="False">
+                                        <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
+                                    </Trigger>
+
+                                    <Trigger SourceName="Bd" Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#333333" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#007ACC" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <ScrollViewer
-                        CanContentScroll="True"
-                        HorizontalScrollBarVisibility="auto"
-                        TextElement.Foreground="White"
-                        VerticalScrollBarVisibility="Hidden">
-                        <StackPanel
-                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=Width}"
-                            Cursor="Hand"
-                            Orientation="Horizontal">
-                            <StackPanel
-                                Height="30"
-                                Margin="1"
-                                Orientation="Horizontal"
-                                TextElement.FontSize="22">
-                                <Path
-                                    Width="22"
-                                    Height="26"
-                                    Margin="0,0,10,0"
-                                    VerticalAlignment="Center"
-                                    Data="{Binding IconText}"
-                                    Fill="GreenYellow"
-                                    Stretch="Uniform" />
+                    <StackPanel
+                        Height="30"
+                        Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Converter={w_cvts:TreeViewIndentConverter IndentStep=16}}"
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Path
+                            x:Name="IconPath"
+                            Width="15"
+                            Height="15"
+                            Margin="5,0,10,0"
+                            VerticalAlignment="Center"
+                            Data="{Binding IconText}"
+                            Fill="GreenYellow"
+                            Stretch="Uniform" />
+                        <TextBlock
+                            x:Name="NameText"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding Name}" />
+                        <TextBlock
+                            x:Name="RemarkText"
+                            Margin="5,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Green"
+                            Text="{Binding Remark}"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
 
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    Text="{Binding Name}" />
-
-                                <TextBlock
-                                    Margin="5,0"
-                                    VerticalAlignment="Center"
-                                    Foreground="Green"
-                                    Text="{Binding Remark}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </ScrollViewer>
+                    <HierarchicalDataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" Value="True">
+                            <Setter TargetName="RemarkText" Property="Foreground" Value="#A6E22E" />
+                        </DataTrigger>
+                    </HierarchicalDataTemplate.Triggers>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
@@ -242,6 +361,7 @@
                     <StackPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Expander
@@ -249,41 +369,50 @@
                         FocusVisualStyle="{x:Null}"
                         Header="{Binding Name}"
                         Style="{StaticResource BaseStyle}">
-                        <ItemsControl ItemsSource="{Binding Children}">
+
+                        <ItemsControl
+                            dd:DragDrop.DragAdornerTemplate="{StaticResource MyDragAdornerTemplate}"
+                            dd:DragDrop.IsDragSource="True"
+                            dd:DragDrop.UseDefaultDragAdorner="True"
+                            dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                            ItemsSource="{Binding Children}">
+
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel
-                                        Margin="4"
-                                        dd:DragDrop.IsDragSource="True"
-                                        dd:DragDrop.UseDefaultDragAdorner="True"
-                                        dd:DragDrop.UseDefaultEffectDataTemplate="True">
+                                    <StackPanel Margin="4">
+
                                         <Border
                                             Width="50"
                                             Height="50"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
+                                            Background="Transparent"
                                             BorderBrush="White"
                                             BorderThickness="0.5"
-                                            CornerRadius="8">
-                                            <Button Style="{StaticResource FunctionButtonStyle}">
-                                                <StackPanel>
-                                                    <Path Data="{Binding IconText}" Style="{StaticResource FunctionIconStyle}" />
-                                                    <TextBlock
-                                                        Margin="0,1,0,0"
-                                                        Style="{StaticResource FunctionTextStyle}"
-                                                        Text="{Binding Name}" />
-                                                </StackPanel>
-                                            </Button>
+                                            CornerRadius="8"
+                                            Cursor="Hand">
+
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Path Data="{Binding IconText}" Style="{StaticResource FunctionIconStyle}" />
+                                                <TextBlock
+                                                    Margin="0,1,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Style="{StaticResource FunctionTextStyle}"
+                                                    Text="{Binding Name}" />
+                                            </StackPanel>
+
                                         </Border>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
                     </Expander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

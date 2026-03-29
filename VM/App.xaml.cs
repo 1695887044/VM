@@ -46,9 +46,10 @@ namespace VM
             containerRegistry.RegisterSingleton<SystemInfo>();
             containerRegistry.RegisterSingleton<IMessageService, MessageService>();
             containerRegistry.RegisterSingleton<ISuperDialogService, SuperDialogService>();
-            containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalDataService>();
+            containerRegistry.RegisterSingleton<PluginService>().RegisterSingleton<GlobalVariableService>();
             containerRegistry.RegisterSingleton<ILoggerService, LogService>();
             containerRegistry.RegisterSingleton<ISolutionManager, SolutionService>();
+            containerRegistry.RegisterDialog<GlobalVariableView, GlobalVariableViewModel>("GlobalView");
         }
         protected override IModuleCatalog CreateModuleCatalog()
         {

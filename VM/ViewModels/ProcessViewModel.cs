@@ -9,7 +9,8 @@ using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.ModuleEvent;
 using VM.IPlugin.Views;
 using VM.Shard.Services;
-using VM.Start.Models.Projects.Nodes;
+using VM.Start.Core.Interfaces;
+using VM.Start.Models.Nodes;
 using VM.Start.Services;
 
 namespace VM.Start.ViewModels
@@ -26,28 +27,36 @@ namespace VM.Start.ViewModels
         #endregion
 
         private readonly IDialogService dialogService;
-        private readonly GlobalDataService globalVarService;
+        private readonly GlobalVariableService globalVarService;
         private readonly ILoggerService loggerService;
         private readonly IMessageService messageService;
-        private IProcessNode _currentNode;
-        private IProcessNode selectNodeItem;
+        private readonly ISolutionManager solutionManager;
+        private ToolNodeBase _currentNode;
+        private ToolNodeBase selectNodeItem;
 
-        public IProcessNode SelectNodeItem
+        public ToolNodeBase SelectNodeItem
         {
             get { return selectNodeItem; }
             set { selectNodeItem = value; RaisePropertyChanged(); }
         }
 
-        public DelegateCommand<IProcessNode> DoubleClickCommand { get; init; }
+        public DelegateCommand<ToolNodeBase> DoubleClickCommand { get; init; }
+        private ObservableCollection<ToolNodeBase> _processDatas;
 
-        public ObservableCollection<IProcessNode> ProcessDatas { get; }
-  
+        public ObservableCollection<ToolNodeBase> ProcessDatas
+        {
+            get { return _processDatas; }
+            set { _processDatas = value;  RaisePropertyChanged(); }
+        }
 
 
-        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalDataService globalVarService,ILoggerService loggerService,IMessageService messageService)
+
+
+
+        public ProcessViewModel(PrismProvider prism , IDialogService dialogService,GlobalVariableService globalVarService,ILoggerService loggerService,IMessageService messageService, ISolutionManager solutionManager)
         {
 
-            DoubleClickCommand = new DelegateCommand<IProcessNode>(NodeShow);
+            DoubleClickCommand = new DelegateCommand<ToolNodeBase>(NodeShow);
             ExecuteFlowOnceCommand = new DelegateCommand(ExecuteFlowOnce);
             MenuOperateCommand = new DelegateCommand<string>(MenuOperate);
             this.prism = prism;
@@ -55,7 +64,13 @@ namespace VM.Start.ViewModels
             this.globalVarService = globalVarService;
             this.loggerService = loggerService;
             this.messageService = messageService;
-            ProcessDatas = SysConfigProvider.Ins.CurrentProject.DisplayProcessNodes;
+            this.solutionManager = solutionManager;
+            solutionManager.SelectedNodeChanged += (s,e)=> { 
+                if(e is ContainerNodeBase<ToolNodeBase> containerNodeBase)
+                {
+                    ProcessDatas = containerNodeBase.Children;
+                }
+            };
         }
         /// <summary>
         /// 菜单栏命令
@@ -76,7 +91,7 @@ namespace VM.Start.ViewModels
                 case "禁用": break;
                 case "粘贴": break;
                 case "删除":
-                    ProcessDatas.Remove(SelectNodeItem);
+                    solutionManager.CurrentSolution.Children.Remove(SelectNodeItem);
                     int tempi = 1;
                     foreach (var processData in ProcessDatas)
                     {
@@ -98,9 +113,11 @@ namespace VM.Start.ViewModels
         /// 打开的时候 订阅打开变量视图事件
         /// </summary>
         /// <param name="node"></param>
-        private void NodeShow(IProcessNode node)
+        private void NodeShow(ToolNodeBase node)
         {
-            if (!(node.View is FrameworkElement content)) return;
+            if (node.View == null) return;
+            var content = Activator.CreateInstance(node.View) as FrameworkElement;
+            if (content == null) return;
             _currentNode = node;
             node.ViewModel.OpenVarLinkViewEvent += OpenVarLinkView; 
              _ = new PluginView().ShowView(content, node.ViewModel,node.Name,node.IconText);
@@ -130,9 +147,24 @@ namespace VM.Start.ViewModels
         /// 控件拖动
         /// </summary>
         /// <param name="args"></param>
-        public void DragOver(IDropInfo args)
+        public void DragOver(IDropInfo dropInfo)
         {
-            args.Effects = args.Data is IProcessNode ? DragDropEffects.Move : args.Data is INode ? DragDropEffects.Copy : DragDropEffects.None;
+            // 如果没有抓取到数据，或者没有落点集合，直接拒绝
+            if (dropInfo.Data == null || dropInfo.TargetCollection == null) return;
+
+            bool isInternalMove = dropInfo.DragInfo.SourceCollection == dropInfo.TargetCollection;
+
+            if (isInternalMove)
+            {
+                dropInfo.Effects = DragDropEffects.Move;
+                // 允许在项之间插入
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+            }
+            else
+            {
+                dropInfo.Effects = DragDropEffects.Copy;
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            }
         }
         /// <summary>
         /// 控件落下
@@ -141,13 +173,13 @@ namespace VM.Start.ViewModels
         public void Drop(IDropInfo args)
         {
             if (args.Effects != DragDropEffects.Copy && args.Effects != DragDropEffects.Move) return;
-            if (args.Effects == DragDropEffects.Copy && args.Data is INode node)
+            if (args.Effects == DragDropEffects.Copy && args.Data is ToolNodeBase node)
             {
                 ProcessDatas.Add(createProcessNode(node));
                 loggerService.LogInfo($"添加模块{node.Name}");
                 return;
             }
-            if (args.Effects == DragDropEffects.Move  && args.Data is IProcessNode d && args.TargetItem is IProcessNode t)
+            if (args.Effects == DragDropEffects.Move  && args.Data is ToolNodeBase d && args.TargetItem is ToolNodeBase t)
             {
                 var a = d.SortId;
                 ProcessDatas[d.SortId-1] = t;
@@ -159,23 +191,19 @@ namespace VM.Start.ViewModels
         /// <summary>
         /// 根据节点创建流程节点 创建后 模块初始化  注册输入类型 注册输出类型
         /// </summary>
-        /// <param name="node"></param>
-        /// <exception cref="NotImplementedException"></exception>
        #endregion
-        private ProcessNode createProcessNode(INode args)
+        private ToolNodeBase createProcessNode(INode args)
         {
-            ProcessNode node = new()
+            ToolNode node = new()
             {
                 Name = args.Name,
-                CreateTime = DateTime.Now,
-                Updatetime = DateTime.Now,
-                SortId = ProcessDatas.Count > 0 ? ProcessDatas.Last().SortId + 1 : 1,
-                Token = Guid.NewGuid(),
+                UpdateTime = DateTime.Now,
+                SortId = ProcessDatas?.Count > 0 ? ProcessDatas.Last().SortId + 1 : 1,
                 Tag = args.Tag,
                 
                 IconText = args.IconText,
                 ViewModel = (ModuleViewModelBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewModelType),
-                View = (IModuleViewBase)prism.Container.Resolve(PluginService.PluginDic_Module[args.Tag].ViewType),
+                View = PluginService.PluginDic_Module[args.Tag].ViewType,
                 Remark = args.Remark
             };
             node.ViewModel.ModuleInit();

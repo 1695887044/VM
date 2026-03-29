@@ -176,6 +176,8 @@
             <Button
                 Content="&#xe629;"
                 Style="{StaticResource NavOperateButtonStyle}"
+                     Command="{Binding ViewCommand}"
+                 CommandParameter="GlobalVar"
                 ToolTip="全局变量" />
             <Button
                 Content="&#xe66e;"

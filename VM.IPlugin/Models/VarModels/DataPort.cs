@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace VM.IPlugin.Models.VarModels
 {
-    /// <summary>
-    /// 泛型数据端口基类，承载具体的业务数据，支持 MVVM 数据绑定机制
-    /// </summary>
-    /// <typeparam name="T">端口承载的数据类型 (如 HObject, double, string)</typeparam>
     public class DataPort<T> : BindableBase, IDataPort
     {
         private string _displayName;
-        public string DisplayName
+        public string SourcePath
         {
             get { return _displayName; }
             set
@@ -32,9 +28,10 @@ namespace VM.IPlugin.Models.VarModels
             get { return _value; }
             set
             {
-                _value = value;
-                RaisePropertyChanged(); // 通知 WPF 界面 (如 TextBlock, 属性网格) 更新
-                OnValueChanged?.Invoke(this, _value); // 触发 C# 后台事件
+                if(SetProperty(ref _value, value))
+                {
+                    OnValueChanged?.Invoke(this, _value); // 触发 C# 后台事件
+                }
             }
         }
 
@@ -56,6 +53,7 @@ namespace VM.IPlugin.Models.VarModels
         /// </summary>
         public Type Type => typeof(T);
 
+
         /// <summary>
         /// 值变更事件，可用于订阅特殊的数据流联动逻辑
         /// </summary>
@@ -66,8 +64,21 @@ namespace VM.IPlugin.Models.VarModels
         public void Disconnect()
         {
             this.LinkedPort = null;
-            this.DisplayName = string.Empty;
+            this.SourcePath = string.Empty;
         }
+        public DataPort()
+        {
+            
+        }
+        public DataPort(string name, string uiName, T defaultValue = default)
+        {
+            Name = name;
+            DisPlayName = uiName;
 
+            Value = defaultValue;
+
+            SourcePath = string.Empty;
+            Expression = string.Empty;
+        }
     }
 }

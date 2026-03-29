@@ -73,12 +73,12 @@
                         ColumnWidth="*"
                         HeadersVisibility="Column"
                         IsReadOnly="True"
-                        ItemsSource="{Binding VarModels}"
+                        ItemsSource="{Binding Ports}"
                         Style="{StaticResource DataGrid.Small}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Width="140"
-                                Binding="{Binding DisPlayName}"
+                                Binding="{Binding Name}"
                                 Header="变量名称" />
                             <DataGridTextColumn
                                 Width="auto"

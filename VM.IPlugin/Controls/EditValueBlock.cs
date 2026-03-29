@@ -12,7 +12,6 @@ namespace VM.IPlugin.Controls
             set { SetValue(HeaderProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Header.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HeaderProperty =
             DependencyProperty.Register("Header", typeof(string), typeof(EditValueBlock), new PropertyMetadata(string.Empty));
 
@@ -24,7 +23,6 @@ namespace VM.IPlugin.Controls
             set { SetValue(IsReadOnlayProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsReadOnlay.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsReadOnlayProperty =
             DependencyProperty.Register("IsReadOnlay", typeof(bool), typeof(EditValueBlock), new PropertyMetadata(false));
 

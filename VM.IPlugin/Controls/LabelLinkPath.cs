@@ -1,61 +1,57 @@
-﻿
-
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows;
 using VM.IPlugin.Models.VarModels;
 using VM.IPlugin.Enums;
 
 namespace VM.IPlugin.Controls
 {
+    [TemplatePart(Name = "PART_LinkButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_ClearButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_ContentBox", Type = typeof(TextBox))]
     public class LabelLinkPath : Control
     {
-        bool UserEditable;
-        Type genericType;
-        Button? LinkButton, ClearButton;
-        TextBlock? HeadTextBlock;
-        TextBox? ContentBox;
-        public bool BindMode
+        private Button? _linkButton;
+        private Button? _clearButton;
+        private TextBox? _contentBox;
+
+        #region Dependency Properties
+
+        private static readonly DependencyPropertyKey IsLinkedPropertyKey =
+            DependencyProperty.RegisterReadOnly("IsLinked", typeof(bool), typeof(LabelLinkPath), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsLinkedProperty = IsLinkedPropertyKey.DependencyProperty;
+
+        public bool IsLinked
         {
-            get { return (bool)GetValue(BindModeProperty); }
-            set { SetValue(BindModeProperty, value); }
+            get { return (bool)GetValue(IsLinkedProperty); }
+            private set { SetValue(IsLinkedPropertyKey, value); }
         }
-
-        public static readonly DependencyProperty BindModeProperty =
-            DependencyProperty.Register("BindMode", typeof(bool), typeof(LabelLinkPath), new PropertyMetadata(false));
-
-
-        public bool IsReadOnly
-        {
-            get { return (bool)GetValue(IsReadOnlyProperty); }
-            set { SetValue(IsReadOnlyProperty, value); }
-        }
-        public static readonly DependencyProperty IsReadOnlyProperty =
-            DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(LabelLinkPath), new PropertyMetadata(false));
-
 
         public string Header
         {
             get { return (string)GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
         }
-
         public static readonly DependencyProperty HeaderProperty =
             DependencyProperty.Register("Header", typeof(string), typeof(LabelLinkPath), new PropertyMetadata("路径"));
-
-
 
         public object LinkParam
         {
             get { return (object)GetValue(LinkParamProperty); }
             set { SetValue(LinkParamProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for LinkParam.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LinkParamProperty =
             DependencyProperty.Register("LinkParam", typeof(object), typeof(LabelLinkPath), new PropertyMetadata(null));
 
-
+        public ICommand OperatorCommand
+        {
+            get { return (ICommand)GetValue(OperatorCommandProperty); }
+            set { SetValue(OperatorCommandProperty, value); }
+        }
+        public static readonly DependencyProperty OperatorCommandProperty =
+            DependencyProperty.Register("OperatorCommand", typeof(ICommand), typeof(LabelLinkPath));
 
         public Object Value
         {
@@ -70,104 +66,87 @@ namespace VM.IPlugin.Controls
         {
             if (d is LabelLinkPath ctl)
             {
-                if(e.NewValue is IDataPort _Var)
+                // 卸载旧对象的属性监听
+                if (e.OldValue is INotifyPropertyChanged oldPc)
+                    oldPc.PropertyChanged -= ctl.OnPortPropertyChanged;
+
+                // 装载新对象的属性监听
+                if (e.NewValue is INotifyPropertyChanged newPc)
+                    newPc.PropertyChanged += ctl.OnPortPropertyChanged;
+
+                ctl.RefreshUIState();
+            }
+        }
+
+        #endregion
+
+        // 监听绑定的后端对象变化 (当弹窗修改了端口路径时触发)
+        private void OnPortPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "DisplayName" || e.PropertyName == "Expression")
+            {
+                RefreshUIState();
+            }
+        }
+
+        #region 极简 UI 状态路由
+
+        private void RefreshUIState()
+        {
+            if (_contentBox == null) return;
+
+            if (Value is IDataPort port)
+            {
+                // 判断：只要有路径名或表达式，就算是被绑定了
+                bool hasLink = !string.IsNullOrEmpty(port.SourcePath) || !string.IsNullOrEmpty(port.Expression);
+
+                // 给依赖属性赋值，XAML里的触发器会自动根据这个变成蓝色胶囊！
+                this.IsLinked = hasLink;
+
+                if (hasLink)
                 {
-                    ctl.UpdateTextValue(_Var);
+                    // 状态 A：已链接
+                    _contentBox.Text = $"{port.DisPlayName} / {port.SourcePath}";
+                    _contentBox.FontStyle = FontStyles.Normal;
                 }
                 else
                 {
-                    ctl.UpDataTextValue();
+                    // 状态 B：未链接
+                    _contentBox.Text = "待绑定变量..."; // 灰色占位提示
+                    _contentBox.FontStyle = FontStyles.Italic;
                 }
-
+            }
+            else
+            {
+                this.IsLinked = false;
+                _contentBox.Text = "无效的绑定对象";
             }
         }
 
-        private void UpDataTextValue()
-        {
-            ContentBox.IsReadOnly = false;
-            ContentBox.Text = Value.ToString();
-        }
+        #endregion
 
-        private void UpdateTextValue(IDataPort _var)
-        {
-            ContentBox.IsReadOnly = true;
-            ContentBox.Text = _var.DisplayName + "/" + _var.Name;
-        }
+        #region 控件生命周期与事件挂载
 
-        public ICommand OperatorCommand
-        {
-            get { return (ICommand)GetValue(OperatorCommandProperty); }
-            set { SetValue(OperatorCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty OperatorCommandProperty =
-            DependencyProperty.Register("OperatorCommand", typeof(ICommand), typeof(LabelLinkPath));
-        LinkPathParam p1, p2;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            LinkButton = this.GetTemplateChild("PART_LinkButton") as Button;
-            ClearButton = this.GetTemplateChild("PART_ClearButton") as Button;
-            HeadTextBlock = this.GetTemplateChild("PART_HeadTextBlock") as TextBlock;
-            ContentBox = this.GetTemplateChild("PART_ContentBox") as TextBox;
-            p1 = new(LinkPathType.Link, this.LinkParam);
-            p2 = new(LinkPathType.Clear, this.LinkParam);
-            LinkButton.Click += (s, e) =>
-            {
 
-                OperatorCommand?.Execute(p1);
-            };
-            ClearButton.Click += (s, e) =>
-            {
-                OperatorCommand?.Execute(p2);
-            };
+            _linkButton = GetTemplateChild("PART_LinkButton") as Button;
+            _clearButton = GetTemplateChild("PART_ClearButton") as Button;
+            _contentBox = GetTemplateChild("PART_ContentBox") as TextBox;
+
+            if (_linkButton != null)
+                _linkButton.Click += (s, e) => OperatorCommand?.Execute(new LinkPathParam(LinkPathType.Link, this.LinkParam));
+
+            if (_clearButton != null)
+                _clearButton.Click += (s, e) => OperatorCommand?.Execute(new LinkPathParam(LinkPathType.Clear, this.LinkParam));
+
+            RefreshUIState();
         }
 
-        private void updateValue(object sender, TextChangedEventArgs e)
-        {
-            //解锁用户编辑功能
-            if (Value is DataPort<string> strVar && genericType == typeof(string))
-            {
-                strVar.Value = ContentBox.Text;
-            }
-            else if (Value is DataPort<int> intVar && genericType == typeof(int))
-            {
-                if (int.TryParse(ContentBox.Text, out int v))
-                {
-                    intVar.Value = v;
-                }
-            }
-            else if (Value is DataPort<double> doubleVar && genericType == typeof(double))
-            {
-                if (double.TryParse(ContentBox.Text, out double v))
-                {
-                    doubleVar.Value = v;
-                }
-            }
-            else if (Value is DataPort<float> floatVar && genericType == typeof(float))
-            {
-                if (float.TryParse(ContentBox.Text, out float v))
-                {
-                    floatVar.Value = v;
-                }
-            }
-            else if (Value is DataPort<bool> boolVar && genericType == typeof(bool))
-            {
-                if (bool.TryParse(ContentBox.Text, out bool v))
-                {
-                    boolVar.Value = v;
-                }
-            }
-            else if (Value is DataPort<long> longVar && genericType == typeof(long))
-            {
-                if (long.TryParse(ContentBox.Text, out long v))
-                {
-                    longVar.Value = v;
-                }
-            }
-        }
-
+        #endregion
     }
+
     public record class LinkPathParam
     {
         public LinkPathType PathType { get; set; }

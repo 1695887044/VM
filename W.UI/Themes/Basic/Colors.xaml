@@ -91,5 +91,17 @@
         <GradientStop Offset="0" Color="#FF04040E" />
         <GradientStop Offset="1" Color="#FF24315D" />
     </RadialGradientBrush>
-
+    <Color x:Key="Slate100Color">#F1F5F9</Color>
+    <Color x:Key="Slate200Color">#E2E8F0</Color>
+    <Color x:Key="Slate500Color">#64748B</Color>
+    <Color x:Key="Slate700Color">#334155</Color>
+    <Color x:Key="Slate900Color">#0F172A</Color>
+    <Color x:Key="Sky500Color">#0EA5E9</Color>
+    <Color x:Key="Sky600Color">#0284C7</Color>
+    <Color x:Key="Sky700Color">#0369A1</Color>
+    <SolidColorBrush x:Key="PrimaryActionBrush" Color="{StaticResource Sky600Color}" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Slate900Color}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource Slate500Color}" />
+    <SolidColorBrush x:Key="CardBorderBrush" Color="{StaticResource Slate200Color}" />
+    <DropShadowEffect x:Key="CardShadow" BlurRadius="6" ShadowDepth="1" Color="#000000" Opacity="0.08"/>
 </ResourceDictionary>

@@ -8,9 +8,9 @@ namespace VM.Start.Dialogs.ViewModels
 
 
 
-        private UserModel user;
+        private UserAccount user;
 
-        public UserModel User
+        public UserAccount User
         {
             get { return user; }
             set { user = value;RaisePropertyChanged(); }

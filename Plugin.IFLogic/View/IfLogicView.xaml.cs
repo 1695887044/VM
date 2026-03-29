@@ -1,8 +1,8 @@
-﻿using NLog;
-using ScintillaNET;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using W.UI.Attributes;
 
-namespace DemoThemes
+namespace Plugin.IFLogic.View
 {
-
-    public partial class MainWindow : Window
+    /// <summary>
+    /// IfLogicView.xaml 的交互逻辑
+    /// </summary>
+    public partial class IfLogicView : UserControl
     {
-
-        public MainWindow()
+        public IfLogicView()
         {
             InitializeComponent();
-            this.DataContext = this;
-            this.winFormHost.Child = new Scintilla();
         }
     }
 }

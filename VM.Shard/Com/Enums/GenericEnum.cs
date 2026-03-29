@@ -52,7 +52,7 @@ namespace VM.Shard.Com.Enums
         主动执行 = 0,
         调用执行 = 1,
     }
-    public enum NodeType
+    public enum E_NodeType
     {
         [Description("解决方案")]
         Solution,
@@ -61,6 +61,23 @@ namespace VM.Shard.Com.Enums
         [Description("流程")]
         Process,
         [Description("方法")]
-        Method
+        Method,
+        [Description("工具")]
+        Tool
+    }
+    public enum E_NodeState
+    {
+        [Description("未执行")]
+        Waiting = 0,
+        [Description("运行")]
+        Running = 1,
+        [Description("成功")]
+        Success = 2,
+        [Description("失败")]
+        Failed = 3,
+        [Description("警告")]
+        Warning = 4,
+        [Description("跳过")]
+        Skipped = 5
     }
 }
